@@ -19,6 +19,7 @@ public abstract class Tile {
     private static int xCount = 0;
     private static int yCount = 0;
     Rectangle boundsBox;
+    boolean isSolid;
 
     public Tile(int posX, int posY, Color backColor){
         this.posX = posX;
