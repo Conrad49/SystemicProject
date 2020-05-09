@@ -43,8 +43,6 @@ public class Main extends Application
     static double height = 0;
     static double width = 0;
 
-    static ThingOne thingOne = new ThingOne();
-    static ThingTwo thingTwo = new ThingTwo();
     static Player player = new Player(Color.AQUA, new Rectangle(100, 100, 50, 70));
 
     @Override
@@ -105,19 +103,12 @@ public class Main extends Application
 
     }
 
-    public static void renderThings(){
-        for(Thing thing : Thing.allThings){
-            thing.render(graphicsContext);
-        }
-    }
-
     public void renderTiles(){
 
         for(int i = 0; i < Tile.getAllTiles().length; i ++){
             for(int j = 0; j < Tile.getAllTiles().length; j ++){
                 Tile[][] tiles = Tile.getAllTiles();
                 Tile tileToBeRendered = tiles[j][i];
-                tileToBeRendered.render(graphicsContext);
             }
         }
     }
@@ -153,9 +144,6 @@ public class Main extends Application
         Camera camera = new Camera(visibleTiles);
 
         // camera.renderVisibleTiles(graphicsContext);
-
-        renderThings();
-
 
         if (currentlyActiveKeys.contains("A"))
         {

@@ -20,9 +20,6 @@ public abstract class Tile {
     private static int yCount = 0;
     Rectangle boundsBox;
 
-
-
-
     public Tile(int posX, int posY, Color backColor){
         this.posX = posX;
         this.posY = posY;
@@ -44,22 +41,6 @@ public abstract class Tile {
         this.texture = texture;
 
         this.isTextured = true;
-    }
-
-    public void render(GraphicsContext g){
-        if (isTextured) {
-            g.drawImage(texture, this.posX, this.posY);
-        } else {
-            g.setStroke(this.backColor);
-            g.fillRect(this.posX, this.posY, 32, 32);
-        }
-    }
-
-    public void tick(){
-
-        if(this.isInteractiveTile){
-            // player.movementSpeed = this.movementSpeed;
-        }
     }
 
     public Rectangle getBoundsBox() {

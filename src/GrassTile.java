@@ -13,19 +13,8 @@ public class GrassTile extends Tile {
         this.isInteractiveTile = true;
     }
 
-
     public void setTexture(Image image){
         texture = image;
         this.isTextured = true;
-    }
-
-    @Override
-    public void render(GraphicsContext g) {
-        super.render(g);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
     }
 }
