@@ -81,24 +81,24 @@ public class Main extends Application {
 
         // camera.renderVisibleTiles(graphicsContext);
 
-        if (currentlyActiveKeys.contains("A"))
-        {
+        if (currentlyActiveKeys.contains("A")) {
             player.posX -= speed;
+            player.tileX = (int)player.posX / Tile.width;
         }
 
-        if (currentlyActiveKeys.contains("D"))
-        {
+        if (currentlyActiveKeys.contains("D")) {
             player.posX += speed;
+            player.tileX = (int)player.posX / Tile.width;
         }
 
-        if (currentlyActiveKeys.contains("W"))
-        {
+        if (currentlyActiveKeys.contains("W")) {
             player.posY -= speed;
+            player.tileY = (int)player.posY / Tile.width;
         }
 
-        if (currentlyActiveKeys.contains("S"))
-        {
+        if (currentlyActiveKeys.contains("S")) {
             player.posY += speed;
+            player.tileY = (int)player.posY / Tile.width;
         }
     }
 
