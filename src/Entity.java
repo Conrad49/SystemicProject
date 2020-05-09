@@ -71,4 +71,12 @@ public abstract class Entity {
             }
         }
     }
+
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
 }

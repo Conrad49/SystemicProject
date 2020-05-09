@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ public class Main extends Application {
     }
 
     private static Scene mainScene;
+    private static Pane root;
     private static int WIDTH = 512;
     private static int HEIGHT = 256;
 
@@ -28,13 +30,16 @@ public class Main extends Application {
     private static Player player = new Player(Color.AQUA, new Rectangle(100, 100, 50, 70));
 
     @Override
-    public void start(Stage mainStage) {
-        mainStage.setTitle("Event Handling");
+    public void start(Stage stage) {
+        stage.setTitle("Event Handling");
 
-        Group root = new Group();
+        root = new Pane();
 
         mainScene = new Scene(root);
-        mainStage.setScene(mainScene);
+
+        stage.setFullScreen(true);
+
+        stage.setScene(mainScene);
 
         prepareActionHandlers();
 
@@ -49,7 +54,7 @@ public class Main extends Application {
             }
         }.start();
 
-        mainStage.show();
+        stage.show();
 
     }
 
@@ -62,7 +67,6 @@ public class Main extends Application {
     }
 
     public void renderTiles(){
-
         for(int i = 0; i < Tile.getAllTiles().length; i ++){
             for(int j = 0; j < Tile.getAllTiles().length; j ++){
                 Tile[][] tiles = Tile.getAllTiles();
@@ -73,20 +77,7 @@ public class Main extends Application {
 
 
     private static void tickAndRender() {
-        int topLeftX = player.tileX - Camera.cameraWidth/2;
-        int topLeftY = player.tileY - Camera.cameraWidth/2;
-        Tile[][] allTiles = Tile.getAllTiles();
-        Tile[][] visibleTiles = new Tile[Camera.cameraWidth][Camera.cameraWidth];
-
-        if (topLeftX >= 0 && topLeftY >= 0) {
-            for(int i = topLeftY; i < topLeftY + Camera.cameraWidth; i ++){
-                for(int j = topLeftX; j < topLeftX + Camera.cameraWidth; j ++){
-                    visibleTiles[j - topLeftX][i - topLeftY] = allTiles[j][i];
-                }
-            }
-        }
-
-        Camera camera = new Camera(visibleTiles);
+        Camera camera = new Camera();
 
         // camera.renderVisibleTiles(graphicsContext);
 
@@ -109,5 +100,9 @@ public class Main extends Application {
         {
             player.posY += speed;
         }
+    }
+
+    public static Player getPlayer(){
+        return player;
     }
 }
