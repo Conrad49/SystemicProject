@@ -30,6 +30,7 @@ public abstract class Tile {
         this.isTextured = false;
 
         this.boundsBox = new Rectangle(this.posX, this.posY, 10, 10);   // TODO: DECIDE WIDTH VARIABLE!
+        this.boundsBox.setFill(backColor);
 
         allTiles[xCount][yCount] = this;
         xCount ++;

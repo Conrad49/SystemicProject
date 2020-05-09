@@ -18,7 +18,7 @@ public class Main extends Application {
     }
 
     private static Scene mainScene;
-    private static Pane root;
+    private static Camera root;
     private static int WIDTH = 512;
     private static int HEIGHT = 256;
 
@@ -33,7 +33,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         stage.setTitle("Event Handling");
 
-        root = new Pane();
+        root = new Camera();
 
         mainScene = new Scene(root);
 
