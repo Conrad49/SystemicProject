@@ -34,6 +34,10 @@ public abstract class Tile {
 
         allTiles[xCount][yCount] = this;
         xCount ++;
+        if(xCount >= allTiles.length){
+            yCount++;
+            xCount = 0;
+        }
     }
 
     public Tile(int posX, int posY, Image texture){

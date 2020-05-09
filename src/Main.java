@@ -42,6 +42,7 @@ public class Main extends Application {
         stage.setScene(mainScene);
 
         prepareActionHandlers();
+        makeWorld();
 
         /**
          * Main "game" loop
@@ -63,7 +64,6 @@ public class Main extends Application {
         currentlyActiveKeys = new HashSet<String>();
         mainScene.setOnKeyPressed(e -> currentlyActiveKeys.add(e.getCode().toString()));
         mainScene.setOnKeyReleased(e -> currentlyActiveKeys.remove(e.getCode().toString()));
-
     }
 
     public void renderTiles(){
@@ -77,7 +77,7 @@ public class Main extends Application {
 
 
     private static void tickAndRender() {
-        Camera camera = new Camera();
+        root.update();
 
         // camera.renderVisibleTiles(graphicsContext);
 
@@ -104,5 +104,14 @@ public class Main extends Application {
 
     public static Player getPlayer(){
         return player;
+    }
+
+    private static void makeWorld(){
+        Tile[][] allTiles = Tile.getAllTiles();
+        for (int i = 0; i < 999; i++) {
+            for (int j = 0; j < 999; j++) {
+                new GrassTile(i * 10, j * 10, Color.GREEN);
+            }
+        }
     }
 }

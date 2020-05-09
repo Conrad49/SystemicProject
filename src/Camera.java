@@ -20,13 +20,12 @@ public class Camera extends Pane{
     private ArrayList<Group> tiles = new ArrayList<>();
 
     public Camera(){
-        update();
     }
 
     /**
      * makes sure all the groups are up to date
      */
-    private void update(){
+    public void update(){
         getChildren().clear();
 
         screenTilesWide = (int)(getWidth() / tileWidth) + 3;
@@ -60,12 +59,6 @@ public class Camera extends Pane{
             }
         }
     }
-
-    public Group getScreen(){
-        update();
-        return mainGroup;
-    }
-
 
     public void renderVisibleTiles(GraphicsContext g){
 
