@@ -10,28 +10,25 @@ import javafx.stage.Stage;
 
 import java.util.HashSet;
 
-public class Main extends Application
-{
+public class Main extends Application {
     public static void main(String[] args)
     {
         launch(args);
     }
 
-    static Scene mainScene;
-    static GraphicsContext graphicsContext;
-    static int WIDTH = 512;
-    static int HEIGHT = 256;
+    private static Scene mainScene;
+    private static int WIDTH = 512;
+    private static int HEIGHT = 256;
 
-    static HashSet<String> currentlyActiveKeys;
+    private static HashSet<String> currentlyActiveKeys;
 
-    private static final double speed = 5;
+    static final double speed = 5;
 
 
-    static Player player = new Player(Color.AQUA, new Rectangle(100, 100, 50, 70));
+    private static Player player = new Player(Color.AQUA, new Rectangle(100, 100, 50, 70));
 
     @Override
-    public void start(Stage mainStage)
-    {
+    public void start(Stage mainStage) {
         mainStage.setTitle("Event Handling");
 
         Group root = new Group();
@@ -56,8 +53,7 @@ public class Main extends Application
 
     }
 
-    private static void prepareActionHandlers()
-    {
+    private static void prepareActionHandlers() {
         // HashSets don't allow duplicate values
         currentlyActiveKeys = new HashSet<String>();
         mainScene.setOnKeyPressed(e -> currentlyActiveKeys.add(e.getCode().toString()));
@@ -76,11 +72,7 @@ public class Main extends Application
     }
 
 
-    private static void tickAndRender()
-    {
-        graphicsContext.clearRect(0, 0, WIDTH, HEIGHT);
-
-
+    private static void tickAndRender() {
         int topLeftX = player.tileX - Camera.cameraWidth/2;
         int topLeftY = player.tileY - Camera.cameraWidth/2;
         Tile[][] allTiles = Tile.getAllTiles();
@@ -117,6 +109,5 @@ public class Main extends Application
         {
             player.posY += speed;
         }
-
     }
 }
