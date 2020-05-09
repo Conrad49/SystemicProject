@@ -110,7 +110,7 @@ public class Main extends Application {
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {
             for (int j = 0; j < 999; j++) {
-                new GrassTile(i * 10, j * 10, Color.GREEN);
+                new GrassTile(i * Tile.width, j * Tile.width, Color.GREEN);
             }
         }
     }

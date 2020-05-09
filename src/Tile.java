@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 
 public abstract class Tile {
 
-    static int width = 20;
+    static int width = 16 * 4;
 
     Image texture;
     Color backColor;
@@ -29,7 +29,7 @@ public abstract class Tile {
 
         this.isTextured = false;
 
-        this.boundsBox = new Rectangle(this.posX, this.posY, 10, 10);   // TODO: DECIDE WIDTH VARIABLE!
+        this.boundsBox = new Rectangle(this.posX, this.posY, width, width);
         this.boundsBox.setFill(backColor);
 
         allTiles[xCount][yCount] = this;
