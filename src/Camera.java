@@ -27,8 +27,8 @@ public class Camera extends Pane{
     public void update(){
         getChildren().clear();
 
-        screenTilesWide = (int)(getWidth() / Tile.width) + 3;
-        screenTilesTall = (int)(getHeight() / Tile.width) + 3;
+        screenTilesWide = (int)(getWidth() / Tile.width + 4);
+        screenTilesTall = (int)(getHeight() / Tile.width + 4);
 
         Player p = Main.getPlayer();
 
@@ -36,33 +36,36 @@ public class Camera extends Pane{
         int topLeftY = p.tileY - screenTilesTall / 2;
         Tile[][] allTiles = Tile.getAllTiles();
 
-        // The offset is how far the player is away from the top left corner of the tile.
-        // This is used for shifting all tiles that far so that the player will not always on the top left corner of the tile.
-        int xOffset = (int) Math.round(p.getPosX() % Tile.width);
-        int yOffset = (int) Math.round(p.getPosY() % Tile.width);
+        for(int i = topLeftY; i < topLeftY + screenTilesTall; i ++){
+            for(int j = topLeftX; j < topLeftX + screenTilesWide; j ++){
+                if(i < 0){
+                    i = 0;
+                }
+                if(j < 0){
+                    j = 0;
+                }
 
-            for(int i = topLeftY; i < topLeftY + screenTilesTall; i ++){
-                for(int j = topLeftX; j < topLeftX + screenTilesWide; j ++){
-                    if(i < 0){
-                        i = 0;
-                    }
-                    if(j < 0){
-                        j = 0;
-                    }
+                if(allTiles[j][i].isTextured) {
+                    getChildren().add(new ImageView(allTiles[j][i].texture));
+                }else{
+                    Color tileCol = (Color) allTiles[j][i].getBoundsBox().getFill();
+                    int[] cords = shift(allTiles[j][i].posX, allTiles[j][i].posY);
+                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
-                    if(allTiles[j][i].isTextured) {
-                        getChildren().add(new ImageView(allTiles[j][i].texture));
-                    }else{
-                        Color tileCol = (Color) allTiles[j][i].getBoundsBox().getFill();
-                        int x = xOffset + j * Tile.width;
-                        int y = yOffset + i * Tile.width;
-                        Rectangle rect = new Rectangle(x, y, Tile.width, Tile.width);
-                        rect.setFill(tileCol);
-                        getChildren().add(rect);
-                    }
+                    rect.setFill(tileCol);
+                    rect.setStrokeWidth(5);
+                    rect.setStroke(Color.BLACK);
+                    getChildren().add(rect);
                 }
             }
+        }
+    }
 
+    public int[] shift(int x, int y){
+        x = (int)(x - Math.round(Main.getPlayer().getPosX()) + getWidth() / 2);
+        y = (int)(y - Math.round(Main.getPlayer().getPosY()) + getHeight() / 2);
+
+        return new int[] {x, y};
     }
 
     public void renderVisibleTiles(GraphicsContext g){
