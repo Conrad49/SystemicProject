@@ -45,11 +45,11 @@ public class Camera extends Pane{
                     j = 0;
                 }
 
-                if(allTiles[j][i].isTextured) {
-                    getChildren().add(new ImageView(allTiles[j][i].texture));
+                if(allTiles[i][j].isTextured) {
+                    getChildren().add(new ImageView(allTiles[i][j].texture));
                 }else{
-                    Color tileCol = (Color) allTiles[j][i].getBoundsBox().getFill();
-                    int[] cords = shift(allTiles[j][i].posX, allTiles[j][i].posY);
+                    Color tileCol = (Color) allTiles[i][j].getBoundsBox().getFill();
+                    int[] cords = shift(allTiles[i][j].posX, allTiles[i][j].posY);
                     Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
                     rect.setFill(tileCol);
@@ -74,7 +74,7 @@ public class Camera extends Pane{
 
         for(int i = 0; i < 10; i ++){
             for(int j = 0; j < 10; j++){
-                // visibleTiles[j][i].render(g);
+                // visibleTiles[i][j].render(g);
             }
         }
     }
