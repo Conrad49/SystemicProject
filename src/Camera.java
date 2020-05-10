@@ -57,6 +57,7 @@ public class Camera extends Pane{
                 }
             }
         }
+        getChildren().add(p.boundsBox);
     }
 
     /**
