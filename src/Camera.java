@@ -57,7 +57,7 @@ public class Camera extends Pane{
                 }
             }
         }
-        getChildren().add(Main.getPlayer().boundsBox);
+        getChildren().add(new Rectangle(getWidth()/2 - Main.getPlayer().boundsBox.getWidth()/2, getHeight()/2 - Main.getPlayer().boundsBox.getHeight()/2, Main.getPlayer().boundsBox.getWidth(), Main.getPlayer().boundsBox.getHeight()));
     }
 
     /**
