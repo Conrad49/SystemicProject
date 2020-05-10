@@ -27,7 +27,7 @@ public class Main extends Application {
     static final double speed = 5;
 
 
-    private static Player player = new Player(Color.AQUA, new Rectangle(512/2, 256/2, 50, 70));
+    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 50, 70));
 
     @Override
     public void start(Stage stage) {
@@ -110,7 +110,7 @@ public class Main extends Application {
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {
             for (int j = 0; j < 999; j++) {
-                new GrassTile(i * Tile.width, j * Tile.width, Color.GREEN);
+                new GrassTile(i * Tile.width, j * Tile.width);
             }
         }
     }
