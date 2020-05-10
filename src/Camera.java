@@ -57,7 +57,7 @@ public class Camera extends Pane{
                 }
             }
         }
-        getChildren().add(p.boundsBox);
+        getChildren().add(Main.getPlayer().boundsBox);
     }
 
     /**
