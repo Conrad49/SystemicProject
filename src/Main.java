@@ -12,7 +12,8 @@ import javafx.stage.Stage;
 import java.util.HashSet;
 
 /**
- * This is where all the running action takes place.
+ * This is where the setup and running happens. Everything from drawing a frame to
+ * deciding what each creature does in that from is decided from here.
  */
 public class Main extends Application {
     public static void main(String[] args)
@@ -39,17 +40,14 @@ public class Main extends Application {
         root = new Camera();
 
         mainScene = new Scene(root);
+        stage.setScene(mainScene);
 
         stage.setFullScreen(true);
-
-        stage.setScene(mainScene);
 
         prepareActionHandlers();
         makeWorld();
 
-        /**
-         * Main "game" loop
-         */
+         //Main "game" loop
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
