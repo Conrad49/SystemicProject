@@ -85,7 +85,8 @@ public abstract class Entity {
 
             if(tileBounds.intersects(this.boundsBox.getBoundsInLocal())){
                 if(tileBounds.getX() < this.boundsBox.getX()){
-                    this.posX = tileBounds.getX() + tileBounds.getWidth() - (this.boundsBox.getWidth()/2);
+                    this.posX = tileBounds.getX() + tileBounds.getWidth();
+                            //- (this.boundsBox.getWidth()/2);
                 }
 
                 if(tileBounds.getX() > this.boundsBox.getX()){

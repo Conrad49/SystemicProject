@@ -114,16 +114,20 @@ public class Main extends Application {
 
 
         // above
-        surroundingTiles[0] = allTiles[player.tileX][player.tileY - 1];
+        surroundingTiles[0] = allTiles[player.tileY - 1][player.tileX];
+        surroundingTiles[0].backColor = Color.RED;
 
         // below
-        surroundingTiles[1] = allTiles[player.tileX][player.tileY + 1];
+        surroundingTiles[1] = allTiles[player.tileY + 1][player.tileX];
+        surroundingTiles[1].backColor = Color.BLUE;
 
         // left
         surroundingTiles[2] = allTiles[player.tileY][player.tileX - 1];
+        surroundingTiles[2].backColor = Color.PALEGOLDENROD;
 
         // right
         surroundingTiles[3] = allTiles[player.tileY][player.tileX + 1];
+        surroundingTiles[3].backColor = Color.GRAY;
 
         for(Tile tile : surroundingTiles){
             player.checkTileCollision(tile);

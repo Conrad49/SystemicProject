@@ -17,6 +17,7 @@ public class Camera extends Pane{
     private int screenCenterX;
     private int screenCenterY;
     private Group mainGroup = new Group();
+    private static Player player = Main.getPlayer();
 
     private ArrayList<Group> tiles = new ArrayList<>();
 
@@ -49,15 +50,21 @@ public class Camera extends Pane{
                 }else{
                     Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
-                    Color tileCol = (Color) allTiles[i][j].getBoundsBox().getFill();
-                    rect.setFill(tileCol);
+                    //Color tileCol = (Color) allTiles[i][j].getBoundsBox().getFill();
+                    rect.setFill(allTiles[i][j].backColor);
                     rect.setStrokeWidth(3);
                     rect.setStroke(Color.BLACK);
                     getChildren().add(rect);
                 }
             }
         }
-        getChildren().add(new Rectangle(getWidth()/2 - Main.getPlayer().boundsBox.getWidth()/2, getHeight()/2 - Main.getPlayer().boundsBox.getHeight()/2, Main.getPlayer().boundsBox.getWidth(), Main.getPlayer().boundsBox.getHeight()));
+        //getChildren().add(new Rectangle(getWidth()/2 - Main.getPlayer().boundsBox.getWidth()/2, getHeight()/2 - Main.getPlayer().boundsBox.getHeight()/2, Main.getPlayer().boundsBox.getWidth(), Main.getPlayer().boundsBox.getHeight()));
+
+        int[] playerCoords = shift((int)player.posX, (int)player.posY);
+
+        Rectangle playerRect = new Rectangle(playerCoords[0] - player.boundsBox.getWidth()/2, playerCoords[1] - player.boundsBox.getHeight() / 2, player.boundsBox.getWidth(), player.boundsBox.getHeight());
+        playerRect.setFill(Color.BLACK);
+        getChildren().add(playerRect);
     }
 
     /**

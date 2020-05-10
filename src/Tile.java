@@ -29,7 +29,7 @@ public abstract class Tile {
         this.isTextured = false;
 
         this.boundsBox = new Rectangle(this.posX, this.posY, width, width);
-        this.boundsBox.setFill(backColor);
+        //this.boundsBox.setFill(backColor);
 
         allTiles[xCount][yCount] = this;
         xCount ++;
