@@ -86,25 +86,28 @@ public class Main extends Application {
      * This method does all of that and everything related to displaying that frame.
      */
     private static void tickAndRender() {
-        // camera.renderVisibleTiles(graphicsContext);
 
         if (currentlyActiveKeys.contains("A")) {
-            player.posX -= speed;
+            player.xSpeed = speed * -1;
+            player.posX += player.xSpeed;
             player.tileX = (int)player.posX / Tile.width;
         }
 
         if (currentlyActiveKeys.contains("D")) {
-            player.posX += speed;
+            player.xSpeed = speed;
+            player.posX += player.xSpeed;
             player.tileX = (int)player.posX / Tile.width;
         }
 
         if (currentlyActiveKeys.contains("W")) {
-            player.posY -= speed;
+            player.ySpeed = speed * -1;
+            player.posY += player.ySpeed;
             player.tileY = (int)player.posY / Tile.width;
         }
 
         if (currentlyActiveKeys.contains("S")) {
-            player.posY += speed;
+            player.ySpeed = speed;
+            player.posY += player.ySpeed;
             player.tileY = (int)player.posY / Tile.width;
         }
         player.boundsBox = new Rectangle(player.posX, player.posY, player.boundsBox.getWidth(), player.boundsBox.getHeight());
