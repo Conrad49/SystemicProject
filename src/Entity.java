@@ -125,4 +125,11 @@ public abstract class Entity {
     public Image getTexture() {
         return this.texture;
     }
+
+    public int[] getChunkCoords(){
+        int[] chunkCoords = new int[2];
+        chunkCoords[0] = this.tileX / Chunk.sideLength;
+        chunkCoords[1] = this.tileY / Chunk.sideLength;
+        return chunkCoords;
+    }
 }

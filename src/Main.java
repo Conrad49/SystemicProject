@@ -87,6 +87,12 @@ public class Main extends Application {
      */
     private static void tickAndRender() {
 
+        Chunk[] chunks = player.getSurroundingChunks();
+
+        for(Chunk chunk : chunks){
+            chunk.tick();
+        }
+
         if (currentlyActiveKeys.contains("A")) {
             player.xSpeed = speed * -1;
             player.posX += player.xSpeed;

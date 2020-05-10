@@ -24,4 +24,11 @@ public class Player extends Entity {
     public void tick() {
         super.tick();
     }
+
+    public Chunk[] getSurroundingChunks(){
+
+        Chunk[] surroundingChunks = new Chunk[9];
+
+        return surroundingChunks;
+    }
 }
