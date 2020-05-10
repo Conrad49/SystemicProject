@@ -46,8 +46,6 @@ public abstract class Entity {
     }
 
     public void tick(){
-
-        System.out.println("tick!");
         // update positions and velocities / speeds
     }
 

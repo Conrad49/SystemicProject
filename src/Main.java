@@ -67,7 +67,8 @@ public class Main extends Application {
      */
     private static void prepareActionHandlers() {
         // HashSets don't allow duplicate values
-        currentlyActiveKeys = new HashSet<String>();
+        //currentlyActiveKeys = new HashSet<String>();
+        currentlyActiveKeys = Player.getCurrentlyActiveKeys();
         mainScene.setOnKeyPressed(e -> currentlyActiveKeys.add(e.getCode().toString()));
         mainScene.setOnKeyReleased(e -> currentlyActiveKeys.remove(e.getCode().toString()));
     }
@@ -88,34 +89,11 @@ public class Main extends Application {
     private static void tickAndRender() {
 
         Chunk[] chunks = player.getSurroundingChunks();
+        player.tick();
+        //for(Chunk chunk : chunks){
+        //    chunk.tick();
+        //}
 
-        for(Chunk chunk : chunks){
-            chunk.tick();
-        }
-
-        if (currentlyActiveKeys.contains("A")) {
-            player.xSpeed = speed * -1;
-            player.posX += player.xSpeed;
-            player.tileX = (int)player.posX / Tile.width;
-        }
-
-        if (currentlyActiveKeys.contains("D")) {
-            player.xSpeed = speed;
-            player.posX += player.xSpeed;
-            player.tileX = (int)player.posX / Tile.width;
-        }
-
-        if (currentlyActiveKeys.contains("W")) {
-            player.ySpeed = speed * -1;
-            player.posY += player.ySpeed;
-            player.tileY = (int)player.posY / Tile.width;
-        }
-
-        if (currentlyActiveKeys.contains("S")) {
-            player.ySpeed = speed;
-            player.posY += player.ySpeed;
-            player.tileY = (int)player.posY / Tile.width;
-        }
         player.boundsBox = new Rectangle(player.posX, player.posY, player.boundsBox.getWidth(), player.boundsBox.getHeight());
 
         Tile[] surroundingTiles = new Tile[4];
