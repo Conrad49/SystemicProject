@@ -18,6 +18,7 @@ public abstract class Tile {
     private static int xCount = 0;
     private static int yCount = 0;
     Rectangle boundsBox;
+    private Image texture;
     boolean isSolid;
 
     public Tile(int posX, int posY, Color backColor){
@@ -57,5 +58,9 @@ public abstract class Tile {
 
     public static Tile[][] getAllTiles() {
         return allTiles;
+    }
+
+    public Image getTexture() {
+        return this.texture;
     }
 }

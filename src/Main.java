@@ -65,7 +65,8 @@ public class Main extends Application {
      */
     private static void prepareActionHandlers() {
         // HashSets don't allow duplicate values
-        currentlyActiveKeys = new HashSet<String>();
+        //currentlyActiveKeys = new HashSet<String>();
+        currentlyActiveKeys = Player.getCurrentlyActiveKeys();
         mainScene.setOnKeyPressed(e -> currentlyActiveKeys.add(e.getCode().toString()));
         mainScene.setOnKeyReleased(e -> currentlyActiveKeys.remove(e.getCode().toString()));
     }
@@ -84,27 +85,13 @@ public class Main extends Application {
      * This method does all of that and everything related to displaying that frame.
      */
     private static void tickAndRender() {
-        // camera.renderVisibleTiles(graphicsContext);
 
-        if (currentlyActiveKeys.contains("A")) {
-            player.posX -= speed;
-            player.tileX = (int)player.posX / Tile.width;
-        }
+        Chunk[] chunks = player.getSurroundingChunks();
+        player.tick();
+        //for(Chunk chunk : chunks){
+        //    chunk.tick();
+        //}
 
-        if (currentlyActiveKeys.contains("D")) {
-            player.posX += speed;
-            player.tileX = (int)player.posX / Tile.width;
-        }
-
-        if (currentlyActiveKeys.contains("W")) {
-            player.posY -= speed;
-            player.tileY = (int)player.posY / Tile.width;
-        }
-
-        if (currentlyActiveKeys.contains("S")) {
-            player.posY += speed;
-            player.tileY = (int)player.posY / Tile.width;
-        }
         player.boundsBox = new Rectangle(player.posX, player.posY, player.boundsBox.getWidth(), player.boundsBox.getHeight());
 
         Tile[] surroundingTiles = new Tile[4];
@@ -113,19 +100,19 @@ public class Main extends Application {
 
         // above
         surroundingTiles[0] = allTiles[player.tileY - 1][player.tileX];
-        surroundingTiles[0].backColor = Color.RED;
+        //surroundingTiles[0].backColor = Color.RED;
 
         // below
         surroundingTiles[1] = allTiles[player.tileY + 1][player.tileX];
-        surroundingTiles[1].backColor = Color.BLUE;
+        //surroundingTiles[1].backColor = Color.BLUE;
 
         // left
         surroundingTiles[2] = allTiles[player.tileY][player.tileX - 1];
-        surroundingTiles[2].backColor = Color.PALEGOLDENROD;
+        //surroundingTiles[2].backColor = Color.PALEGOLDENROD;
 
         // right
         surroundingTiles[3] = allTiles[player.tileY][player.tileX + 1];
-        surroundingTiles[3].backColor = Color.GRAY;
+        //surroundingTiles[3].backColor = Color.GRAY;
 
         for(Tile tile : surroundingTiles){
             player.checkTileCollision(tile);

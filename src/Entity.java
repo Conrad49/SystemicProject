@@ -8,8 +8,8 @@ import javafx.scene.shape.Shape;
 
 public abstract class Entity {
 
-    int xSpeed;
-    int ySpeed;
+    double xSpeed;
+    double ySpeed;
     Image texture;
     Color backColor;
     Rectangle boundsBox;
@@ -46,8 +46,6 @@ public abstract class Entity {
     }
 
     public void tick(){
-
-        System.out.println("tick!");
         // update positions and velocities / speeds
     }
 
@@ -74,33 +72,46 @@ public abstract class Entity {
         }
     }
 
+
+    /**
+     * Checks the entity that this method is called on for collision with a given tile
+     */
     public void checkTileCollision(Tile tile){
         Rectangle tileBounds = tile.boundsBox;
+
         if (tile.isSolid) {
 
-            Shape intersect = Shape.intersect(this.boundsBox, tileBounds);
+            Rectangle shiftedRect = new Rectangle(this.posX - (this.boundsBox.getWidth() / 2), this.posY - (this.boundsBox.getHeight() / 2), this.boundsBox.getWidth(), this.boundsBox.getHeight());
+
+            boolean intersects = tileBounds.intersects(shiftedRect.getBoundsInLocal());
+
+            Shape intersect = Shape.intersect(shiftedRect, tileBounds);
             if (intersect.getBoundsInLocal().getWidth() != -1) {
-               System.out.println("COLLISION!");
+
+                // left
+                if(tileBounds.getX() < this.boundsBox.getX() && this.xSpeed < 0 && (tile.posY / tile.boundsBox.getHeight()) == this.tileY){
+                    this.posX = this.posX + intersect.getBoundsInLocal().getWidth();
+                    this.xSpeed = 0;
+                }
+
+                if(tileBounds.getX() > this.boundsBox.getX() && this.xSpeed > 0 && (tile.posY / tile.boundsBox.getHeight()) == this.tileY){
+                    this.posX = this.posX - intersect.getBoundsInLocal().getWidth();
+                    this.xSpeed = 0;
+                }
+
+                // above
+                if(tileBounds.getY() < this.boundsBox.getY() && this.ySpeed < 0 && (tile.posX / tile.boundsBox.getWidth()) == this.tileX){
+                    this.posY = this.posY + intersect.getBoundsInLocal().getHeight();
+                    this.ySpeed = 0;
+                }
+
+                // below
+                if(tileBounds.getY() > this.boundsBox.getY() && this.ySpeed > 0 && (tile.posX / tile.boundsBox.getWidth()) == this.tileX){
+                    this.posY = this.posY - intersect.getBoundsInLocal().getHeight();
+                    this.ySpeed = 0;
+                }
             }
 
-            if(tileBounds.intersects(this.boundsBox.getBoundsInLocal())){
-                if(tileBounds.getX() < this.boundsBox.getX()){
-                    this.posX = tileBounds.getX() + tileBounds.getWidth();
-                            //- (this.boundsBox.getWidth()/2);
-                }
-
-                if(tileBounds.getX() > this.boundsBox.getX()){
-                    this.posX = tileBounds.getX() - (this.boundsBox.getWidth()/2);
-                }
-
-                if(tileBounds.getY() < this.boundsBox.getY()){
-                    this.posY = tileBounds.getY() + tileBounds.getHeight();
-                }
-
-                if(tileBounds.getY() > this.boundsBox.getY()){
-                    this.posY = tileBounds.getY() + tileBounds.getHeight();
-                }
-            }
         }
     }
 
@@ -110,5 +121,21 @@ public abstract class Entity {
 
     public double getPosY() {
         return posY;
+    }
+
+    public Image getTexture() {
+        return this.texture;
+    }
+
+
+    /**
+     * Gets an entity's coordinates in relation to all of the chunks (first chunk over and two chunks down)
+     * @return An int array with index 0 being the x-coordinate and index 1 being the y-coordinate
+     */
+    public int[] getChunkCoords(){
+        int[] chunkCoords = new int[2];
+        chunkCoords[0] = this.tileX / Chunk.sideLength;
+        chunkCoords[1] = this.tileY / Chunk.sideLength;
+        return chunkCoords;
     }
 }
