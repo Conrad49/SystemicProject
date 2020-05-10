@@ -105,12 +105,14 @@ public class Camera extends Pane{
             for(int j = topLeftX; j <= topLeftX + screenTilesWide; j ++){
                 int[] cords = shift(allTiles[i][j].posX, allTiles[i][j].posY);
 
-
                     //getChildren().add(new ImageView(allTiles[i][j].texture));
                     if (allTiles[i][j].getTexture() != null) {
-                        getChildren().add(new ImageView(allTiles[i][j].getTexture()));
-                    }
-                else{
+                        ImageView imageToAdd = new ImageView(allTiles[i][j].getTexture());
+                        imageToAdd.setX(cords[0]);
+                        imageToAdd.setY(cords[1]);
+
+                        visibleRow.add(imageToAdd);
+                    }else{
                     Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
                     rect.setFill(allTiles[i][j].backColor);
