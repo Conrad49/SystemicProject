@@ -59,6 +59,7 @@ public class Camera extends Pane{
                 }
             }
         }
+        getChildren().add(p.boundsBox);
     }
 
     public int[] shift(int x, int y){
