@@ -129,13 +129,15 @@ public class Main extends Application {
      * very basic world generation method.
      */
     private static void makeWorld(){
+        GrassTile.texture = (new Image("/res/GrassTile.png"));
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {
             for (int j = 0; j < 999; j++) {
                 if(i == 30 || j == 30){
                     new StoneTile(i * Tile.width, j * Tile.width);
                 }else {
-                    new GrassTile(i * Tile.width, j * Tile.width);
+                    GrassTile grassTile = new GrassTile(i * Tile.width, j * Tile.width);
+                    //grassTile.setTexture(new Image("/res/GrassTile.png"));
                 }
             }
         }

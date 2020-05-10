@@ -12,7 +12,7 @@ public abstract class Tile {
     Color backColor;
     int posX;
     int posY;
-    boolean isTextured;
+    boolean isTextured = false;
     boolean isInteractiveTile;
     private static Tile[][] allTiles = new Tile[999][999];    // TODO: fill array with Tiles and calculate size of array
     private static int xCount = 0;
@@ -62,5 +62,10 @@ public abstract class Tile {
 
     public Image getTexture() {
         return this.texture;
+    }
+
+    public void setTexture(Image image){
+        this.texture = image;
+        isTextured = true;
     }
 }

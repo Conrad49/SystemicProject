@@ -105,9 +105,12 @@ public class Camera extends Pane{
             for(int j = topLeftX; j <= topLeftX + screenTilesWide; j ++){
                 int[] cords = shift(allTiles[i][j].posX, allTiles[i][j].posY);
 
-                if(allTiles[i][j].isTextured) {
+
                     //getChildren().add(new ImageView(allTiles[i][j].texture));
-                }else{
+                    if (allTiles[i][j].getTexture() != null) {
+                        getChildren().add(new ImageView(allTiles[i][j].getTexture()));
+                    }
+                else{
                     Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
                     rect.setFill(allTiles[i][j].backColor);

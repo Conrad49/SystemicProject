@@ -8,6 +8,7 @@ public class GrassTile extends Tile {
 
     double movementSpeed;
     static Image texture;
+    static boolean isTextured = true;
 
     public GrassTile(int posX, int posY) {
         super(posX, posY, Color.GREEN);
@@ -15,8 +16,8 @@ public class GrassTile extends Tile {
         this.isInteractiveTile = true;
     }
 
-    public void setTexture(Image image){
-        texture = image;
-        this.isTextured = true;
+    public Image getTexture() {
+        return texture;
     }
+
 }
