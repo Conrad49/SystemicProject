@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.util.HashSet;
 
+/**
+ * This is where all the running action takes place.
+ */
 public class Main extends Application {
     public static void main(String[] args)
     {
@@ -59,6 +62,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Adds all the action handlers to the game.
+     */
     private static void prepareActionHandlers() {
         // HashSets don't allow duplicate values
         currentlyActiveKeys = new HashSet<String>();
@@ -75,10 +81,11 @@ public class Main extends Application {
         }
     }
 
-
+    /**
+     * A tick is what needs to be done in a frame like plant growth or creature ai choices and movement.
+     * This method does all of that and everything related to displaying that frame.
+     */
     private static void tickAndRender() {
-        root.update();
-
         // camera.renderVisibleTiles(graphicsContext);
 
         if (currentlyActiveKeys.contains("A")) {
@@ -100,12 +107,17 @@ public class Main extends Application {
             player.posY += speed;
             player.tileY = (int)player.posY / Tile.width;
         }
+
+        root.update();
     }
 
     public static Player getPlayer(){
         return player;
     }
 
+    /**
+     * very basic world generation method.
+     */
     private static void makeWorld(){
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {

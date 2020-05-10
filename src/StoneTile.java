@@ -2,7 +2,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
- * @author Benjamin Vick
+ * Stone is a solid tile that you cannot move past.
  */
 public class StoneTile extends Tile{
     double movementSpeed;
