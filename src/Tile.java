@@ -9,7 +9,6 @@ public abstract class Tile {
 
     static int width = 16 * 4;
 
-    Image texture;
     Color backColor;
     int posX;
     int posY;
@@ -40,11 +39,9 @@ public abstract class Tile {
         }
     }
 
-    public Tile(int posX, int posY, Image texture){
+    public Tile(int posX, int posY){
         this.posX = posX;
         this.posY = posY;
-
-        this.texture = texture;
 
         this.isTextured = true;
     }

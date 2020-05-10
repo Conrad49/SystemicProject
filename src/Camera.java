@@ -45,7 +45,7 @@ public class Camera extends Pane{
                 int[] cords = shift(allTiles[i][j].posX, allTiles[i][j].posY);
 
                 if(allTiles[i][j].isTextured) {
-                    getChildren().add(new ImageView(allTiles[i][j].texture));
+                    //getChildren().add(new ImageView(allTiles[i][j].texture));
                 }else{
                     Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
