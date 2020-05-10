@@ -153,8 +153,20 @@ public class Camera extends Pane{
 
             for (int i = 0; i <= screenTilesTall; i++) {
                 int[] cords = shift(allTiles[i][sideX].posX, allTiles[i][sideX].posY);
-                if (allTiles[i][sideX].isTextured) {
-                    //getChildren().add(new ImageView(allTiles[i][j].texture));
+                if (allTiles[i][sideX].getTexture() != null) {
+                    ImageView imageToAdd = new ImageView(allTiles[i][sideX].getTexture());
+                    imageToAdd.setX(cords[0]);
+                    imageToAdd.setY(cords[1]);
+
+                    if(changeTileX < 0) {
+                        // left move
+                        visibleTilesArray.get(i).add(0, imageToAdd);
+                        visibleTilesArray.get(i).remove(visibleTilesArray.get(i).size() - 1);
+                    }else{
+                        // right move
+                        visibleTilesArray.get(i).add(imageToAdd);
+                        visibleTilesArray.get(i).remove(0);
+                    }
                 } else {
                     Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
@@ -189,8 +201,12 @@ public class Camera extends Pane{
             ArrayList<Node> newRow = new ArrayList<>();
             for (int i = 0; i <= screenTilesWide; i++) {
                 int[] cords = shift(allTiles[sideY][i].posY, allTiles[sideY][i].posX);
-                if (allTiles[sideY][i].isTextured) {
-                    //getChildren().add(new ImageView(allTiles[i][j].texture));
+                if (allTiles[sideY][i].getTexture() != null) {
+                    ImageView imageToAdd = new ImageView(allTiles[sideY][i].getTexture());
+                    imageToAdd.setX(cords[0]);
+                    imageToAdd.setY(cords[1]);
+
+                    newRow.add(imageToAdd);
                 } else {
                     Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
 
@@ -206,6 +222,7 @@ public class Camera extends Pane{
                 visibleTilesArray.add(0, newRow);
                 visibleTilesArray.remove(visibleTilesArray.size());
             }else{
+                // down
                 visibleTilesArray.remove(0);
                 visibleTilesArray.add(newRow);
             }
@@ -222,7 +239,9 @@ public class Camera extends Pane{
             for(Node n : a){
                 // visibleTilesArray will only ever contain a rectangle or and image view
                 if(n instanceof ImageView){
-
+                    ImageView i = (ImageView) n;
+                    i.setX(i.getX() + changeX);
+                    i.setY(i.getY() + changeY);
                 }else{
                     Rectangle r = (Rectangle) n;
                     r.setX(r.getX() + changeX);
