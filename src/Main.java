@@ -78,8 +78,13 @@ public class Main extends Application {
         // HashSets don't allow duplicate values
         //currentlyActiveKeys = new HashSet<String>();
         currentlyActiveKeys = Player.getCurrentlyActiveKeys();
-        mainScene.setOnKeyPressed(e -> currentlyActiveKeys.add(e.getCode().toString()));
-        mainScene.setOnKeyReleased(e -> currentlyActiveKeys.remove(e.getCode().toString()));
+        mainScene.setOnKeyPressed(e -> {
+            currentlyActiveKeys.add(e.getCode().toString());
+        });
+        mainScene.setOnKeyReleased(e -> {
+            player.setHasChangedFullscreen(false);
+            currentlyActiveKeys.remove(e.getCode().toString());
+        });
     }
 
     public void renderTiles(){

@@ -11,6 +11,8 @@ public class Player extends Entity {
     private static int speed = 5;
 
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
+    private boolean hasChangedFullscreen;
+
 
 
     public Player(Color backColor, javafx.scene.shape.Rectangle boundsBox) {
@@ -56,10 +58,16 @@ public class Player extends Entity {
         }
         // Binding for going in and out of fullscreen
         if(currentlyActiveKeys.contains("F11")) {
-            Main.switchFullscreen();
-            currentlyActiveKeys.remove("F11");
+            if (!hasChangedFullscreen) {
+                Main.switchFullscreen();
+            }
+            hasChangedFullscreen = true;
         }
 
+    }
+    // Sets the variable that checks if the fullscreen has been changed
+    public void setHasChangedFullscreen(boolean hasChangedFullscreen) {
+        this.hasChangedFullscreen = hasChangedFullscreen;
     }
 
     public Chunk[] getSurroundingChunks(){
