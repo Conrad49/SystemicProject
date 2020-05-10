@@ -3,6 +3,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class Player extends Entity {
 
@@ -29,6 +30,7 @@ public class Player extends Entity {
     public void tick() {
         super.tick();
 
+
         if (currentlyActiveKeys.contains("A")) {
             this.xSpeed = speed * -1;
             this.posX += this.xSpeed;
@@ -52,6 +54,12 @@ public class Player extends Entity {
             this.posY += this.ySpeed;
             this.tileY = (int)this.posY / Tile.width;
         }
+        // Binding for going in and out of fullscreen
+        if(currentlyActiveKeys.contains("F11")) {
+            Main.switchFullscreen();
+            currentlyActiveKeys.remove("F11");
+        }
+
     }
 
     public Chunk[] getSurroundingChunks(){

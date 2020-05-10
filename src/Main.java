@@ -20,7 +20,7 @@ public class Main extends Application {
     {
         launch(args);
     }
-
+    private static Stage stage; //
     private static Scene mainScene;
     private static Camera root;
     private static int WIDTH = 512;
@@ -35,6 +35,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        Main.stage = stage;
         stage.setTitle("Event Handling");
 
         root = new Camera();
@@ -60,6 +61,16 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Switches the program in and out of fullscreen
+     */
+    public static void switchFullscreen() {
+        if (stage.isFullScreen()) {
+            stage.setFullScreen(false);
+        } else {
+            stage.setFullScreen(true);
+        }
+    }
     /**
      * Adds all the action handlers to the game.
      */
