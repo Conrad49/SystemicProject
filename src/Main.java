@@ -107,10 +107,6 @@ public class Main extends Application {
             player.posY += speed;
             player.tileY = (int)player.posY / Tile.width;
         }
-
-<<<<<<< HEAD
-        root.update();
-=======
         player.boundsBox = new Rectangle(player.posX, player.posY, player.boundsBox.getWidth(), player.boundsBox.getHeight());
 
         Tile[] surroundingTiles = new Tile[4];
@@ -133,7 +129,7 @@ public class Main extends Application {
             player.checkTileCollision(tile);
         }
 
->>>>>>> e34059a128722b920f50792e8418e82fc86c34b0
+        root.update();
     }
 
     public static Player getPlayer(){
