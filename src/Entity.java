@@ -72,7 +72,10 @@ public abstract class Entity {
         }
     }
 
-    // checks the entity that this method is called on for collision with a given tile
+
+    /**
+     * Checks the entity that this method is called on for collision with a given tile
+     */
     public void checkTileCollision(Tile tile){
         Rectangle tileBounds = tile.boundsBox;
 
@@ -124,6 +127,11 @@ public abstract class Entity {
         return this.texture;
     }
 
+
+    /**
+     * Gets an entity's coordinates in relation to all of the chunks (first chunk over and two chunks down)
+     * @return An int array with index 0 being the x-coordinate and index 1 being the y-coordinate
+     */
     public int[] getChunkCoords(){
         int[] chunkCoords = new int[2];
         chunkCoords[0] = this.tileX / Chunk.sideLength;
