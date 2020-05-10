@@ -108,7 +108,32 @@ public class Main extends Application {
             player.tileY = (int)player.posY / Tile.width;
         }
 
+<<<<<<< HEAD
         root.update();
+=======
+        player.boundsBox = new Rectangle(player.posX, player.posY, player.boundsBox.getWidth(), player.boundsBox.getHeight());
+
+        Tile[] surroundingTiles = new Tile[4];
+        Tile[][] allTiles = Tile.getAllTiles();
+
+
+        // above
+        surroundingTiles[0] = allTiles[player.tileX][player.tileY - 1];
+
+        // below
+        surroundingTiles[1] = allTiles[player.tileX][player.tileY + 1];
+
+        // left
+        surroundingTiles[2] = allTiles[player.tileY][player.tileX - 1];
+
+        // right
+        surroundingTiles[3] = allTiles[player.tileY][player.tileX + 1];
+
+        for(Tile tile : surroundingTiles){
+            player.checkTileCollision(tile);
+        }
+
+>>>>>>> e34059a128722b920f50792e8418e82fc86c34b0
     }
 
     public static Player getPlayer(){
