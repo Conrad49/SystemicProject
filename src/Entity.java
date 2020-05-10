@@ -1,7 +1,9 @@
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 
 public abstract class Entity {
@@ -67,6 +69,35 @@ public abstract class Entity {
 
 
 
+                }
+            }
+        }
+    }
+
+    public void checkTileCollision(Tile tile){
+        Rectangle tileBounds = tile.boundsBox;
+        if (tile.isSolid) {
+
+            Shape intersect = Shape.intersect(this.boundsBox, tileBounds);
+            if (intersect.getBoundsInLocal().getWidth() != -1) {
+               System.out.println("COLLISION!");
+            }
+
+            if(tileBounds.intersects(this.boundsBox.getBoundsInLocal())){
+                if(tileBounds.getX() < this.boundsBox.getX()){
+                    this.posX = tileBounds.getX() + tileBounds.getWidth() - (this.boundsBox.getWidth()/2);
+                }
+
+                if(tileBounds.getX() > this.boundsBox.getX()){
+                    this.posX = tileBounds.getX() - (this.boundsBox.getWidth()/2);
+                }
+
+                if(tileBounds.getY() < this.boundsBox.getY()){
+                    this.posY = tileBounds.getY() + tileBounds.getHeight();
+                }
+
+                if(tileBounds.getY() > this.boundsBox.getY()){
+                    this.posY = tileBounds.getY() + tileBounds.getHeight();
                 }
             }
         }
