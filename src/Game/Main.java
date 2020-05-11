@@ -147,15 +147,23 @@ public class Main extends Application {
     private static void makeWorld(){
         GrassTile.setTexture(new Image("/res/GrassTile.png"));
         StoneTile.setTexture(new Image("/res/StoneTile.png"));
+        Rectangle[][] noiseRectangles = ImprovedNoise.getNoiseArray();
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {
             for (int j = 0; j < 999; j++) {
-                if(i == 30 || j == 30){
+                Color color = (Color)noiseRectangles[i][j].getFill();
+                if (color.getBlue() < 0.5){
+                    new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                } else {
+                    new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                }
+
+                /*if(i == 30 || j == 30){
                     new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
                 }else {
                     GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
                     //grassTile.setTexture(new Image("/res/Game.Tiles.GrassTile.png"));
-                }
+                }*/
             }
         }
     }

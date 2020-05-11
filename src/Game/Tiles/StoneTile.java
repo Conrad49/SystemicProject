@@ -14,7 +14,7 @@ public class StoneTile extends Tile {
         super(posX, posY, Color.GRAY);
         this.movementSpeed = 5;
         this.isInteractiveTile = true;
-        super.isSolid = true;
+        super.isSolid = false;
     }
 
     public static void setTexture(Image image){

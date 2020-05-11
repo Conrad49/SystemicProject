@@ -2,7 +2,14 @@ package Game;
 
 // JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN.
 
+//import java.awt.*;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
 public final class ImprovedNoise {
+    static boolean grayScale = false;
+    //static double zCount = 1;
     static public double noise(double x, double y, double z) {
         int X = (int)Math.floor(x) & 255,                  // FIND UNIT CUBE THAT
                 Y = (int)Math.floor(y) & 255,                  // CONTAINS POINT.
@@ -50,14 +57,38 @@ public final class ImprovedNoise {
     static { for (int i=0; i < 256 ; i++) p[256+i] = p[i] = permutation[i]; }
 
 
-    public static void main(String[] args) {
-        double count = 3.14;
-        double step = 0.01;
 
-        while(true) {
-            System.out.println(noise(count, 42, 7));
-            count += step;
+    public static Rectangle[][] getNoiseArray(){
+        Rectangle[][] noise = new Rectangle[999][999];
+
+        double count = 3.14;
+        double yCount = 1.25;
+
+        //was 0.02
+        double step = 0.01;
+        //zCount += step;
+
+        for(int i = 0; i < 999; i ++){
+            for(int j = 0; j < 999; j++){
+                double noiseVal = (noise(count, yCount, 1) + 1)/2.0;
+                       Rectangle rectangle = new Rectangle(j, i, 1, 1);
+                if (!grayScale) {
+                    if(noiseVal > 0 && noiseVal < 0.5) {
+                        rectangle.setFill(Color.RED);
+                    } else {
+                        //rectangle.setFill(new Color(noiseVal, noiseVal, noiseVal, 1));
+                        rectangle.setFill(Color.BLUE);
+                    }
+                } else {
+                    rectangle.setFill(new Color(noiseVal, noiseVal,noiseVal, 1));
+                }
+                noise[i][j] = rectangle;
+                count += step;
+            }
+            count = 3.14;
+            yCount += step;
         }
 
+        return noise;
     }
 }
