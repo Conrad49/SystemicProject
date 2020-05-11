@@ -1,5 +1,7 @@
-package Game;
+package Game.Entities;
 
+import Game.Chunk;
+import Game.Entities.Player;
 import Game.Tiles.Tile;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -12,14 +14,14 @@ public abstract class Entity {
     double ySpeed;
     Image texture;
     Color backColor;
-    protected Rectangle boundsBox;
+    private Rectangle boundsBox;
     int tileX;
     int tileY;
     double posX;
     double posY;
     boolean isVisible = false;
-    protected int width;
-    protected int height;
+    private int width;
+    private int height;
 
     public Entity(Color backColor, Rectangle boundsBox) {
         this.backColor = backColor;
@@ -132,7 +134,45 @@ public abstract class Entity {
         return chunkCoords;
     }
 
+    private void move() {}
+
     public Rectangle getBoundsBox() {
         return boundsBox;
+    }
+
+    public double getxSpeed() {
+        return xSpeed;
+    }
+
+    public double getySpeed() {
+        return ySpeed;
+    }
+
+    public Color getBackColor() {
+        return backColor;
+    }
+
+    public int getTileX() {
+        return tileX;
+    }
+
+    public int getTileY() {
+        return tileY;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setBoundsBox(Rectangle boundsBox) {
+        this.boundsBox = boundsBox;
     }
 }

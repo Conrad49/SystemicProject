@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Entities.Player;
 import Game.Tiles.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -108,26 +109,27 @@ public class Main extends Application {
         //    chunk.tick();
         //}
 
-        player.boundsBox = new Rectangle(player.posX, player.posY, player.boundsBox.getWidth(), player.boundsBox.getHeight());
+        player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
+                player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
 
         Tile[] surroundingTiles = new Tile[4];
         Tile[][] allTiles = Tile.getAllTiles();
 
 
         // above
-        surroundingTiles[0] = allTiles[player.tileY - 1][player.tileX];
+        surroundingTiles[0] = allTiles[player.getTileY() - 1][player.getTileX()];
         //surroundingTiles[0].backColor = Color.RED;
 
         // below
-        surroundingTiles[1] = allTiles[player.tileY + 1][player.tileX];
+        surroundingTiles[1] = allTiles[player.getTileY() + 1][player.getTileX()];
         //surroundingTiles[1].backColor = Color.BLUE;
 
         // left
-        surroundingTiles[2] = allTiles[player.tileY][player.tileX - 1];
+        surroundingTiles[2] = allTiles[player.getTileY()][player.getTileX() - 1];
         //surroundingTiles[2].backColor = Color.PALEGOLDENROD;
 
         // right
-        surroundingTiles[3] = allTiles[player.tileY][player.tileX + 1];
+        surroundingTiles[3] = allTiles[player.getTileY()][player.getTileX() + 1];
         //surroundingTiles[3].backColor = Color.GRAY;
 
         for(Tile tile : surroundingTiles){

@@ -1,14 +1,13 @@
 package Game;
 
+import Game.Entities.Entity;
 import Game.Tiles.Tile;
-
 import java.util.ArrayList;
 
 public class Chunk {
-
     ArrayList<Entity> entities;
     ArrayList<Tile> tiles;
-    static int sideLength;
+    public static int sideLength;
     int tileX;
     int tileY;
 

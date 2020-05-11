@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Entities.Player;
 import Game.Tiles.Tile;
 import javafx.scene.Group;
 import javafx.scene.Node;
