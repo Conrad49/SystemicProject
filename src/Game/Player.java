@@ -1,8 +1,6 @@
 package Game;
 
-import Game.Chunk;
-import Game.Entity;
-import Game.Main;
+import Game.Tiles.Tile;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -34,25 +32,25 @@ public class Player extends Entity {
         if (currentlyActiveKeys.contains("A")) {
             this.xSpeed = speed * -1;
             this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.width;
+            this.tileX = (int)this.posX / Tile.getWidth();
         }
 
         if (currentlyActiveKeys.contains("D")) {
             this.xSpeed = speed;
             this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.width;
+            this.tileX = (int)this.posX / Tile.getWidth();
         }
 
         if (currentlyActiveKeys.contains("W")) {
             this.ySpeed = speed * -1;
             this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.width;
+            this.tileY = (int)this.posY / Tile.getWidth();
         }
 
         if (currentlyActiveKeys.contains("S")) {
             this.ySpeed = speed;
             this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.width;
+            this.tileY = (int)this.posY / Tile.getWidth();
         }
         // Binding for going in and out of fullscreen
         if(currentlyActiveKeys.contains("F11")) {

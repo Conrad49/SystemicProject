@@ -1,4 +1,4 @@
-package Game;
+package Game.Tiles;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -17,9 +17,9 @@ public class StoneTile extends Tile {
         super.isSolid = true;
     }
 
-    public void setTexture(Image image){
+    public static void setTexture(Image image){
         texture = image;
-        this.isTextured = true;
+        isTextured = true;
     }
 
     public Image getTexture() {

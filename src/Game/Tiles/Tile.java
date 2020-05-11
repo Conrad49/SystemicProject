@@ -1,4 +1,4 @@
-package Game;
+package Game.Tiles;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -12,7 +12,7 @@ public abstract class Tile {
     Color backColor;
     int posX;
     int posY;
-    boolean isTextured = false;
+    static boolean isTextured = false;
     boolean isInteractiveTile;
     private static Tile[][] allTiles = new Tile[999][999];    // TODO: fill array with Tiles and calculate size of array
     private static int xCount = 0;
@@ -64,8 +64,33 @@ public abstract class Tile {
         return this.texture;
     }
 
-    public void setTexture(Image image){
-        this.texture = image;
-        isTextured = true;
+
+    public static int getWidth() {
+        return width;
     }
+
+    public Color getBackColor() {
+        return backColor;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public boolean isTextured() {
+        return isTextured;
+    }
+
+    public boolean isInteractiveTile() {
+        return isInteractiveTile;
+    }
+
+    public boolean isSolid() {
+        return isSolid;
+    }
+
 }

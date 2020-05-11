@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Tiles.Tile;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -54,8 +55,8 @@ public class Camera extends Pane{
         oldScreenCenterX = screenCenterX;
         int oldScreenWide = screenTilesWide;
         int oldScreenTall = screenTilesTall;
-        screenTilesWide = (int)(getWidth() / Tile.width + 4);
-        screenTilesTall = (int)(getHeight() / Tile.width + 4);
+        screenTilesWide = (int)(getWidth() / Tile.getWidth() + 4);
+        screenTilesTall = (int)(getHeight() / Tile.getWidth() + 4);
         topLeftX = screenCenterTileX - screenTilesWide / 2;
         topLeftY = screenCenterTileY - screenTilesTall / 2;
         changeTileX = oldScreenCenterTileX - screenCenterTileX;
@@ -105,7 +106,7 @@ public class Camera extends Pane{
         for(int i = topLeftY; i <= topLeftY + screenTilesTall; i ++){
             ArrayList<Node> visibleRow = new ArrayList<>();
             for(int j = topLeftX; j <= topLeftX + screenTilesWide; j ++){
-                int[] cords = shift(allTiles[i][j].posX, allTiles[i][j].posY);
+                int[] cords = shift(allTiles[i][j].getPosX(), allTiles[i][j].getPosY());
 
                     //getChildren().add(new ImageView(allTiles[i][j].texture));
                     if (allTiles[i][j].getTexture() != null) {
@@ -115,9 +116,10 @@ public class Camera extends Pane{
 
                         visibleRow.add(imageToAdd);
                     }else{
-                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
+                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.getWidth(),
+                            Tile.getWidth());
 
-                    rect.setFill(allTiles[i][j].backColor);
+                    rect.setFill(allTiles[i][j].getBackColor());
                     rect.setStrokeWidth(3);
                     rect.setStroke(Color.BLACK);
                     visibleRow.add(rect);
@@ -154,7 +156,7 @@ public class Camera extends Pane{
         if(sideX != -1) {//will only be false if the change in x is 0
 
             for (int i = 0; i <= screenTilesTall; i++) {
-                int[] cords = shift(allTiles[i][sideX].posX, allTiles[i][sideX].posY);
+                int[] cords = shift(allTiles[i][sideX].getPosX(), allTiles[i][sideX].getPosY());
                 if (allTiles[i][sideX].getTexture() != null) {
                     ImageView imageToAdd = new ImageView(allTiles[i][sideX].getTexture());
                     imageToAdd.setX(cords[0]);
@@ -170,9 +172,9 @@ public class Camera extends Pane{
                         visibleTilesArray.get(i).remove(0);
                     }
                 } else {
-                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
+                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.getWidth(), Tile.getWidth());
 
-                    rect.setFill(allTiles[i][sideX].backColor);
+                    rect.setFill(allTiles[i][sideX].getBackColor());
                     rect.setStrokeWidth(3);
                     rect.setStroke(Color.BLACK);
 
@@ -202,7 +204,7 @@ public class Camera extends Pane{
 
             ArrayList<Node> newRow = new ArrayList<>();
             for (int i = 0; i <= screenTilesWide; i++) {
-                int[] cords = shift(allTiles[sideY][i].posY, allTiles[sideY][i].posX);
+                int[] cords = shift(allTiles[sideY][i].getPosY(), allTiles[sideY][i].getPosX());
                 if (allTiles[sideY][i].getTexture() != null) {
                     ImageView imageToAdd = new ImageView(allTiles[sideY][i].getTexture());
                     imageToAdd.setX(cords[0]);
@@ -210,9 +212,9 @@ public class Camera extends Pane{
 
                     newRow.add(imageToAdd);
                 } else {
-                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.width, Tile.width);
+                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.getWidth(), Tile.getWidth());
 
-                    rect.setFill(allTiles[sideY][i].backColor);
+                    rect.setFill(allTiles[sideY][i].getBackColor());
                     rect.setStrokeWidth(3);
                     rect.setStroke(Color.BLACK);
 
@@ -301,7 +303,7 @@ public class Camera extends Pane{
         screenCenterX = (int) Main.getPlayer().posX;
         screenCenterY = (int) Main.getPlayer().posY;
 
-        screenCenterTileX = screenCenterX / Tile.width;
-        screenCenterTileY = screenCenterY / Tile.width;
+        screenCenterTileX = screenCenterX / Tile.getWidth();
+        screenCenterTileY = screenCenterY / Tile.getWidth();
     }
 }
