@@ -143,7 +143,7 @@ public class Main extends Application {
      */
     private static void makeWorld(){
         GrassTile.texture = (new Image("/res/GrassTile.png"));
-        StoneTile.texture = new Image("/StoneTile.png");
+        StoneTile.texture = new Image("/res/StoneTile.png");
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {
             for (int j = 0; j < 999; j++) {
