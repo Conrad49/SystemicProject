@@ -1,9 +1,12 @@
-import javafx.scene.canvas.GraphicsContext;
+package Game;
+
+import Game.Chunk;
+import Game.Entity;
+import Game.Main;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class Player extends Entity {
 

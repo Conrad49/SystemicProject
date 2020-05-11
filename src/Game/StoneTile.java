@@ -1,10 +1,12 @@
+package Game;
+
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
  * Stone is a solid tile that you cannot move past.
  */
-public class StoneTile extends Tile{
+public class StoneTile extends Tile {
     double movementSpeed;
     static Image texture;
 

@@ -1,3 +1,6 @@
+package Game;
+
+import Game.Chunk;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -21,8 +24,8 @@ public abstract class Entity {
         this.boundsBox = boundsBox;
         this.posX = boundsBox.getX();
         this.posY = boundsBox.getY();
-        this.tileX = (int)posX/Tile.width;
-        this.tileY = (int)posY/Tile.width;
+        this.tileX = (int)posX/ Tile.width;
+        this.tileY = (int)posY/ Tile.width;
     }
 
     public Entity(Image texture, Rectangle boundsBox) {
@@ -30,8 +33,8 @@ public abstract class Entity {
         this.boundsBox = boundsBox;
         this.posX = boundsBox.getX();
         this.posY = boundsBox.getY();
-        this.tileX = (int)posX/Tile.width;
-        this.tileY = (int)posY/Tile.width;
+        this.tileX = (int)posX/ Tile.width;
+        this.tileY = (int)posY/ Tile.width;
     }
 
     public void setxSpeed(int xSpeed) {

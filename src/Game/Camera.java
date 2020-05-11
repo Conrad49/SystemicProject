@@ -1,3 +1,5 @@
+package Game;
+
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -77,7 +79,7 @@ public class Camera extends Pane{
 
         //Temporary position
 
-        //getChildren().add(new Rectangle(getWidth()/2 - Main.getPlayer().boundsBox.getWidth()/2, getHeight()/2 - Main.getPlayer().boundsBox.getHeight()/2, Main.getPlayer().boundsBox.getWidth(), Main.getPlayer().boundsBox.getHeight()));
+        //getChildren().add(new Rectangle(getWidth()/2 - Game.Main.getPlayer().boundsBox.getWidth()/2, getHeight()/2 - Game.Main.getPlayer().boundsBox.getHeight()/2, Game.Main.getPlayer().boundsBox.getWidth(), Game.Main.getPlayer().boundsBox.getHeight()));
 
         entityGroup.getChildren().clear();
 
@@ -296,8 +298,8 @@ public class Camera extends Pane{
      * screen and the players position to be the same.
      */
     private void findScreenCenter(){
-        screenCenterX = (int)Main.getPlayer().posX;
-        screenCenterY = (int)Main.getPlayer().posY;
+        screenCenterX = (int) Main.getPlayer().posX;
+        screenCenterY = (int) Main.getPlayer().posY;
 
         screenCenterTileX = screenCenterX / Tile.width;
         screenCenterTileY = screenCenterY / Tile.width;

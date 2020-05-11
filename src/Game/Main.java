@@ -1,3 +1,5 @@
+package Game;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -45,7 +47,7 @@ public class Main extends Application {
         prepareActionHandlers();
         makeWorld();
 
-         //Main "game" loop
+         //Game.Main "game" loop
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
@@ -101,7 +103,7 @@ public class Main extends Application {
 
         Chunk[] chunks = player.getSurroundingChunks();
         player.tick();
-        //for(Chunk chunk : chunks){
+        //for(Game.Chunk chunk : chunks){
         //    chunk.tick();
         //}
 
@@ -151,7 +153,7 @@ public class Main extends Application {
                     new StoneTile(i * Tile.width, j * Tile.width);
                 }else {
                     GrassTile grassTile = new GrassTile(i * Tile.width, j * Tile.width);
-                    //grassTile.setTexture(new Image("/res/GrassTile.png"));
+                    //grassTile.setTexture(new Image("/res/Game.GrassTile.png"));
                 }
             }
         }
