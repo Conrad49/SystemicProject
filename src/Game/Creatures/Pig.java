@@ -12,7 +12,7 @@ public class Pig extends Entity{
         super(backColor, new Rectangle(x, y, 128, 64));
         width = (int) boundsBox.getWidth();
         height = (int) boundsBox.getHeight();
-        Rectangle r = new Rectangle(x, y, width, height);
+        
 
     }
 
