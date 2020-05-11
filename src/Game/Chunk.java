@@ -1,5 +1,7 @@
 package Game;
 
+import Game.Tiles.Tile;
+
 import java.util.ArrayList;
 
 public class Chunk {

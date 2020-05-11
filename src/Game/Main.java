@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Tiles.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -144,16 +145,16 @@ public class Main extends Application {
      * very basic world generation method.
      */
     private static void makeWorld(){
-        GrassTile.texture = (new Image("/res/GrassTile.png"));
-        StoneTile.texture = new Image("/res/StoneTile.png");
+        GrassTile.setTexture(new Image("/res/GrassTile.png"));
+        StoneTile.setTexture(new Image("/res/StoneTile.png"));
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {
             for (int j = 0; j < 999; j++) {
                 if(i == 30 || j == 30){
-                    new StoneTile(i * Tile.width, j * Tile.width);
+                    new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
                 }else {
-                    GrassTile grassTile = new GrassTile(i * Tile.width, j * Tile.width);
-                    //grassTile.setTexture(new Image("/res/Game.GrassTile.png"));
+                    GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    //grassTile.setTexture(new Image("/res/Game.Tiles.GrassTile.png"));
                 }
             }
         }

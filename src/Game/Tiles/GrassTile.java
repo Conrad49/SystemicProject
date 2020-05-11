@@ -1,4 +1,4 @@
-package Game;
+package Game.Tiles;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -22,4 +22,8 @@ public class GrassTile extends Tile {
         return texture;
     }
 
+    public static void setTexture(Image texture) {
+        GrassTile.texture = texture;
+        isTextured = true;
+    }
 }
