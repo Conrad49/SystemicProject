@@ -32,6 +32,9 @@ public class Noise extends Application {
         //}.start();
 
         testImage(root);
+        root.setOnMousePressed(e -> {
+            testImage(root);
+        });
 
         stage.setScene(scene);
         stage.show();
@@ -49,23 +52,49 @@ public class Noise extends Application {
         }
     }
 
+    double zCount = 0;
+
     public void testImage(Pane root){
+        root.getChildren().clear();
         Canvas canvas = new Canvas(root.getWidth(), root.getHeight());
         PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
 
-        double count = 3.14;
-        double yCount = 1.25;
+        double count = 0;
+        double yCount = 0;
+        zCount += 10;
         double inc = 0.01;
 
         for(int i = 0; i < root.getHeight(); i ++) {
             for (int j = 0; j < root.getWidth(); j++) {
-                double noiseVal = (ImprovedNoise.noise(count, yCount, 1) + 1) / 2.0;
+                double noiseVal = (ImprovedNoise.noise(count, yCount, zCount) + 1) / 2.0;
                 count += inc;
 
-                if (noiseVal < 0.3) {
+                if (noiseVal < 0.2) {
                     pw.setColor(j, i, Color.RED);
+                }else if(noiseVal < 0.25){
+                    pw.setColor(j, i, Color.ORANGERED);
+                }else if(noiseVal < 0.3){
+                    pw.setColor(j, i, Color.ORANGE);
+                }else if(noiseVal < 0.35){
+                    pw.setColor(j, i, Color.GOLD);
                 } else if(noiseVal < 0.4){
+                    pw.setColor(j, i, Color.YELLOW);
+                } else if(noiseVal < 0.45){
+                    pw.setColor(j, i, Color.YELLOWGREEN);
+                }else if(noiseVal < 0.5){
+                    pw.setColor(j, i, Color.GREEN);
+                }else if(noiseVal < 0.55){
+                    pw.setColor(j, i, Color.DARKGREEN);
+                }else if(noiseVal < 0.6){
                     pw.setColor(j, i, Color.BLUE);
+                }else if(noiseVal < 0.65){
+                    pw.setColor(j, i, Color.SKYBLUE);
+                }else if(noiseVal < 0.7){
+                    pw.setColor(j, i, Color.DARKBLUE);
+                }else if(noiseVal < 0.75){
+                    pw.setColor(j, i, Color.MAGENTA);
+                }else if(noiseVal < 0.8){
+                    pw.setColor(j, i, Color.PURPLE);
                 }
             }
             count = 0;
