@@ -32,7 +32,7 @@ public class Main extends Application {
     static final double speed = 5;
 
 
-    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 50, 70));
+    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 40));
 
     @Override
     public void start(Stage stage) {
