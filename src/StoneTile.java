@@ -19,4 +19,8 @@ public class StoneTile extends Tile{
         texture = image;
         this.isTextured = true;
     }
+
+    public Image getTexture() {
+        return texture;
+    }
 }

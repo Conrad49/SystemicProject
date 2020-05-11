@@ -1,10 +1,7 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -146,6 +143,7 @@ public class Main extends Application {
      */
     private static void makeWorld(){
         GrassTile.texture = (new Image("/res/GrassTile.png"));
+        StoneTile.texture = new Image("/StoneTile.png");
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < 999; i++) {
             for (int j = 0; j < 999; j++) {
