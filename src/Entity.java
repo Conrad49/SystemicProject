@@ -1,10 +1,7 @@
-import javafx.geometry.Bounds;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-
 
 public abstract class Entity {
 
@@ -47,15 +44,6 @@ public abstract class Entity {
 
     public void tick(){
         // update positions and velocities / speeds
-    }
-
-    public void render(GraphicsContext g){
-        if(texture != null){
-            g.drawImage(this.texture, this.posX, this.posY);
-        } else {
-            g.setStroke(this.backColor);
-            g.fillRect(this.boundsBox.getX(), this.boundsBox.getY(), this.boundsBox.getWidth(), this.boundsBox.getHeight());
-        }
     }
 
     public void checkVisiblity(Player p){

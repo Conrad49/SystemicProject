@@ -24,11 +24,6 @@ public class Player extends Entity {
     }
 
     @Override
-    public void render(GraphicsContext g) {
-        super.render(g);
-    }
-
-    @Override
     public void tick() {
         super.tick();
 
@@ -65,6 +60,7 @@ public class Player extends Entity {
         }
 
     }
+
     // Sets the variable that checks if the fullscreen has been changed
     public void setHasChangedFullscreen(boolean hasChangedFullscreen) {
         this.hasChangedFullscreen = hasChangedFullscreen;
