@@ -85,9 +85,12 @@ public class Camera extends Pane{
 
         entityGroup.getChildren().clear();
 
-        int[] playerCoords = shift((int)player.posX, (int)player.posY);
+        int[] playerCoords = shift((int)player.getPosX(), (int)player.getPosY());
 
-        Rectangle playerRect = new Rectangle(playerCoords[0] - player.boundsBox.getWidth()/2, playerCoords[1] - player.boundsBox.getHeight() / 2, player.boundsBox.getWidth(), player.boundsBox.getHeight());
+        Rectangle playerRect = new Rectangle(playerCoords[0] - player.getBoundsBox().getWidth()/2,
+                playerCoords[1] - player.getBoundsBox().getHeight() / 2,
+                player.getBoundsBox().getWidth()
+                , player.getBoundsBox().getHeight());
         playerRect.setFill(Color.BLACK);
         entityGroup.getChildren().add(playerRect);
     }
@@ -301,8 +304,8 @@ public class Camera extends Pane{
      * screen and the players position to be the same.
      */
     private void findScreenCenter(){
-        screenCenterX = (int) Main.getPlayer().posX;
-        screenCenterY = (int) Main.getPlayer().posY;
+        screenCenterX = (int) Main.getPlayer().getPosX();
+        screenCenterY = (int) Main.getPlayer().getPosY();
 
         screenCenterTileX = screenCenterX / Tile.getWidth();
         screenCenterTileY = screenCenterY / Tile.getWidth();
