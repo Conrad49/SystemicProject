@@ -14,7 +14,9 @@ public abstract class Tile {
     int posY;
     static boolean isTextured = false;
     boolean isInteractiveTile;
-    private static Tile[][] allTiles = new Tile[999][999];    // TODO: fill array with Tiles and calculate size of array
+    private static int mapWidth;
+    private static int mapHeight;
+    private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
     private static int xCount = 0;
     private static int yCount = 0;
     Rectangle boundsBox;
@@ -93,4 +95,17 @@ public abstract class Tile {
         return isSolid;
     }
 
+    public static void setMapDimensions(int width, int height){
+        mapWidth = width;
+        mapHeight = height;
+        allTiles = new Tile[mapWidth][mapHeight];
+    }
+
+    public static int getMapWidth() {
+        return mapWidth;
+    }
+
+    public static int getMapHeight() {
+        return mapHeight;
+    }
 }

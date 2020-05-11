@@ -18,6 +18,7 @@ import java.util.HashSet;
 public class Main extends Application {
     public static void main(String[] args)
     {
+        Tile.setMapDimensions(999, 999);
         launch(args);
     }
     private static Stage stage; //
@@ -149,8 +150,8 @@ public class Main extends Application {
         StoneTile.setTexture(new Image("/res/StoneTile.png"));
         Rectangle[][] noiseRectangles = ImprovedNoise.getNoiseArray();
         Tile[][] allTiles = Tile.getAllTiles();
-        for (int i = 0; i < 999; i++) {
-            for (int j = 0; j < 999; j++) {
+        for (int i = 0; i < Tile.getMapHeight(); i++) {
+            for (int j = 0; j < Tile.getMapWidth(); j++) {
                 Color color = (Color)noiseRectangles[i][j].getFill();
                 if (color.getBlue() < 0.5){
                     new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());

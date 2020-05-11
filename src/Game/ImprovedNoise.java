@@ -4,6 +4,7 @@ package Game;
 
 //import java.awt.*;
 
+import Game.Tiles.Tile;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -59,7 +60,7 @@ public final class ImprovedNoise {
 
 
     public static Rectangle[][] getNoiseArray(){
-        Rectangle[][] noise = new Rectangle[999][999];
+        Rectangle[][] noise = new Rectangle[Tile.getMapHeight()][Tile.getMapWidth()];
 
         double count = 3.14;
         double yCount = 1.25;
@@ -68,8 +69,8 @@ public final class ImprovedNoise {
         double step = 0.01;
         //zCount += step;
 
-        for(int i = 0; i < 999; i ++){
-            for(int j = 0; j < 999; j++){
+        for(int i = 0; i < Tile.getMapHeight(); i ++){
+            for(int j = 0; j < Tile.getMapWidth(); j++){
                 double noiseVal = (noise(count, yCount, 1) + 1)/2.0;
                        Rectangle rectangle = new Rectangle(j, i, 1, 1);
                 if (!grayScale) {
