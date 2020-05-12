@@ -34,6 +34,13 @@ public class Main extends Application {
 
     private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 40));
 
+    AnimationTimer animationTimer = new AnimationTimer() {
+        public void handle(long currentNanoTime)
+        {
+            tickAndRender();
+        }
+    };
+
     @Override
     public void start(Stage stage) {
         Main.stage = stage;
@@ -50,18 +57,15 @@ public class Main extends Application {
         makeWorld();
 
          //Game.Main "game" loop
-        new AnimationTimer()
-        {
-            public void handle(long currentNanoTime)
-            {
-                tickAndRender();
-            }
-        }.start();
+        animationTimer.start();
 
         stage.show();
 
     }
 
+    private void pauseMenu() {
+        animationTimer.stop();
+    }
     /**
      * Switches the program in and out of fullscreen
      */

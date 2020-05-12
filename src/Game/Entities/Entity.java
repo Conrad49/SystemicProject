@@ -14,14 +14,14 @@ public abstract class Entity {
     double ySpeed;
     Image texture;
     Color backColor;
-    private Rectangle boundsBox;
+    protected Rectangle boundsBox;
     int tileX;
     int tileY;
     double posX;
     double posY;
     boolean isVisible = false;
-    private int width;
-    private int height;
+    protected int width;
+    protected int height;
 
     public Entity(Color backColor, Rectangle boundsBox) {
         this.backColor = backColor;
