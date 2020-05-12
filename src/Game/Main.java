@@ -39,6 +39,8 @@ public class Main extends Application {
 
     private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 40));
 
+
+
     @Override
     public void start(Stage stage) {
         Main.stage = stage;
@@ -83,12 +85,13 @@ public class Main extends Application {
             {
                 tickAndRender();
             }
+
         }.start();
 
         stage.show();
 
     }
-
+    
     /**
      * Switches the program in and out of fullscreen
      */

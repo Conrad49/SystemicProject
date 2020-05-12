@@ -138,6 +138,7 @@ public abstract class Entity {
         return boundsBox;
     }
 
+
     public void setBoundsBox(Rectangle boundsBox) {
         this.boundsBox = boundsBox;
     }
@@ -173,4 +174,5 @@ public abstract class Entity {
     public int getHeight() {
         return height;
     }
+
 }

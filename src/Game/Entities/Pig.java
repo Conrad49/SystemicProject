@@ -13,5 +13,4 @@ public class Pig extends Entity{
         height = (int) boundsBox.getHeight();
     }
 
-
 }
