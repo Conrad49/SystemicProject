@@ -134,10 +134,13 @@ public abstract class Entity {
         return chunkCoords;
     }
 
-    private void move() {}
-
     public Rectangle getBoundsBox() {
         return boundsBox;
+    }
+
+
+    public void setBoundsBox(Rectangle boundsBox) {
+        this.boundsBox = boundsBox;
     }
 
     public double getxSpeed() {
@@ -172,7 +175,4 @@ public abstract class Entity {
         return height;
     }
 
-    public void setBoundsBox(Rectangle boundsBox) {
-        this.boundsBox = boundsBox;
-    }
 }
