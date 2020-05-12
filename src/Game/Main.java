@@ -63,7 +63,8 @@ public class Main extends Application {
         int response = reader.nextInt();
 
         if (response == 1) {
-            ImprovedNoise.generateNoiseArrayFile();
+            double rand = Math.random() * 50;
+            ImprovedNoise.generateNoiseArrayFile(rand);
             makeWorldFromFile();
         } else {
             boolean exists = new File("map.txt").exists();

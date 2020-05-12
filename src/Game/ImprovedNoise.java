@@ -96,7 +96,7 @@ public final class ImprovedNoise {
         return noise;
     }
 
-    public static void generateNoiseArrayFile(){
+    public static void generateNoiseArrayFile(double z){
         double xCount = 3.14;
         double yCount = 1.25;
 
@@ -106,7 +106,7 @@ public final class ImprovedNoise {
 
             for(int i = 0; i < Tile.getMapHeight(); i ++){
                 for(int j = 0; j < Tile.getMapWidth(); j++){
-                    double noiseVal = (noise(xCount, yCount, 1) + 1)/2.0;
+                    double noiseVal = (noise(xCount, yCount, z) + 1)/2.0;
 
                     if(noiseVal > 0 && noiseVal < 0.5) {
                         fileWriter.write("g,");
