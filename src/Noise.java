@@ -123,9 +123,9 @@ public class Noise extends Application {
                 double b = (ImprovedNoise.noise(count, yCount, zCount + 20) + 1) / 2.0;
 
                 // test 4 is test 3 but with the next 3 lines added
-                //r = (double)((int)(r * 10)) / 10.0;
-                //g = (double)((int)(g * 10)) / 10.0;
-                //b = (double)((int)(b * 10)) / 10.0;
+                // r = (double)((int)(r * 10)) / 10.0;
+                // g = (double)((int)(g * 10)) / 10.0;
+                // b = (double)((int)(b * 10)) / 10.0;
 
 
 

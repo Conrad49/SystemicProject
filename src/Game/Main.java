@@ -10,7 +10,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashSet;
+import java.util.Scanner;
 
 /**
  * This is where the setup and running happens. Everything from drawing a frame to
@@ -48,9 +52,31 @@ public class Main extends Application {
         stage.setFullScreen(true);
 
         prepareActionHandlers();
-        makeWorld();
 
-         //Game.Main "game" loop
+        System.out.println("Would you like to generate a new world file?");
+        System.out.println("Yes [1]");
+        System.out.println("No [0]");
+
+        Scanner reader = new Scanner(System.in);
+        int response = reader.nextInt();
+
+        if (response == 1) {
+            ImprovedNoise.generateNoiseArrayFile();
+            makeWorldFromFile();
+        } else {
+            boolean exists = new File("map.txt").exists();
+            if(exists){
+                System.out.println("Running with existing map file");
+                makeWorldFromFile();
+            } else {
+                System.out.println("No existing map file");
+                System.out.println("Stopping...");
+                System.exit(0);
+            }
+        }
+
+
+        //Game.Main "game" loop
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
@@ -169,5 +195,31 @@ public class Main extends Application {
                 }*/
             }
         }
+    }
+
+    private static void makeWorldFromFile(){
+        GrassTile.setTexture(new Image("/res/GrassTile.png"));
+        StoneTile.setTexture(new Image("/res/StoneTile.png"));
+
+        File file = new File("map.txt");
+        Scanner reader = null;
+        try {
+            reader = new Scanner(file);
+
+            for (int i = 0; i < Tile.getMapHeight(); i++) {
+                String[] line = reader.nextLine().split(",");
+                for (int j = 0; j < Tile.getMapWidth(); j++) {
+                    if(line[j].equals("g")){
+                        new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    } else if(line[j].equals("s")){
+                        new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!!!");
+        }
+
+
     }
 }
