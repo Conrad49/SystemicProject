@@ -1,5 +1,7 @@
-package Game;
+package Game.Entities;
 
+import Game.Chunk;
+import Game.Main;
 import Game.Tiles.Tile;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;

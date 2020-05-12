@@ -1,6 +1,5 @@
-package Game.Creatures;
+package Game.Entities;
 
-import Game.Entity;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
