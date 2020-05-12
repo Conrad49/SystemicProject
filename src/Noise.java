@@ -12,6 +12,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.w3c.dom.css.Rect;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Noise extends Application {
 
     public static void main(String[] args) {
@@ -52,7 +54,7 @@ public class Noise extends Application {
         }
     }
 
-    double zCount = 0;
+    double zCount = ThreadLocalRandom.current().nextInt(0, 100);
 
     public void testImage(Pane root){
         root.getChildren().clear();
@@ -61,14 +63,17 @@ public class Noise extends Application {
 
         double count = 0;
         double yCount = 0;
-        zCount += 10;
-        double inc = 0.01;
+        zCount += 50;
+        double inc = 0.005;
 
         for(int i = 0; i < root.getHeight(); i ++) {
             for (int j = 0; j < root.getWidth(); j++) {
-                double noiseVal = (ImprovedNoise.noise(count, yCount, zCount) + 1) / 2.0;
-                count += inc;
 
+                double noiseVal = (ImprovedNoise.noise(count, yCount, zCount) + 1) / 2.0;
+
+                /*
+                // test 1 D;
+                double noiseVal = (ImprovedNoise.noise(count, yCount, zCount) + 1) / 2.0;
                 if (noiseVal < 0.2) {
                     pw.setColor(j, i, Color.RED);
                 }else if(noiseVal < 0.25){
@@ -96,6 +101,138 @@ public class Noise extends Application {
                 }else if(noiseVal < 0.8){
                     pw.setColor(j, i, Color.PURPLE);
                 }
+                */
+
+
+                /*
+                // test 2 :/
+                double noiseVal = (ImprovedNoise.noise(count, yCount, zCount) + 1) / 2.0;
+                if (noiseVal < 0.44) {
+                    pw.setColor(j, i, Color.RED);
+                }else if(noiseVal < 0.56){
+                    pw.setColor(j, i, Color.GREEN);
+                }else if(noiseVal < 1){
+                    pw.setColor(j, i, Color.BLUE);
+                }
+                */
+
+
+                // Test 3 start :D
+                double r = (ImprovedNoise.noise(count, yCount, zCount) + 1) / 2.0;
+                double g = (ImprovedNoise.noise(count, yCount, zCount + 10) + 1) / 2.0;
+                double b = (ImprovedNoise.noise(count, yCount, zCount + 20) + 1) / 2.0;
+
+                // test 4 is test 3 but with the next 3 lines added
+                //r = (double)((int)(r * 10)) / 10.0;
+                //g = (double)((int)(g * 10)) / 10.0;
+                //b = (double)((int)(b * 10)) / 10.0;
+
+
+
+                // test 5 start requires test 3 enabled
+                // maybe?
+                boolean bigR = false;
+                boolean bigG = false;
+                boolean bigB = false;
+
+                double toBeBig = 0.5;
+                if(r > toBeBig){
+                    bigR = true;
+                }
+                if(g > toBeBig){
+                    bigG = true;
+                }
+                if(b > toBeBig){
+                    bigB = true;
+                }
+
+                // test 6
+                if(bigR && bigG && bigB){
+                    r = 1;
+                    g = 0;
+                    b = 0;
+                }else if(!bigR && !bigG && !bigB){
+                    r = 0;
+                    g = 0;
+                    b = 1;
+                }else{
+                    if(bigR){
+                        g = 0;
+                        r = 1;
+                        if(bigB){
+                            r = 0;
+                        }else{
+                            b = 0;
+                        }
+                    }
+                    if(bigG){
+                        b = 0;
+                        g = 1;
+                        if(bigR){
+                            g = 0;
+                        }else{
+                            r = 0;
+                        }
+                    }
+                    if(bigB){
+                        r = 0;
+                        b = 1;
+                        if(bigG){
+                            b = 0;
+                        }else{
+                            g = 0;
+                        }
+                    }
+                }
+                if(r != 1 && r != 0 || g != 1 && g != 0 || b != 1 && b != 0)
+                System.out.println(bigR + " " + bigG + " " + bigB);
+                // end test 6
+
+                /*
+                // comment out if monstrosity for test 6 to work
+                if(bigR || bigG || bigB) {
+                    if (bigR) {
+                        r = 1;
+                        if (!bigG) {
+                            g = 0;
+                        } else {
+                            g = 1;
+                        }
+                        if (!bigB) {
+                            b = 0;
+                        } else {
+                            b = 1;
+                        }
+                    } else if (bigG || bigB) {
+                        r = 0;
+                        if (!bigG) {
+                            g = 0;
+                        } else {
+                            g = 1;
+                        }
+                        if (!bigB) {
+                            b = 0;
+                        } else {
+                            b = 1;
+                        }
+                    }
+                }else{
+                    r = 0;
+                    g = 0;
+                    b = 0;
+                }
+                // test 5 end
+
+                 */
+
+
+                Color c = new Color(r, g, b, 1);
+                pw.setColor(j, i, c);
+                // test 3 end
+
+
+
+                count += inc;
             }
             count = 0;
             yCount += inc;
