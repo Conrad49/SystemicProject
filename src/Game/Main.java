@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Entities.Player;
 import Game.Tiles.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -9,7 +10,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashSet;
+import java.util.Scanner;
 
 /**
  * This is where the setup and running happens. Everything from drawing a frame to
@@ -34,6 +39,8 @@ public class Main extends Application {
 
     private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 40));
 
+
+
     @Override
     public void start(Stage stage) {
         Main.stage = stage;
@@ -47,21 +54,45 @@ public class Main extends Application {
         stage.setFullScreen(true);
 
         prepareActionHandlers();
-        makeWorld();
 
-         //Game.Main "game" loop
+        System.out.println("Would you like to generate a new world file?");
+        System.out.println("Yes [1]");
+        System.out.println("No [0]");
+
+        Scanner reader = new Scanner(System.in);
+        int response = reader.nextInt();
+
+        if (response == 1) {
+            double rand = Math.random() * 50;
+            ImprovedNoise.generateNoiseArrayFile(rand);
+            makeWorldFromFile();
+        } else {
+            boolean exists = new File("map.txt").exists();
+            if(exists){
+                System.out.println("Running with existing map file");
+                makeWorldFromFile();
+            } else {
+                System.out.println("No existing map file");
+                System.out.println("Stopping...");
+                System.exit(0);
+            }
+        }
+
+
+        //Game.Main "game" loop
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
             {
                 tickAndRender();
             }
+
         }.start();
 
         stage.show();
 
     }
-
+    
     /**
      * Switches the program in and out of fullscreen
      */
@@ -109,26 +140,27 @@ public class Main extends Application {
         //    chunk.tick();
         //}
 
-        player.boundsBox = new Rectangle(player.posX, player.posY, player.boundsBox.getWidth(), player.boundsBox.getHeight());
+        player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
+                player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
 
         Tile[] surroundingTiles = new Tile[4];
         Tile[][] allTiles = Tile.getAllTiles();
 
 
         // above
-        surroundingTiles[0] = allTiles[player.tileY - 1][player.tileX];
+        surroundingTiles[0] = allTiles[player.getTileY() - 1][player.getTileX()];
         //surroundingTiles[0].backColor = Color.RED;
 
         // below
-        surroundingTiles[1] = allTiles[player.tileY + 1][player.tileX];
+        surroundingTiles[1] = allTiles[player.getTileY() + 1][player.getTileX()];
         //surroundingTiles[1].backColor = Color.BLUE;
 
         // left
-        surroundingTiles[2] = allTiles[player.tileY][player.tileX - 1];
+        surroundingTiles[2] = allTiles[player.getTileY()][player.getTileX() - 1];
         //surroundingTiles[2].backColor = Color.PALEGOLDENROD;
 
         // right
-        surroundingTiles[3] = allTiles[player.tileY][player.tileX + 1];
+        surroundingTiles[3] = allTiles[player.getTileY()][player.getTileX() + 1];
         //surroundingTiles[3].backColor = Color.GRAY;
 
         for(Tile tile : surroundingTiles){
@@ -167,5 +199,31 @@ public class Main extends Application {
                 }*/
             }
         }
+    }
+
+    private static void makeWorldFromFile(){
+        GrassTile.setTexture(new Image("/res/GrassTile.png"));
+        StoneTile.setTexture(new Image("/res/StoneTile.png"));
+
+        File file = new File("map.txt");
+        Scanner reader = null;
+        try {
+            reader = new Scanner(file);
+
+            for (int i = 0; i < Tile.getMapHeight(); i++) {
+                String[] line = reader.nextLine().split(",");
+                for (int j = 0; j < Tile.getMapWidth(); j++) {
+                    if(line[j].equals("g")){
+                        new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    } else if(line[j].equals("s")){
+                        new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!!!");
+        }
+
+
     }
 }

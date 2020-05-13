@@ -37,7 +37,7 @@ public class Noise extends Application {
 
     public void tickAndRender(Pane root){
         Rectangle[][] array = ImprovedNoise.getNoiseArray();
-        for (int i = 0; i < array[0].length - 1; i++) {
+        for (int i = 0; i < array.length - 1; i++) {
             for (int j = 0; j < array.length - 1; j++) {
                 root.getChildren().add(array[j][i]);
             }

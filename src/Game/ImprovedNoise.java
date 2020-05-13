@@ -8,6 +8,9 @@ import Game.Tiles.Tile;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public final class ImprovedNoise {
     static boolean grayScale = false;
     //static double zCount = 1;
@@ -91,5 +94,38 @@ public final class ImprovedNoise {
         }
 
         return noise;
+    }
+
+    public static void generateNoiseArrayFile(double z){
+        double xCount = 3.14;
+        double yCount = 1.25;
+
+        double step = 0.01;
+        try {
+            FileWriter fileWriter = new FileWriter("map.txt");
+
+            for(int i = 0; i < Tile.getMapHeight(); i ++){
+                for(int j = 0; j < Tile.getMapWidth(); j++){
+                    double noiseVal = (noise(xCount, yCount, z) + 1)/2.0;
+
+                    if(noiseVal > 0 && noiseVal < 0.5) {
+                        fileWriter.write("g,");
+                    } else {
+                        fileWriter.write("s,");
+                    }
+
+                    xCount += step;
+                }
+                fileWriter.write("\n");
+                xCount = 3.14;
+                yCount += step;
+            }
+
+            fileWriter.close();
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+
+
     }
 }
