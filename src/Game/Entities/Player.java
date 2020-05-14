@@ -16,8 +16,7 @@ public class Player extends Entity {
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
     private boolean hasChangedFullscreen;
 
-
-
+    static Image texture;
     public Player(Color backColor, javafx.scene.shape.Rectangle boundsBox) {
         super(backColor, boundsBox);
     }
@@ -78,5 +77,13 @@ public class Player extends Entity {
 
     public static HashSet<String> getCurrentlyActiveKeys() {
         return currentlyActiveKeys;
+    }
+
+    public void setTexture(Image image){
+        texture = image;
+    }
+
+    public Image getTexture(){
+        return texture;
     }
 }

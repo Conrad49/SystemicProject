@@ -4,6 +4,7 @@ import Game.Entities.Player;
 import Game.Tiles.Tile;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -91,8 +92,13 @@ public class Camera extends Pane{
                 playerCoords[1] - player.getBoundsBox().getHeight() / 2,
                 player.getBoundsBox().getWidth()
                 , player.getBoundsBox().getHeight());
+
+        player.setTexture(new Image("/res/player.png"));
         playerRect.setFill(Color.BLACK);
-        entityGroup.getChildren().add(playerRect);
+        ImageView playerImage = (new ImageView(player.getTexture()));
+        playerImage.setX(playerCoords[0] - player.getBoundsBox().getWidth()/2);
+        playerImage.setY((playerCoords[1] - player.getBoundsBox().getHeight() / 2) - 128 + player.getBoundsBox().getHeight());
+        entityGroup.getChildren().add(playerImage);
     }
 
     /**

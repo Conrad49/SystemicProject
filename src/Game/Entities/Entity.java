@@ -175,4 +175,7 @@ public abstract class Entity {
         return height;
     }
 
+    public void setTexture(Image texture) {
+        this.texture = texture;
+    }
 }
