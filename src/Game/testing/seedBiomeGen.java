@@ -128,6 +128,11 @@ public class seedBiomeGen extends Application {
                     if(availableTiles[i] == null){
                         break;
                     }
+                    if(availableTiles[i].size() <= 0){
+                        done++;
+                        availableTiles[i] = null;
+                        break;
+                    }
 
                     // find a random set of coordinates in the list
                     // since coordinates take up 2 places there are twice the amount of
@@ -177,11 +182,7 @@ public class seedBiomeGen extends Application {
                         }
 
                         // if there are no possible moves left then the biome is done
-                        if(availableTiles[i].size() <= 0){
-                            done++;
-                            availableTiles[i] = null;
-                            break;
-                        }
+
                     }else{
                         // tile was claimed so try again
                         j--;
