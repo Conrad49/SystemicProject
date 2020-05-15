@@ -59,9 +59,9 @@ public class NoiseBiomGen extends Application {
 
                 // test 1 D;
                 double noiseVal = (SimplexNoise.noise(xCount, yCount, zCount) + 1) / 2.0;
-                double tempVal = (SimplexNoise.noise(tempXCount, tempYCount, zCount + 1) + 1) / 2.0;
-                double moistureVal = (SimplexNoise.noise(moistureXCount, moistureYCount, zCount + 2) + 1) / 2.0;
-                double salinity = (SimplexNoise.noise(salinityXCount, salinityYCount, zCount + 3) + 1) / 2.0;
+                double tempVal = (SimplexNoise.noise(tempXCount, tempYCount, zCount) + 1) / 2.0;
+                double moistureVal = (SimplexNoise.noise(moistureXCount, moistureYCount, zCount) + 1) / 2.0;
+                double salinity = (SimplexNoise.noise(salinityXCount, salinityYCount, zCount) + 1) / 2.0;
 
 
                 boolean ocean = salinity > 0.8;
