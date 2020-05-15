@@ -64,11 +64,28 @@ public class NoiseBiomGen extends Application {
                 double salinity = (SimplexNoise.noise(salinityXCount, salinityYCount, zCount + 3) + 1) / 2.0;
 
 
-                if(tempVal > 0.3 && salinity < 0.5 && moistureVal > 0.5){
-                    pw.setColor(j, i, Color.ORANGE);
-                } else {
-                    pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
+                boolean ocean = salinity > 0.8;
+
+                String biome = biome(ocean, ocean, false, tempVal, moistureVal);
+
+                switch(biome){
+                    case "OCEAN":
+                        pw.setColor(j, i, Color.BLUE);
+                        break;
+                    case "TEMPERATE_RAIN_FOREST":
+                        pw.setColor(j, i, Color.GREEN);
+                        break;
+                    default:
+                        pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
+                        break;
+
                 }
+
+                //if(tempVal > 0.3 && salinity < 0.5 && moistureVal > 0.5){
+                //    pw.setColor(j, i, Color.ORANGE);
+                //} else {
+                //    pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
+                //}
 
 
                 /*if (noiseVal < 0.2) {
@@ -242,11 +259,35 @@ public class NoiseBiomGen extends Application {
             moistureXCount = 0;
             salinityXCount = 0;
 
-            tempYCount += inc + 0.1;
-            moistureYCount += inc + 0.1;
-            salinityYCount += inc + 0.1;
+            tempYCount += inc + 0.05;
+            moistureYCount += inc + 0.05;
+            salinityYCount += inc + 0.05;
             yCount += inc;
         }
         root.getChildren().add(canvas);
+    }
+
+    public String biome(boolean ocean, boolean water, boolean coast, double temperature, double moisture) {
+        if (ocean) {
+            return "OCEAN";
+        } else if (water) {
+            if (temperature > 0.9) return "MARSH";
+            if (temperature < 0.2) return "ICE";
+            return "LAKE";
+        } else if (coast) {
+            return "BEACH";
+        } else if (temperature < 0.2) {
+            if (moisture > 0.50) return "SNOW";
+            else return "SCORCHED";
+        } else if (temperature < 0.4) {
+            if (moisture > 0.66) return "TAIGA";
+            else return "TEMPERATE_DESERT";
+        } else if (temperature < 0.7) {
+            if (moisture > 0.83) return "TEMPERATE_RAIN_FOREST";
+            else return "TEMPERATE_DESERT";
+        } else {
+            if (moisture > 0.66) return "TROPICAL_RAIN_FOREST";
+            else return "SUBTROPICAL_DESERT";
+        }
     }
 }
