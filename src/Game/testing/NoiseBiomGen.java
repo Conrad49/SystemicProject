@@ -42,8 +42,14 @@ public class NoiseBiomGen extends Application {
         Canvas canvas = new Canvas(root.getWidth(), root.getHeight());
         PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
 
-        double count = 0;
+        double xCount = 0;
         double yCount = 0;
+        double tempXCount = 40;
+        double tempYCount = 40;
+        double moistureXCount = 5;
+        double moistureYCount = 5;
+        double salinityXCount = 6;
+        double salinityYCount = 6;
         zCount += 50;
         double inc = 0.005;
 
@@ -52,8 +58,20 @@ public class NoiseBiomGen extends Application {
 
 
                 // test 1 D;
-                double noiseVal = (ImprovedNoise.noise(count, yCount, zCount) + 1) / 2.0;
-                if (noiseVal < 0.2) {
+                double noiseVal = (SimplexNoise.noise(xCount, yCount, zCount) + 1) / 2.0;
+                double tempVal = (SimplexNoise.noise(tempXCount, tempYCount, zCount + 1) + 1) / 2.0;
+                double moistureVal = (SimplexNoise.noise(moistureXCount, moistureYCount, zCount + 2) + 1) / 2.0;
+                double salinity = (SimplexNoise.noise(salinityXCount, salinityYCount, zCount + 3) + 1) / 2.0;
+
+
+                if(tempVal > 0.3 && salinity < 0.5 && moistureVal > 0.5){
+                    pw.setColor(j, i, Color.ORANGE);
+                } else {
+                    pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
+                }
+
+
+                /*if (noiseVal < 0.2) {
                     pw.setColor(j, i, Color.RED);
                 }else if(noiseVal < 0.25){
                     pw.setColor(j, i, Color.ORANGERED);
@@ -79,7 +97,7 @@ public class NoiseBiomGen extends Application {
                     pw.setColor(j, i, Color.MAGENTA);
                 }else if(noiseVal < 0.8){
                     pw.setColor(j, i, Color.PURPLE);
-                }
+                }*/
 
 
 
@@ -214,9 +232,19 @@ public class NoiseBiomGen extends Application {
 */
 
 
-                count += inc;
+                xCount += inc;
+                tempXCount += inc;
+                moistureXCount += inc;
+                salinityXCount += inc;
             }
-            count = 0;
+            xCount = 0;
+            tempXCount = 0;
+            moistureXCount = 0;
+            salinityXCount = 0;
+
+            tempYCount += inc + 0.1;
+            moistureYCount += inc + 0.1;
+            salinityYCount += inc + 0.1;
             yCount += inc;
         }
         root.getChildren().add(canvas);
