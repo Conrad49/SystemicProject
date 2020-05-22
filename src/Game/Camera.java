@@ -93,7 +93,7 @@ public class Camera extends Pane{
                 player.getBoundsBox().getWidth()
                 , player.getBoundsBox().getHeight());
 
-        player.setTexture(new Image("/res/player.png"));
+        player.setTexture(new Image("/res/player(1).png"));
         playerRect.setFill(Color.BLACK);
         ImageView playerImage = (new ImageView(player.getTexture()));
         playerImage.setX(playerCoords[0] - player.getBoundsBox().getWidth()/2);

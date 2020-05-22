@@ -75,6 +75,13 @@ public class NoiseBiomGen extends Application {
                     case "TEMPERATE_RAIN_FOREST":
                         pw.setColor(j, i, Color.GREEN);
                         break;
+                    case "TAIGA":
+                        pw.setColor(j, i, Color.RED);
+                        break;
+                    case "TEMPERATE_DESERT":
+                        pw.setColor(j, i, Color.YELLOW);
+                    case "SUBTROPICAL_DESERT":
+                        pw.setColor(j, i, Color.SKYBLUE);
                     default:
                         pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
                         break;
