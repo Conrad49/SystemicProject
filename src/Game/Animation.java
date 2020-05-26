@@ -23,8 +23,8 @@ public class Animation {
         if (this.count < this.animation.length) {
             return this.animation[count];
         } else {
-            this.count = -1;
-            return  this.animation[count];
+            this.count = 0;
+            return this.animation[count];
         }
     }
 
