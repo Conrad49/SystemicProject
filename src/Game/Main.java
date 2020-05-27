@@ -21,6 +21,9 @@ import java.util.Scanner;
  * deciding what each creature does in that from is decided from here.
  */
 public class Main extends Application {
+
+    public static int numOfFrames = 0;
+
     public static void main(String[] args)
     {
         Tile.setMapDimensions(999, 999);
@@ -84,6 +87,7 @@ public class Main extends Application {
         {
             public void handle(long currentNanoTime)
             {
+                numOfFrames ++;
                 tickAndRender();
             }
 

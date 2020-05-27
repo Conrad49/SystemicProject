@@ -19,7 +19,9 @@ public class Animation {
     }
 
     public Image getImage(){
-        this.count ++;
+        if (Main.numOfFrames % 6 == 0) {
+            this.count ++;
+        }
         if (this.count < this.animation.length) {
             return this.animation[count];
         } else {
