@@ -1,5 +1,6 @@
 package Game.Entities;
 
+import Game.Animation;
 import Game.Chunk;
 import Game.Entities.Player;
 import Game.Tiles.Tile;
@@ -22,6 +23,15 @@ public abstract class Entity {
     boolean isVisible = false;
     protected int width;
     protected int height;
+    private Animation currentAnimation;
+
+    public Animation getCurrentAnimation() {
+        return currentAnimation;
+    }
+
+    public void setCurrentAnimation(Animation currentAnimation) {
+        this.currentAnimation = currentAnimation;
+    }
 
     public Entity(Color backColor, Rectangle boundsBox) {
         this.backColor = backColor;

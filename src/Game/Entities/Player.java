@@ -34,8 +34,6 @@ public class Player extends Entity {
     private Animation walkRight = new Animation();
     private Animation idleAnimation = new Animation();
 
-    private Animation currentAnimation;
-
     @Override
     public void tick() {
         super.tick();
@@ -52,11 +50,11 @@ public class Player extends Entity {
             moving = true;
         } else {
             this.walkLeft.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
         if (currentlyActiveKeys.contains("D")) {
-            //this.currentAnimation = walkDown;
+            this.setCurrentAnimation(walkRight);
 
             this.xSpeed = speed;
             this.posX += this.xSpeed;
@@ -64,7 +62,7 @@ public class Player extends Entity {
             moving = true;
         } else {
             this.walkRight.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
         if (currentlyActiveKeys.contains("W")) {
@@ -76,11 +74,11 @@ public class Player extends Entity {
             moving = true;
         } else {
             this.walkUp.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
         if (currentlyActiveKeys.contains("S")) {
-            this.currentAnimation = walkDown;
+            this.setCurrentAnimation(this.walkDown);
 
             this.ySpeed = speed;
             this.posY += this.ySpeed;
@@ -88,7 +86,7 @@ public class Player extends Entity {
             moving = true;
         } else {
             this.walkDown.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
 
@@ -101,6 +99,9 @@ public class Player extends Entity {
         }
 
         System.out.println(moving);
+        if(!moving){
+            this.setCurrentAnimation(this.idleAnimation);
+        }
 
     }
 
@@ -120,9 +121,14 @@ public class Player extends Entity {
         return currentlyActiveKeys;
     }
 
+    public void getNumOfChars(HashSet<String> currentlyActiveKeys){
+
+    }
+
     public void setTexture(Image image){
         texture = image;
         Image[] walkDown = new Image[6];
+        Image[] walkRight = new Image[8];
         Image[] idle = new Image[1];
        /* walkDown[0] = image;
         walkDown[1] = new Image("/res/player.png");
@@ -135,14 +141,21 @@ public class Player extends Entity {
             walkDown[i] = new Image(url);
         }
 
+        for (int j = 0; j < walkRight.length; j++) {
+            String url = "/res/playerR" + (j+1) + ".png";
+            walkRight[j] = new Image(url);
+        }
+
         idle[0] = new Image("res/player1.png");
 
         this.idleAnimation.setImages(idle);
 
         this.walkDown.setImages(walkDown);
+        this.walkRight.setImages(walkRight);
     }
 
     public Image getTexture(){
+        Animation currentAnimation = this.getCurrentAnimation();
         return currentAnimation.getImage();
         //return texture;
     }
