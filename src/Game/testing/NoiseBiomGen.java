@@ -58,12 +58,23 @@ public class NoiseBiomGen extends Application {
 
 
                 // test 1 D;
-                double noiseVal = (SimplexNoise.noise(xCount, yCount, zCount) + 1) / 2.0;
+                 double noiseVal = (SimplexNoise.noise(xCount, yCount, zCount) + 1) / 2.0;
+
+                // double noiseVal = (SimplexNoise.octavedNoise(10, 0.7f, 1f, xCount, yCount) + 1) / 2.0;
+                // noise value using octaves ^^
+
                 double tempVal = (SimplexNoise.noise(tempXCount, tempYCount, zCount) + 1) / 2.0;
                 double moistureVal = (SimplexNoise.noise(moistureXCount, moistureYCount, zCount) + 1) / 2.0;
                 double salinity = (SimplexNoise.noise(salinityXCount, salinityYCount, zCount) + 1) / 2.0;
 
+                // Octave Stuff
+                //if(noiseVal > 0.5){
+                //    pw.setColor(j, i, Color.GREEN);
+                //} else {
+                //    pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
+                //}
 
+                // comment out for octaves
                 boolean ocean = salinity > 0.8;
 
                 String biome = biome(ocean, ocean, false, tempVal, moistureVal);
