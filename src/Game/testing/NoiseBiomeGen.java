@@ -46,6 +46,8 @@ public class NoiseBiomeGen extends Application {
         zCount += 50;
         double zOffset = 10;
         double inc = 0.005;
+        float roughness = 0.55f;
+        int octaves = 20;
 
         new Biome("frozen lake", "low", "low medium", "low");
         new Biome("lake", "medium", "low medium", "low");
@@ -67,10 +69,10 @@ public class NoiseBiomeGen extends Application {
 
         for(int i = 0; i < root.getHeight(); i ++) {
             for (int j = 0; j < root.getWidth(); j++) {
-                double noiseVal = (SimplexNoise.noise(xCount, yCount, zCount) + 1) / 2.0;
-                double tempVal = (SimplexNoise.noise(xCount, yCount, zCount + zOffset) + 1) / 2.0;
-                double moistureVal = (SimplexNoise.noise(xCount, yCount, zCount + 2 * zOffset) + 1) / 2.0;
-                double elevation = (SimplexNoise.noise(xCount, yCount, zCount+ 3 * zOffset) + 1) / 2.0;
+                double noiseVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount,  zCount) + 1) / 2.0;
+                double tempVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount,  zCount + zOffset) + 1) / 2.0;
+                double moistureVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + 2 * zOffset) + 1) / 2.0;
+                double elevation = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount+ 3 * zOffset) + 1) / 2.0;
 
                 String biome = biome(elevation, tempVal, moistureVal);
 
@@ -151,8 +153,8 @@ public class NoiseBiomeGen extends Application {
      * range of numbers and returns the range as a lowercase string.
      */
     private String findRange(double exactValue){
-        double low = 0.35;
-        double high = 0.65;
+        double low = 0.43;
+        double high = 0.57;
 
         String range;
         if(exactValue <= low){
