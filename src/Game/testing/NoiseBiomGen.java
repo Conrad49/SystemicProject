@@ -57,7 +57,6 @@ public class NoiseBiomGen extends Application {
             for (int j = 0; j < root.getWidth(); j++) {
 
 
-                // test 1 D;
                  double noiseVal = (SimplexNoise.noise(xCount, yCount, zCount) + 1) / 2.0;
 
                 // double noiseVal = (SimplexNoise.octavedNoise(10, 0.7f, 1f, xCount, yCount) + 1) / 2.0;
@@ -67,6 +66,14 @@ public class NoiseBiomGen extends Application {
                 double moistureVal = (SimplexNoise.noise(moistureXCount, moistureYCount, zCount) + 1) / 2.0;
                 double elevation = (SimplexNoise.noise(salinityXCount, salinityYCount, zCount) + 1) / 2.0;
 
+                /*if(noiseVal > 0.5){
+                    pw.setColor(j, i, Color.GREEN);
+                } else {
+                    pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
+                }*/
+                // for octaved noiseVal ^^
+
+                // comment out when doing octaves vvv
                 String biome = biome(elevation, tempVal, moistureVal);
 
                 switch(biome){
@@ -89,8 +96,6 @@ public class NoiseBiomGen extends Application {
 
                 }
 
-
-
                 xCount += inc;
                 tempXCount += inc;
                 moistureXCount += inc;
@@ -109,7 +114,7 @@ public class NoiseBiomGen extends Application {
         root.getChildren().add(canvas);
     }
 
-    public String biome(double elevation, double temperature, double moisture) {
-        
-    }
+    //public String biome(double elevation, double temperature, double moisture) {
+    //
+    //}
 }
