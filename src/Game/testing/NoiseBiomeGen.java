@@ -47,15 +47,22 @@ public class NoiseBiomeGen extends Application {
         double zOffset = 10;
         double inc = 0.005;
         float roughness = 0.55f;
-        int octaves = 20;
+        int octaves = 10;
 
-        new Biome("frozen lake", "low", "low medium", "low");
-        new Biome("lake", "medium", "low medium", "low");
-        new Biome("swamp", "high", "low medium", "low");
-        new Biome("ocean", "low medium high", "high", "low");
+        new Biome("frozen lake", "low", "low", "low");
+        new Biome("frozen lake2", "low", "medium", "low");
+        new Biome("lake", "medium", "low", "low");
+        new Biome("lake2", "medium", "medium", "low");
+        new Biome("swamp", "high", "low", "low");
+        new Biome("swamp2", "high", "medium", "low");
+        new Biome("ocean", "high", "high", "low");
+        new Biome("ocean2", "medium", "high", "low");
+        new Biome("ocean3", "low", "high", "low");
 
-        new Biome("fields", "medium", "low medium", "medium");
-        new Biome("snow", "low", "low medium", "medium");
+        new Biome("fields", "medium", "low", "medium");
+        new Biome("fields2", "medium", "medium", "medium");
+        new Biome("snow", "low", "medium", "medium");
+        new Biome("snow2", "low", "low", "medium");
         new Biome("forest", "medium", "high", "medium");
         new Biome("jungle", "high", "high", "medium");
         new Biome("grasslands", "high", "medium", "medium");
@@ -63,9 +70,14 @@ public class NoiseBiomeGen extends Application {
         new Biome("snow forest", "low", "high", "medium");
 
         new Biome("volcano", "high", "low", "high");
-        new Biome("peaks", "low medium", "low", "high");
-        new Biome("peaks", "medium high", "medium high", "high");
-        new Biome("snow peaks", "low", "medium high", "high");
+        new Biome("peaks", "low", "low", "high");
+        new Biome("peaks2", "medium", "low", "high");
+        new Biome("peaks3", "medium", "medium", "high");
+        new Biome("peaks4", "high", "medium", "high");
+        new Biome("peaks5", "medium", "high", "high");
+        new Biome("peaks6", "high", "high", "high");
+        new Biome("snow peaks", "low", "high", "high");
+        new Biome("snow peaks2", "low", "medium", "high");
 
         for(int i = 0; i < root.getHeight(); i ++) {
             for (int j = 0; j < root.getWidth(); j++) {
@@ -82,6 +94,12 @@ public class NoiseBiomeGen extends Application {
                         break;
                     case "snow":
                         pw.setColor(j, i, Color.GOLDENROD);
+                        break;
+                    case "fields2":
+                        pw.setColor(j, i, Color.RED);
+                        break;
+                    case "snow2":
+                        pw.setColor(j, i, Color.DARKGREY);
                         break;
                     case "grasslands":
                         pw.setColor(j, i, Color.WHEAT);
@@ -102,10 +120,28 @@ public class NoiseBiomeGen extends Application {
                         pw.setColor(j, i, Color.ORANGE);
                         break;
                     case "peaks":
-                        pw.setColor(j, i, Color.GRAY);
+                        pw.setColor(j, i, Color.BROWN);
+                        break;
+                    case "peaks2":
+                        pw.setColor(j, i, Color.DARKGRAY);
+                        break;
+                    case "peaks3":
+                        pw.setColor(j, i, Color.DARKSALMON);
+                        break;
+                    case "peaks4":
+                        pw.setColor(j, i, Color.LIGHTPINK);
+                        break;
+                    case "peaks5":
+                        pw.setColor(j, i, Color.LIGHTSALMON);
+                        break;
+                    case "peaks6":
+                        pw.setColor(j, i, Color.CORAL);
                         break;
                     case "snow peaks":
                         pw.setColor(j, i, Color.SILVER);
+                        break;
+                    case "snow peaks2":
+                        pw.setColor(j, i, Color.LAVENDER);
                         break;
                     case "frozen lake":
                         pw.setColor(j, i, Color.LIGHTBLUE);
@@ -119,12 +155,30 @@ public class NoiseBiomeGen extends Application {
                     case "ocean":
                         pw.setColor(j, i, Color.DARKBLUE);
                         break;
+                    case "frozen lake2":
+                        pw.setColor(j, i, Color.LIME);
+                        break;
+                    case "lake2":
+                        pw.setColor(j, i, Color.PURPLE);
+                        break;
+                    case "swamp2":
+                        pw.setColor(j, i, Color.MAROON);
+                        break;
+                    case "ocean2":
+                        pw.setColor(j, i, Color.PINK);
+                        break;
+                    case "ocean3":
+                        pw.setColor(j, i, Color.TURQUOISE);
+                        break;
                     default:
                         System.out.println("eek");
                         pw.setColor(j, i, new Color(noiseVal, noiseVal, noiseVal, 1));
                         break;
 
+
+
                 }
+
                 xCount += inc;
             }
             xCount = 0;
