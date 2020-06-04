@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 public class GrassTile extends Tile {
 
     double movementSpeed;
-    static Image texture;
+    //static Image texture;
     static boolean isTextured = true;
 
     public GrassTile(int posX, int posY) {
@@ -22,8 +22,4 @@ public class GrassTile extends Tile {
         return texture;
     }
 
-    public static void setTexture(Image texture) {
-        GrassTile.texture = texture;
-        isTextured = true;
-    }
 }
