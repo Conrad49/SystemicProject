@@ -2,6 +2,7 @@ package Game;
 
 import Game.Entities.Player;
 import Game.Tiles.*;
+import Game.testing.NoiseBiomeGen;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -63,7 +64,8 @@ public class Main extends Application {
 
         if (response == 1) {
             double rand = Math.random() * 50;
-            ImprovedNoise.generateNoiseArrayFile(rand);
+            NoiseBiomeGen.generateWorld();
+            //ImprovedNoise.generateNoiseArrayFile(rand);
             makeWorldFromFile();
         } else {
             boolean exists = new File("map.txt").exists();
@@ -211,8 +213,13 @@ public class Main extends Application {
         //StoneTile.setTexture(new Image("/res/StoneTile.png"));
 
         Image grassImage = new Image("/res/GrassTile.png");
+        Image sandImage = new Image("/res/SandTile.png");
+        Image iceImage = new Image("/res/IceTile.png");
+        Image lavaImage = new Image("/res/LavaTile.png");
+        Image dirtImage = new Image("/res/DirtTile.png");
         Image stoneImage = new Image("/res/StoneTile.png");
         Image snowImage = new Image("/res/SnowTile.png");
+        //Image waterImage = new Image("/res/WaterTile.png");
 
         File file = new File("map.txt");
         Scanner reader = null;
@@ -223,14 +230,26 @@ public class Main extends Application {
                 String[] line = reader.nextLine().split(",");
                 for (int j = 0; j < Tile.getMapWidth(); j++) {
                     if(line[j].equals("g")){
-                        //GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
-                        //grassTile.setTexture(grassImage);
-
-                        SnowTile snowTile = new SnowTile(i * Tile.getWidth(), j * Tile.getWidth());
-                        snowTile.setTexture(snowImage);
+                        GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        grassTile.setTexture(grassImage);
                     } else if(line[j].equals("s")){
                         StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
                         stoneTile.setTexture(stoneImage);
+                    }else if(line[j].equals("a")){
+                        SandTile sandTile = new SandTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        sandTile.setTexture(sandImage);
+                    }else if(line[j].equals("i")){
+                        IceTile iceTile = new IceTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        iceTile.setTexture(iceImage);
+                    }else if(line[j].equals("l")){
+                        LavaTile lavaTile = new LavaTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        lavaTile.setTexture(lavaImage);
+                    }else if(line[j].equals("o")){
+                        SnowTile snowTile = new SnowTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        snowTile.setTexture(snowImage);
+                    }else if(line[j].equals("w")){
+                        WaterTile waterTile = new WaterTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        //waterTile.setTexture(waterImage);
                     }
                 }
             }

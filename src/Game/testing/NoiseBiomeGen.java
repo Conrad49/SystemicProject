@@ -1,5 +1,6 @@
 package Game.testing;
 
+import Game.Tiles.Tile;
 import Game.biomes.Biome;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -9,6 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class NoiseBiomeGen extends Application {
@@ -34,9 +37,9 @@ public class NoiseBiomeGen extends Application {
 
     }
 
-    double zCount = ThreadLocalRandom.current().nextInt(0, 100);
+    static double zCount = ThreadLocalRandom.current().nextInt(0, 100);
 
-    public void testImage(Pane root){
+    public static void testImage(Pane root){
         root.getChildren().clear();
         Canvas canvas = new Canvas(root.getWidth(), root.getHeight());
         PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
@@ -187,7 +190,7 @@ public class NoiseBiomeGen extends Application {
         root.getChildren().add(canvas);
     }
 
-    public String biome(double elevation, double temperature, double moisture) {
+    public static String biome(double elevation, double temperature, double moisture) {
 
         String elevationRange = findRange(elevation);
         String temperatureRange = findRange(temperature);
@@ -206,7 +209,7 @@ public class NoiseBiomeGen extends Application {
      * Takes an exact value from 0-1 and finds if it is in the high low or medium
      * range of numbers and returns the range as a lowercase string.
      */
-    private String findRange(double exactValue){
+    private static String findRange(double exactValue){
         double low = 0.43;
         double high = 0.57;
 
@@ -221,4 +224,108 @@ public class NoiseBiomeGen extends Application {
 
         return range;
     }
+
+
+    /**
+     * Generates a new text document using this form of biome based generation
+     */
+    public static void generateWorld() {
+        FileWriter fw;
+        try {
+            fw = new FileWriter("map.txt");
+
+            double xCount = 0;
+            double yCount = 0;
+            zCount += 50;
+            double zOffset = 10;
+            double inc = 0.005;
+            float roughness = 0.55f;
+            int octaves = 10;
+
+            new Biome("frozen lake", "low", "low", "low");
+            new Biome("lake", "high", "low", "low");
+            new Biome("swamp", "medium", "low", "low");
+            new Biome("ocean", "low medium high", "high", "low");
+            new Biome("valley", "low medium high", "medium", "low");
+
+            new Biome("fields", "medium", "low medium", "medium");
+            new Biome("snow", "low", "low medium", "medium");
+            new Biome("forest", "low medium high", "high", "medium");
+            new Biome("desert", "high", "low medium", "medium");
+
+            new Biome("volcano", "high", "low", "high");
+            new Biome("peaks", "high", "medium", "high");
+            new Biome("peaks", "medium", "low", "high");
+            new Biome("hills", "low medium high", "high", "high");
+            new Biome("plateau", "medium", "medium", "high");
+            new Biome("snow peaks", "low", "low medium", "high");
+
+            for(int i = 0; i < Tile.getMapHeight(); i ++) {
+                for (int j = 0; j < Tile.getMapWidth(); j++) {
+                    double noiseVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount,  zCount) + 1) / 2.0;
+                    double tempVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount,  zCount + zOffset) + 1) / 2.0;
+                    double moistureVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + 2 * zOffset) + 1) / 2.0;
+                    double elevation = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount+ 3 * zOffset) + 1) / 2.0;
+
+                    String biome = biome(elevation, tempVal, moistureVal);
+
+                    if(i == 183 && j == 172){
+                        System.out.println("hi");
+                    }
+
+                    switch(biome){
+                        case "fields":
+
+                        case "forest":
+
+                        case "valley":
+
+                        case "hills":
+
+                        case "swamp":
+
+                        case "plateau":
+                            fw.write("g,");
+                            break;
+                        case "snow":
+
+                        case "snow peaks":
+                            fw.write("o,");
+                            break;
+                        case "desert":
+                            fw.write("a,");
+                            break;
+                        case "volcano":
+                            fw.write("l,");
+                            break;
+                        case "peaks":
+                            fw.write("s,");
+                            break;
+                        case "frozen lake":
+                            fw.write("i,");
+                            break;
+                        case "lake":
+
+                        case "ocean":
+                            fw.write("w,");
+                            break;
+                        default:
+                            System.out.println("eek");
+                            fw.write("g,");
+                            break;
+                    }
+                    xCount += inc;
+                }
+                xCount = 0;
+                yCount += inc;
+                fw.write("\n");
+            }
+
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
