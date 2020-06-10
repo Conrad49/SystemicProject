@@ -209,9 +209,6 @@ public class Main extends Application {
     }
 
     private static void makeWorldFromFile(){
-        //GrassTile.setTexture(new Image("/res/GrassTile.png"));
-        //StoneTile.setTexture(new Image("/res/StoneTile.png"));
-
         Image grassImage = new Image("/res/GrassTile.png");
         Image sandImage = new Image("/res/SandTile.png");
         Image iceImage = new Image("/res/IceTile.png");
