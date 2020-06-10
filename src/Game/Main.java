@@ -147,7 +147,7 @@ public class Main extends Application {
         player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
                 player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
 
-        Tile[] surroundingTiles = new Tile[4];
+        Tile[] surroundingTiles = new Tile[9];
         Tile[][] allTiles = Tile.getAllTiles();
 
 
@@ -166,6 +166,13 @@ public class Main extends Application {
         // right
         surroundingTiles[3] = allTiles[player.getTileY()][player.getTileX() + 1];
         //surroundingTiles[3].backColor = Color.GRAY;
+
+        surroundingTiles[4] = allTiles[player.getTileY()][player.getTileX()];
+
+        surroundingTiles[5] = allTiles[player.getTileY() - 1][player.getTileX() - 1];
+        surroundingTiles[6] = allTiles[player.getTileY() - 1][player.getTileX() + 1];
+        surroundingTiles[7] = allTiles[player.getTileY() + 1][player.getTileX() + 1];
+        surroundingTiles[8] = allTiles[player.getTileY() + 1][player.getTileX() - 1];
 
         for(Tile tile : surroundingTiles){
             player.checkTileCollision(tile);

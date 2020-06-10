@@ -94,24 +94,25 @@ public abstract class Entity {
             if (intersect.getBoundsInLocal().getWidth() != -1) {
 
                 // left
-                if(tileBounds.getX() < this.boundsBox.getX() && this.xSpeed < 0 && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
+                if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
                     this.posX = this.posX + intersect.getBoundsInLocal().getWidth();
                     this.xSpeed = 0;
                 }
 
-                if(tileBounds.getX() > this.boundsBox.getX() && this.xSpeed > 0 && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
+                // right
+                if(tileBounds.getX() > this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
                     this.posX = this.posX - intersect.getBoundsInLocal().getWidth();
                     this.xSpeed = 0;
                 }
 
                 // above
-                if(tileBounds.getY() < this.boundsBox.getY() && this.ySpeed < 0 && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
+                if(tileBounds.getY() + tileBounds.getHeight() < this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
                     this.posY = this.posY + intersect.getBoundsInLocal().getHeight();
                     this.ySpeed = 0;
                 }
 
                 // below
-                if(tileBounds.getY() > this.boundsBox.getY() && this.ySpeed > 0 && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
+                if(tileBounds.getY() > this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
                     this.posY = this.posY - intersect.getBoundsInLocal().getHeight();
                     this.ySpeed = 0;
                 }
