@@ -216,7 +216,7 @@ public class Main extends Application {
         Image dirtImage = new Image("/res/DirtTile.png");
         Image stoneImage = new Image("/res/StoneTile.png");
         Image snowImage = new Image("/res/SnowTile.png");
-        //Image waterImage = new Image("/res/WaterTile.png");
+        Image waterImage = new Image("/res/WaterTile.png");
 
         File file = new File("map.txt");
         Scanner reader = null;
@@ -246,7 +246,7 @@ public class Main extends Application {
                         snowTile.setTexture(snowImage);
                     }else if(line[j].equals("w")){
                         WaterTile waterTile = new WaterTile(i * Tile.getWidth(), j * Tile.getWidth());
-                        //waterTile.setTexture(waterImage);
+                        waterTile.setTexture(waterImage);
                     }
                 }
             }
