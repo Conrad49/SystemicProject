@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
  */
 public class StoneTile extends Tile {
     double movementSpeed;
-    static Image texture;
+    //static Image texture;
 
     public StoneTile(int posX, int posY) {
         super(posX, posY, Color.GRAY);
@@ -17,10 +17,6 @@ public class StoneTile extends Tile {
         super.isSolid = true;
     }
 
-    public static void setTexture(Image image){
-        texture = image;
-        isTextured = true;
-    }
 
     public Image getTexture() {
         return texture;
