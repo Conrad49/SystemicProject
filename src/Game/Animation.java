@@ -18,8 +18,15 @@ public class Animation {
         this.count = -1;
     }
 
+
+    /**
+     * gets the image of the animation object that this method is called on. repeats frames to slow down animation and
+     * resets index as necessary
+     */
     public Image getImage(){
-        if (Main.numOfFrames % 6 == 0) {
+
+        // slows down animation to approximately 10 fps
+        if (Main.numOfFrames % 6 == 0 || this.count == -1) {
             this.count ++;
         }
         if (this.count < this.animation.length) {

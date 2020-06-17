@@ -16,6 +16,11 @@ public class Player extends Entity {
     private static int speed = 5;
     private static boolean moving;
 
+    private static boolean w;
+    private static boolean a;
+    private static boolean s;
+    private static boolean d;
+
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
     private boolean hasChangedFullscreen;
 
@@ -34,16 +39,22 @@ public class Player extends Entity {
     private Animation walkRight = new Animation();
     private Animation idleAnimation = new Animation();
 
-    private Animation currentAnimation;
-
     @Override
     public void tick() {
         super.tick();
         moving = false;
 
+        handleKeyPresses();
+    }
+
+    public void handleKeyPresses(){
+        //this.posX += this.xSpeed;
+        //this.posY += this.ySpeed;
+
         //this.currentAnimation = this.walkDown;
 
         if (currentlyActiveKeys.contains("A")) {
+            a = true;
             //this.currentAnimation = this.walkDown;
 
             this.xSpeed = speed * -1;
@@ -51,23 +62,27 @@ public class Player extends Entity {
             this.tileX = (int)this.posX / Tile.getWidth();
             moving = true;
         } else {
+            a = false;
             this.walkLeft.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
         if (currentlyActiveKeys.contains("D")) {
-            //this.currentAnimation = walkDown;
+            d = true;
+            //this.setCurrentAnimation(walkRight);
 
             this.xSpeed = speed;
             this.posX += this.xSpeed;
             this.tileX = (int)this.posX / Tile.getWidth();
             moving = true;
         } else {
+            d = false;
             this.walkRight.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
         if (currentlyActiveKeys.contains("W")) {
+            w = true;
             //this.currentAnimation = walkDown;
 
             this.ySpeed = speed * -1;
@@ -75,22 +90,27 @@ public class Player extends Entity {
             this.tileY = (int)this.posY / Tile.getWidth();
             moving = true;
         } else {
+            w = false;
             this.walkUp.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
         if (currentlyActiveKeys.contains("S")) {
-            this.currentAnimation = walkDown;
+            s = true;
+            //this.setCurrentAnimation(this.walkDown);
 
             this.ySpeed = speed;
             this.posY += this.ySpeed;
             this.tileY = (int)this.posY / Tile.getWidth();
             moving = true;
         } else {
+            s = false;
             this.walkDown.resetCount();
-            this.currentAnimation = this.idleAnimation;
+            //this.setCurrentAnimation(this.idleAnimation);
         }
 
+
+        setCurrentAnimation();
 
         // Binding for going in and out of fullscreen
         if(currentlyActiveKeys.contains("F11")) {
@@ -100,8 +120,17 @@ public class Player extends Entity {
             hasChangedFullscreen = true;
         }
 
-        System.out.println(moving);
+        if(!a && !d){
+            this.xSpeed = 0;
+        }
 
+        if(!w && !s){
+            this.ySpeed = 0;
+        }
+
+        if(!moving){
+            this.setCurrentAnimation(this.idleAnimation);
+        }
     }
 
     // Sets the variable that checks if the fullscreen has been changed
@@ -120,30 +149,64 @@ public class Player extends Entity {
         return currentlyActiveKeys;
     }
 
+    public void getNumOfChars(HashSet<String> currentlyActiveKeys){
+
+    }
+
     public void setTexture(Image image){
         texture = image;
         Image[] walkDown = new Image[6];
+        Image[] walkRight = new Image[8];
         Image[] idle = new Image[1];
-       /* walkDown[0] = image;
-        walkDown[1] = new Image("/res/player.png");
-        walkDown[2] = new Image("/res/player(1).png");
-        walkDown[3] = new Image("/res/player(1).png");
-        walkDown[4] = new Image("/res/player(1).png");*/
+        Image[] walkUp = new Image[1];
+        Image[] walkLeft = new Image[1];
 
         for(int i = 0; i < walkDown.length; i ++){
             String url = "/res/player" + (i + 1) + ".png";
             walkDown[i] = new Image(url);
         }
 
+        for (int j = 0; j < walkRight.length; j++) {
+            String url = "/res/playerR" + (j+1) + ".png";
+            walkRight[j] = new Image(url);
+        }
+
         idle[0] = new Image("res/player1.png");
+        walkUp[0] = new Image("res/player1.png");
+        walkLeft[0] = new Image("res/player1.png");
 
         this.idleAnimation.setImages(idle);
 
+        this.walkUp.setImages(walkUp);
+        this.walkLeft.setImages(walkLeft);
         this.walkDown.setImages(walkDown);
+        this.walkRight.setImages(walkRight);
     }
 
     public Image getTexture(){
+        Animation currentAnimation = this.getCurrentAnimation();
         return currentAnimation.getImage();
-        //return texture;
+    }
+
+    public void setCurrentAnimation(){
+        if(moving){
+
+            if(this.xSpeed < 0){
+                this.setCurrentAnimation(this.walkLeft);
+                System.out.println("l");
+            }
+            if(this.ySpeed < 0){
+                this.setCurrentAnimation(this.walkUp);
+                System.out.println("u");
+            }
+            if(this.ySpeed > 0){
+                this.setCurrentAnimation(this.walkDown);
+                System.out.println("d");
+            }
+            if(this.xSpeed > 0){
+                this.setCurrentAnimation(this.walkRight);
+                System.out.println("r");
+            }
+        }
     }
 }
