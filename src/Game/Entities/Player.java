@@ -44,8 +44,10 @@ public class Player extends Entity {
         super.tick();
         moving = false;
 
+        handleKeyPresses();
+    }
 
-
+    public void handleKeyPresses(){
         //this.posX += this.xSpeed;
         //this.posY += this.ySpeed;
 
@@ -129,7 +131,6 @@ public class Player extends Entity {
         if(!moving){
             this.setCurrentAnimation(this.idleAnimation);
         }
-
     }
 
     // Sets the variable that checks if the fullscreen has been changed
@@ -206,9 +207,6 @@ public class Player extends Entity {
                 this.setCurrentAnimation(this.walkRight);
                 System.out.println("r");
             }
-        } else {
-            this.setCurrentAnimation(this.idleAnimation);
-            System.out.println("i");
         }
     }
 }
