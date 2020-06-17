@@ -158,12 +158,22 @@ public class Player extends Entity {
         Image[] walkDown = new Image[6];
         Image[] walkRight = new Image[8];
         Image[] idle = new Image[1];
-        Image[] walkUp = new Image[1];
-        Image[] walkLeft = new Image[1];
+        Image[] walkUp = new Image[6];
+        Image[] walkLeft = new Image[8];
 
         for(int i = 0; i < walkDown.length; i ++){
             String url = "/res/player" + (i + 1) + ".png";
             walkDown[i] = new Image(url);
+        }
+
+        for(int i = 0; i < walkUp.length; i ++){
+            String url = "/res/playerU" + (i + 1) + ".png";
+            walkUp[i] = new Image(url);
+        }
+
+        for(int i = 0; i < walkLeft.length; i ++){
+            String url = "/res/playerL" + (i + 1) + ".png";
+            walkLeft[i] = new Image(url);
         }
 
         for (int j = 0; j < walkRight.length; j++) {
@@ -172,8 +182,8 @@ public class Player extends Entity {
         }
 
         idle[0] = new Image("res/player1.png");
-        walkUp[0] = new Image("res/player1.png");
-        walkLeft[0] = new Image("res/player1.png");
+        // walkUp[0] = new Image("res/player1.png");
+        // walkLeft[0] = new Image("res/player1.png");
 
         this.idleAnimation.setImages(idle);
 
