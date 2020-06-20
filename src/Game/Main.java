@@ -2,6 +2,7 @@ package Game;
 
 import Game.Entities.Player;
 import Game.Tiles.*;
+import Game.plants.SingleTallGrass;
 import Game.testing.NoiseBiomeGen;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This is where the setup and running happens. Everything from drawing a frame to
@@ -179,7 +181,27 @@ public class Main extends Application {
             player.checkTileCollision(tile);
         }
 
+        tileTick();
+
         root.update();
+    }
+
+    private static void tileTick(){
+        //growth rate
+        if(numOfFrames % 600 == 0) {
+            ThreadLocalRandom rand = ThreadLocalRandom.current();
+            int loadWidth = 50;
+            for (int i = 0; i < loadWidth; i++) {
+                for (int j = 0; j < loadWidth; j++) {
+                    if(rand.nextInt(5) == 0) {
+                        int tx = ((int) player.getPosX() / Tile.getWidth()) - loadWidth / 2 + j;
+                        int ty = ((int) player.getPosY() / Tile.getWidth()) - loadWidth / 2 + i;
+
+                        Tile.getAllTiles()[ty][tx].tick();
+                    }
+                }
+            }
+        }
     }
 
     public static Player getPlayer(){
@@ -234,13 +256,21 @@ public class Main extends Application {
         try {
             reader = new Scanner(file);
 
+            ThreadLocalRandom rand = ThreadLocalRandom.current();
+
             for (int i = 0; i < Tile.getMapHeight(); i++) {
                 String[] line = reader.nextLine().split(",");
                 for (int j = 0; j < Tile.getMapWidth(); j++) {
                     if(line[j].equals("g")){
                         GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
                         grassTile.setTexture(grassImage);
-                    } else if(line[j].equals("s")){
+
+                        // For texting purposes this should add tall grass to every 4th grass tile
+                        int count = rand.nextInt(3, 5);
+                        for (int k = 0; k < count; k++) {
+                            grassTile.addPlant(new SingleTallGrass(i * Tile.getWidth() + rand.nextInt(Tile.getWidth()), j * Tile.getWidth() + rand.nextInt(Tile.getWidth())));
+                        }
+                    }else if(line[j].equals("s")){
                         StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
                         stoneTile.setTexture(stoneImage);
                     }else if(line[j].equals("a")){
@@ -264,7 +294,5 @@ public class Main extends Application {
         } catch (FileNotFoundException e) {
             System.out.println("File not found!!!");
         }
-
-
     }
 }

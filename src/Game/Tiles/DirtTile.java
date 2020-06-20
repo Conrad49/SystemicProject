@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
  * A dirt tile has no interesting things about it.
  */
 public class DirtTile extends Tile {
+    public static final String tileCode = "d";
 
     double movementSpeed;
     //static Image texture;
@@ -22,4 +23,8 @@ public class DirtTile extends Tile {
         return texture;
     }
 
+    @Override
+    public String getTileCode() {
+        return tileCode;
+    }
 }

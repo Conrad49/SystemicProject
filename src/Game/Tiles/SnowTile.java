@@ -3,6 +3,7 @@ package Game.Tiles;
 import javafx.scene.image.Image;
 
 public class SnowTile extends Tile {
+    public static final String tileCode = "o";
 
     static Image texture;
 
@@ -12,5 +13,8 @@ public class SnowTile extends Tile {
 
     }
 
-
+    @Override
+    public String getTileCode() {
+        return tileCode;
+    }
 }

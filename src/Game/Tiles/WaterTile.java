@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
  * A water tile has no interesting things about it.
  */
 public class WaterTile extends Tile {
+    public static final String tileCode = "w";
 
     double movementSpeed;
     //static Image texture;
@@ -22,4 +23,8 @@ public class WaterTile extends Tile {
         return texture;
     }
 
+    @Override
+    public String getTileCode() {
+        return tileCode;
+    }
 }

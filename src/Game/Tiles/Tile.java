@@ -1,8 +1,11 @@
 package Game.Tiles;
 
+import Game.plants.Plant;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
 
 
 public abstract class Tile {
@@ -22,6 +25,8 @@ public abstract class Tile {
     Rectangle boundsBox;
     Image texture;
     boolean isSolid;
+
+    protected ArrayList<Plant> plants = new ArrayList<>(); // Plants growing on this tile.
 
     public Tile(int posX, int posY, Color backColor){
         this.posX = posX;
@@ -122,5 +127,45 @@ public abstract class Tile {
     public void setTexture(Image texture) {
         this.texture = texture;
         isTextured = true;
+    }
+
+    /**
+     * adds a plant to the tiles list of plants growing on it
+     */
+    public void addPlant(Plant plant){
+        if(plant.canGrowOn(getTileCode())){
+            plants.add(plant);
+        }
+    }
+
+    /**
+     * Every tile needs a string code to be printed onto a file. It should be stored
+     * in a public static final string and this should return that string.
+     */
+    abstract String getTileCode();
+
+    /**
+     * simply tells all the plants on this tile to grow
+     */
+    protected void tickPlants(){
+        for (int i = 0; i < plants.size(); i++) {
+            plants.get(i).tick();
+        }
+    }
+
+    /**
+     * By default this method only tells plants to be ticked but can be overridden
+     * in the subclass for something like a furnace or fire or who knows what that
+     * needs to do more than just tick its plants.
+     */
+    public void tick(){
+        tickPlants();
+    }
+
+    /**
+     * Returns an arraylist of all the coordinates of each plant on this tile.
+     */
+    public ArrayList<Plant> getPlants(){
+        return plants;
     }
 }

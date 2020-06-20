@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
  * An ice tile has no interesting things about it.
  */
 public class IceTile extends Tile {
+    public static final String tileCode = "i";
 
     double movementSpeed;
     //static Image texture;
@@ -22,4 +23,8 @@ public class IceTile extends Tile {
         return texture;
     }
 
+    @Override
+    public String getTileCode() {
+        return tileCode;
+    }
 }

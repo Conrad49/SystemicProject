@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 
 import java.sql.SQLOutput;
 import java.util.HashSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Player extends Entity {
 
@@ -193,19 +194,15 @@ public class Player extends Entity {
 
             if(this.xSpeed < 0){
                 this.setCurrentAnimation(this.walkLeft);
-                System.out.println("l");
             }
             if(this.ySpeed < 0){
                 this.setCurrentAnimation(this.walkUp);
-                System.out.println("u");
             }
             if(this.ySpeed > 0){
                 this.setCurrentAnimation(this.walkDown);
-                System.out.println("d");
             }
             if(this.xSpeed > 0){
                 this.setCurrentAnimation(this.walkRight);
-                System.out.println("r");
             }
         }
     }
