@@ -183,7 +183,7 @@ public class Camera extends Pane {
 
                     ImageView view = new ImageView(p.getImage());
 
-                    int[] pCords = shift(p.getX(), p.getY());
+                    int[] pCords = shift((int)p.getX(), (int)p.getY());
                     view.setX(pCords[0] - p.getWidth() / 2);
                     view.setY(pCords[1] - p.getHeight());
                     standingGroup.getChildren().add(view);

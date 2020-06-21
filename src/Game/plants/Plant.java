@@ -1,6 +1,8 @@
 package Game.plants;
 
+import Game.Displayable;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
@@ -9,28 +11,23 @@ import java.util.ArrayList;
  * This allows for easy access of plants in an area and it's easy to find out what a
  * plant is growing on.
  */
-public abstract class Plant {
+public abstract class Plant extends Displayable {
     protected int health; // health is essentially how much plant there is, if health goes down some of the plant has been cut off.
     protected double energy;
     protected final int maxHealth, maxEnergy;
-    protected int x, y;
     protected final int collectionRate;
     protected final double growthRate;
     protected final String type;
-    protected final int width, height;
 
     public Plant(int health, int maxHealth, int energy, int maxEnergy, int collectionRate, int x, int y, double growthRate, String type, int width, int height) {
+        super(x, y, width, height, false);
         this.health = health;
         this.maxHealth = maxHealth;
         this.energy = energy;
         this.maxEnergy = maxEnergy;
         this.collectionRate = collectionRate;
-        this.x = x;
-        this.y = y;
         this.growthRate = growthRate;
         this.type = type;
-        this.width = width;
-        this.height = height;
     }
 
     /**
@@ -103,21 +100,6 @@ public abstract class Plant {
      *
      * Returns a static image variable that will be made and stored on each subclass.
      */
+    @Override
     public abstract Image getImage();
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
 }

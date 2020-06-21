@@ -3,6 +3,8 @@ package Game.plants;
 import Game.Tiles.DirtTile;
 import Game.Tiles.GrassTile;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 

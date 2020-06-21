@@ -84,7 +84,7 @@ public class Main extends Application {
             }
         }
 
-
+        System.out.println("done");
         //Game.Main "game" loop
         new AnimationTimer()
         {
@@ -188,7 +188,7 @@ public class Main extends Application {
 
     private static void tileTick(){
         //growth rate
-        if(numOfFrames % 600 == 0) {
+        if(numOfFrames % 6 == 0) {
             ThreadLocalRandom rand = ThreadLocalRandom.current();
             int loadWidth = 50;
             for (int i = 0; i < loadWidth; i++) {
@@ -266,7 +266,7 @@ public class Main extends Application {
                         grassTile.setTexture(grassImage);
 
                         // For texting purposes this should add tall grass to every 4th grass tile
-                        int count = rand.nextInt(3, 5);
+                        int count = rand.nextInt(0, 3);
                         for (int k = 0; k < count; k++) {
                             grassTile.addPlant(new SingleTallGrass(i * Tile.getWidth() + rand.nextInt(Tile.getWidth()), j * Tile.getWidth() + rand.nextInt(Tile.getWidth())));
                         }
