@@ -20,7 +20,7 @@ public class StoneTile extends Tile {
     }
 
 
-    public Image getTexture() {
+    public Image getImage() {
         return texture;
     }
 

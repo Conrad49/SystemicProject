@@ -42,7 +42,7 @@ public class Main extends Application {
     static final double speed = 5;
 
 
-    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 40));
+    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 32));
 
 
 
@@ -194,8 +194,8 @@ public class Main extends Application {
             for (int i = 0; i < loadWidth; i++) {
                 for (int j = 0; j < loadWidth; j++) {
                     if(rand.nextInt(5) == 0) {
-                        int tx = ((int) player.getPosX() / Tile.getWidth()) - loadWidth / 2 + j;
-                        int ty = ((int) player.getPosY() / Tile.getWidth()) - loadWidth / 2 + i;
+                        int tx = ((int) player.getPosX() / Tile.getTileWidth()) - loadWidth / 2 + j;
+                        int ty = ((int) player.getPosY() / Tile.getTileWidth()) - loadWidth / 2 + i;
 
                         Tile.getAllTiles()[ty][tx].tick();
                     }
@@ -224,10 +224,10 @@ public class Main extends Application {
             for (int j = 0; j < Tile.getMapWidth(); j++) {
                 Color color = (Color)noiseRectangles[i][j].getFill();
                 if (color.getBlue() < 0.5){
-                    GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                     grassTile.setTexture(grassImage);
                 } else {
-                    StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                     stoneTile.setTexture(stoneImage);
                 }
 
@@ -262,31 +262,31 @@ public class Main extends Application {
                 String[] line = reader.nextLine().split(",");
                 for (int j = 0; j < Tile.getMapWidth(); j++) {
                     if(line[j].equals("g")){
-                        GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         grassTile.setTexture(grassImage);
 
                         // For texting purposes this should add tall grass to every 4th grass tile
                         int count = rand.nextInt(0, 3);
                         for (int k = 0; k < count; k++) {
-                            grassTile.addPlant(new SingleTallGrass(i * Tile.getWidth() + rand.nextInt(Tile.getWidth()), j * Tile.getWidth() + rand.nextInt(Tile.getWidth())));
+                            grassTile.addPlant(new SingleTallGrass(i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()), j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())));
                         }
                     }else if(line[j].equals("s")){
-                        StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         stoneTile.setTexture(stoneImage);
                     }else if(line[j].equals("a")){
-                        SandTile sandTile = new SandTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        SandTile sandTile = new SandTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         sandTile.setTexture(sandImage);
                     }else if(line[j].equals("i")){
-                        IceTile iceTile = new IceTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        IceTile iceTile = new IceTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         iceTile.setTexture(iceImage);
                     }else if(line[j].equals("l")){
-                        LavaTile lavaTile = new LavaTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        LavaTile lavaTile = new LavaTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         lavaTile.setTexture(lavaImage);
                     }else if(line[j].equals("o")){
-                        SnowTile snowTile = new SnowTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        SnowTile snowTile = new SnowTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         snowTile.setTexture(snowImage);
                     }else if(line[j].equals("w")){
-                        WaterTile waterTile = new WaterTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        WaterTile waterTile = new WaterTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         waterTile.setTexture(waterImage);
                     }
                 }

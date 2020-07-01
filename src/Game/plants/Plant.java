@@ -1,8 +1,7 @@
 package Game.plants;
 
-import Game.Displayable;
+import Game.displayablesHidingPlace.Displayable;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 

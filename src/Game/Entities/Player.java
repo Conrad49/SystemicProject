@@ -7,9 +7,7 @@ import Game.Tiles.Tile;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import java.sql.SQLOutput;
 import java.util.HashSet;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Player extends Entity {
 
@@ -25,13 +23,14 @@ public class Player extends Entity {
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
     private boolean hasChangedFullscreen;
 
-    static Image texture;
     public Player(Color backColor, javafx.scene.shape.Rectangle boundsBox) {
         super(backColor, boundsBox);
+        setTexture();
     }
 
     public Player(Image texture, javafx.scene.shape.Rectangle boundsBox) {
         super(texture, boundsBox);
+        setTexture();
     }
 
     public Animation walkDown = new Animation();
@@ -60,7 +59,7 @@ public class Player extends Entity {
 
             this.xSpeed = speed * -1;
             this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.getWidth();
+            this.tileX = (int)this.posX / Tile.getTileWidth();
             moving = true;
         } else {
             a = false;
@@ -74,7 +73,7 @@ public class Player extends Entity {
 
             this.xSpeed = speed;
             this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.getWidth();
+            this.tileX = (int)this.posX / Tile.getTileWidth();
             moving = true;
         } else {
             d = false;
@@ -88,7 +87,7 @@ public class Player extends Entity {
 
             this.ySpeed = speed * -1;
             this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.getWidth();
+            this.tileY = (int)this.posY / Tile.getTileWidth();
             moving = true;
         } else {
             w = false;
@@ -102,7 +101,7 @@ public class Player extends Entity {
 
             this.ySpeed = speed;
             this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.getWidth();
+            this.tileY = (int)this.posY / Tile.getTileWidth();
             moving = true;
         } else {
             s = false;
@@ -154,8 +153,7 @@ public class Player extends Entity {
 
     }
 
-    public void setTexture(Image image){
-        texture = image;
+    public void setTexture(){
         Image[] walkDown = new Image[6];
         Image[] walkRight = new Image[8];
         Image[] idle = new Image[1];

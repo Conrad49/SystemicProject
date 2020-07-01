@@ -19,7 +19,7 @@ public class LavaTile extends Tile {
         this.isInteractiveTile = true;
     }
 
-    public Image getTexture() {
+    public Image getImage() {
         return texture;
     }
 

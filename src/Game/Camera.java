@@ -2,6 +2,7 @@ package Game;
 
 import Game.Entities.Player;
 import Game.Tiles.Tile;
+import Game.displayablesHidingPlace.Displayable;
 import Game.plants.Plant;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 public class Camera extends Pane {
     private int screenTilesTall;
     private int screenTilesWide;
+    private double oldScreenTall = 0;
+    private double oldScreenWide = 0;
 
     private int screenCenterX;
     private int screenCenterTileX;
@@ -38,7 +41,7 @@ public class Camera extends Pane {
     private static Player player = Main.getPlayer();
 
     private Group mainGroup = new Group();
-    private ArrayList<ArrayList<Node>> visibleTilesArray = new ArrayList<>();
+    private ArrayList<Node> entities = new ArrayList<>();
     private Group visibleTiles = new Group();
     private Group standingGroup = new Group();
 
@@ -52,82 +55,99 @@ public class Camera extends Pane {
      * Uses findScreenCenter in the process so the screen center variables will be updated too.
      */
     public void update() {
-        findScreenCenter();
+        updateVariables();
 
-        oldScreenCenterY = screenCenterY;
-        oldScreenCenterX = screenCenterX;
-        int oldScreenWide = screenTilesWide;
-        int oldScreenTall = screenTilesTall;
-        screenTilesWide = (int) (getWidth() / Tile.getWidth() + 4);
-        screenTilesTall = (int) (getHeight() / Tile.getWidth() + 4);
-        topLeftX = screenCenterTileX - screenTilesWide / 2;
-        topLeftY = screenCenterTileY - screenTilesTall / 2;
-        changeTileX = oldScreenCenterTileX - screenCenterTileX;
-        changeTileY = oldScreenCenterTileY - screenCenterTileY;
+        boolean sameCenterBlock = oldScreenCenterTileX == screenCenterTileX && oldScreenCenterTileY == screenCenterTileY;
+        boolean adjacentCenterBlock = changeTileX <= 1 && changeTileX >= -1 && changeTileY <= 1 && changeTileY >= -1;
+        boolean sameScreenSize = (oldScreenTall == this.getHeight()) && (oldScreenWide == this.getWidth());
 
-        /*
-        boolean sameCenterBlock = oldScreenCenterTileX == screenCenterX && oldScreenCenterTileY == screenCenterY;
-        boolean adjacentCenterBlock = changeTileX < 1 && changeTileX > -1 && changeTileY < 1 && changeTileY > -1;
-        boolean sameScreenSize = oldScreenTall == screenTilesTall && oldScreenWide == screenTilesWide;
+        oldScreenWide = this.getWidth();
+        oldScreenTall = this.getHeight();
 
-        if(sameCenterBlock){
+        if(!sameScreenSize){
+            updateAll();
+        }else if(sameCenterBlock){
             updateCords();
-        }
-
-        if(adjacentCenterBlock && sameScreenSize){
+        }else if(adjacentCenterBlock){
             updateSome();
         }else{
             updateAll();
         }
-         */
 
-        updateAll();
+        // Since entities move around we have to recheck their images source every frame.
+        // We cannot find it's real position from the image so we update it all every time.
+        updateEntities();
 
+        sortGroup(visibleTiles);
+        sortGroup(standingGroup);
+    }
 
-        //Temporary position
+    /**
+     * Adds a new item to be displayed. This creates a new image view calculates a
+     * position and adds it to the proper array. This assumes that all tiles and only
+     * tiles are drawn from the top left and all entities are at the bottom middle of
+     * their feet. This method also displays any displayables inside the given
+     * displayable.
+     */
+    private void display(Displayable dis){
+        int x = (int)Math.round(dis.getX());
+        int y = (int)Math.round(dis.getY());
+        int[] cords = shift(x, y);
+        Image image = dis.getImage();
+        ImageView i = new ImageView(image);
 
-        //getChildren().add(new Rectangle(getWidth()/2 - Game.Main.getPlayer().boundsBox.getWidth()/2, getHeight()/2 - Game.Main.getPlayer().boundsBox.getHeight()/2, Game.Main.getPlayer().boundsBox.getWidth(), Game.Main.getPlayer().boundsBox.getHeight()));
+        if(dis.cordsAtCorner()){
+            // this is a tile, part of the ground
+            i.setX(cords[0]);
+            i.setY(cords[1]);
+            visibleTiles.getChildren().add(i);
 
-        int[] playerCoords = shift((int) player.getPosX(), (int) player.getPosY());
+            for(Plant p : ((Tile)dis).getPlants()){
+                display(p);
+            }
+        }else{
+            // this is something that stands up off the ground.
+            i.setX(cords[0] - image.getWidth() / 2);
+            i.setY(cords[1] - image.getHeight());
+            standingGroup.getChildren().add(i);
+        }
+    }
 
-        Rectangle playerRect = new Rectangle(playerCoords[0] - player.getBoundsBox().getWidth() / 2,
-                playerCoords[1] - player.getBoundsBox().getHeight() / 2,
-                player.getBoundsBox().getWidth()
-                , player.getBoundsBox().getHeight());
-
-        player.setTexture(new Image("/res/player(1).png"));
-        playerRect.setFill(Color.BLACK);
-        ImageView playerImage = (new ImageView(player.getTexture()));
-        playerImage.setX(playerCoords[0] - player.getBoundsBox().getWidth() / 2);
-        playerImage.setY((playerCoords[1] - player.getBoundsBox().getHeight() / 2) - 128 + player.getBoundsBox().getHeight());
-        standingGroup.getChildren().add(playerImage);
-
+    /**
+     * Sorts a group's children list to the order they would display based on y level.
+     */
+    private void sortGroup(Group g){
         // Sort the standing group so that the highest up is drawn first and all lower things will go on top of that.
         double oldY;
+        double oldX;
         double y = -1000;
+        double x = -1000;
         boolean startNewCheck = true;
-        for (int j = 0; j < standingGroup.getChildren().size(); j++) {
-            Node n = standingGroup.getChildren().get(j);
+        for (int j = 0; j < g.getChildren().size(); j++) {
+            Node n = g.getChildren().get(j);
             oldY = y;
+            oldX = x;
 
             if (n instanceof ImageView) {
                 ImageView i = (ImageView) n;
                 y = i.getY();
                 y += i.getImage().getHeight();
+                x = i.getX();
             } else if (n instanceof Rectangle) {
                 Rectangle r = (Rectangle) n;
                 y = r.getY();
                 y += r.getHeight();
+                x = r.getX();
             }
 
             // First time through the oldx and oldy will be weird numbers.
             // The second they will be the numbers of the first time through.
             if (!startNewCheck) {
                 // check if a higher up thing is being drawn after a lower
-                if (y < oldY) {
+                if (y < oldY || (y == oldY && x < oldX)) {
                     // Remove this item and re-add it one space to the left
-                    standingGroup.getChildren().remove(n);
-                    standingGroup.getChildren().add(j - 1, n);
+                    g.getChildren().remove(n);
+                    g.getChildren().add(j - 1, n);
                     // Set the loop to continue from one before where this was added
                     // So we can check if it needs to go further back
                     if (j > 2) {// so we don't go out of bounds
@@ -145,6 +165,29 @@ public class Camera extends Pane {
     }
 
     /**
+     * Updates a variety of static class level variables that are used in the
+     * calculations about updating the screen.
+     */
+    private void updateVariables(){
+        oldScreenCenterTileX = screenCenterTileX;
+        oldScreenCenterTileY = screenCenterTileY;
+        oldScreenCenterY = screenCenterY;
+        oldScreenCenterX = screenCenterX;
+        findScreenCenter();
+        // get_____() + Tile.getTileWidth() - 1 adds 1 pixel less than a whole tile so any
+        // partial tile will get counted but if the screen is at an exact tile value it
+        // will not add anything
+        screenTilesWide = (int) ((getWidth() + Tile.getTileWidth() - 1) / Tile.getTileWidth() - 2);
+        screenTilesTall = (int) ((getHeight() + Tile.getTileWidth() - 1) / Tile.getTileWidth() - 2);
+        // + 0.5 will only increase the value if there is already a 0.5 from division
+        // + 1 only really makes sense if you draw out the tiles and realize which would be at the center without it
+        topLeftX = screenCenterTileX - (int)(screenTilesWide / 2.0 + 0.5) + 1;
+        topLeftY = screenCenterTileY - (int)(screenTilesTall / 2.0 + 0.5) + 1;
+        changeTileX = screenCenterTileX - oldScreenCenterTileX;
+        changeTileY = screenCenterTileY - oldScreenCenterTileY;
+    }
+
+    /**
      * Clears and re-updates everything in all the groups. This should only be used
      * after teleport, startup, going into another dimension, down stairs, moving
      * multiple blocks at once, or any such action that would need more than one new
@@ -153,51 +196,39 @@ public class Camera extends Pane {
     private void updateAll() {
         visibleTiles.getChildren().clear();
         standingGroup.getChildren().clear();
-        visibleTilesArray.clear();
-
         Tile[][] allTiles = Tile.getAllTiles();
 
-        for (int i = topLeftY; i <= topLeftY + screenTilesTall; i++) {
-            ArrayList<Node> visibleRow = new ArrayList<>();
-
-            for (int j = topLeftX; j <= topLeftX + screenTilesWide; j++) {
-                Tile curTile = allTiles[i][j];
-                int[] cords = shift(curTile.getPosX(), curTile.getPosY());
-
-                if (curTile.getTexture() != null) {
-                    ImageView imageToAdd = new ImageView(curTile.getTexture());
-                    imageToAdd.setX(cords[0]);
-                    imageToAdd.setY(cords[1]);
-
-                    visibleRow.add(imageToAdd);
-                } else {
-                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.getWidth(), Tile.getWidth());
-
-                    rect.setFill(curTile.getBackColor());
-                    rect.setStrokeWidth(3);
-                    rect.setStroke(Color.BLACK);
-                    visibleRow.add(rect);
-                }
-
-                for(Plant p : curTile.getPlants()) {
-
-                    ImageView view = new ImageView(p.getImage());
-
-                    int[] pCords = shift((int)p.getX(), (int)p.getY());
-                    view.setX(pCords[0] - p.getWidth() / 2);
-                    view.setY(pCords[1] - p.getHeight());
-                    standingGroup.getChildren().add(view);
-                }
-            }
-            visibleTilesArray.add(visibleRow);
-        }
-
-        visibleTiles.getChildren().clear();
-        for (ArrayList<Node> a : visibleTilesArray) {
-            for (Node n : a) {
-                visibleTiles.getChildren().add(n);
+        for (int i = topLeftY; i < topLeftY + screenTilesTall; i++) {
+            for (int j = topLeftX; j < topLeftX + screenTilesWide; j++) {
+                display(allTiles[i][j]);
             }
         }
+    }
+
+    /**
+     * Adds all the entities to the standing group and an array list so they can be
+     * sorted out easily.
+     */
+    private void addAllEntities(){
+        int[] playerCoords = shift((int) player.getPosX(), (int) player.getPosY());;
+        //player.setTexture(new Image("/res/player(1).png"));
+        ImageView playerImage = (new ImageView(player.getTexture()));
+        playerImage.setX(playerCoords[0] - player.getWidth() / 2);
+        playerImage.setY(playerCoords[1] - player.getHeight());
+        standingGroup.getChildren().add(playerImage);
+        entities.add(playerImage);
+    }
+
+    /**
+     * Safely removes all the entities from the standing group and adds back the new versions.
+     * Standing group will need to be sorted afterwords.
+     */
+    private void updateEntities(){
+        for (int i = 0; i < entities.size(); i++) {
+            standingGroup.getChildren().remove(entities.get(i));
+        }
+        entities.clear();
+        addAllEntities();
     }
 
     /**
@@ -205,117 +236,152 @@ public class Camera extends Pane {
      * row after moving off the tile you were on before. The previously stood on tile
      * will be compared to the current to find out how to change the groups properly.
      */
-    /*
+
     private void updateSome(){
-        Tile[][] allTiles = Tile.getAllTiles();
+        if(changeTileX > 0){
+            // right move means remove a layer on the left and add one to the right
+            removeTileLayerSide(false);
+            addTileLayerSide(true);
 
-        int sideX = -1;
-        if(changeTileX < 0){
-            // left move
-            sideX = topLeftX;
-        }else if(changeTileX > 0){
-            // right move
-            sideX = topLeftX + screenTilesWide;
+        }else if(changeTileX < 0){
+            // left move means remove a layer on the right and add one to the left
+            removeTileLayerSide(true);
+            addTileLayerSide(false);
         }
 
-        if(sideX != -1) {//will only be false if the change in x is 0
+        if(changeTileY > 0){
+            // down move means remove a layer on the top and add one to the bottom
+            removeTileLayerTopBot(true);
+            addTileLayerTopBot(false);
 
-            for (int i = 0; i <= screenTilesTall; i++) {
-                int[] cords = shift(allTiles[i][sideX].getPosX(), allTiles[i][sideX].getPosY());
-                if (allTiles[i][sideX].getTexture() != null) {
-                    ImageView imageToAdd = new ImageView(allTiles[i][sideX].getTexture());
-                    imageToAdd.setX(cords[0]);
-                    imageToAdd.setY(cords[1]);
-
-                    if(changeTileX < 0) {
-                        // left move
-                        visibleTilesArray.get(i).add(0, imageToAdd);
-                        visibleTilesArray.get(i).remove(visibleTilesArray.get(i).size() - 1);
-                    }else{
-                        // right move
-                        visibleTilesArray.get(i).add(imageToAdd);
-                        visibleTilesArray.get(i).remove(0);
-                    }
-                } else {
-                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.getWidth(), Tile.getWidth());
-
-                    rect.setFill(allTiles[i][sideX].getBackColor());
-                    rect.setStrokeWidth(3);
-                    rect.setStroke(Color.BLACK);
-
-                    if(changeTileX < 0) {
-                        // left move
-                        visibleTilesArray.get(i).add(0, rect);
-                        visibleTilesArray.get(i).remove(visibleTilesArray.get(i).size() - 1);
-                    }else{
-                        // right move
-                        visibleTilesArray.get(i).add(rect);
-                        visibleTilesArray.get(i).remove(0);
-                    }
-                }
-            }
-        }
-
-        int sideY = -1;
-        if(changeTileY < 0){
-            // up move
-            sideY = topLeftY;
-        }else if(changeTileY > 0){
-            // down move
-            sideY = topLeftY + screenTilesTall;
-        }
-
-        if(sideY != -1) {//will only be false if the change in x is 0
-
-            ArrayList<Node> newRow = new ArrayList<>();
-            for (int i = 0; i <= screenTilesWide; i++) {
-                int[] cords = shift(allTiles[sideY][i].getPosY(), allTiles[sideY][i].getPosX());
-                if (allTiles[sideY][i].getTexture() != null) {
-                    ImageView imageToAdd = new ImageView(allTiles[sideY][i].getTexture());
-                    imageToAdd.setX(cords[0]);
-                    imageToAdd.setY(cords[1]);
-
-                    newRow.add(imageToAdd);
-                } else {
-                    Rectangle rect = new Rectangle(cords[0], cords[1], Tile.getWidth(), Tile.getWidth());
-
-                    rect.setFill(allTiles[sideY][i].getBackColor());
-                    rect.setStrokeWidth(3);
-                    rect.setStroke(Color.BLACK);
-
-                    newRow.add(rect);
-                }
-            }
-            if(changeTileY < 0){
-                // up
-                visibleTilesArray.add(0, newRow);
-                visibleTilesArray.remove(visibleTilesArray.size());
-            }else{
-                // down
-                visibleTilesArray.remove(0);
-                visibleTilesArray.add(newRow);
-            }
+        }else if(changeTileY < 0){
+            // up move means remove a layer on the bottom and add one to the top
+            removeTileLayerTopBot(false);
+            addTileLayerTopBot(true);
         }
 
         updateCords();
+        updateEntities();
     }
+
+    /**
+     * This method removes a vertical layer on the far right or left out of visible tiles
+     * and all their plants and entities from standing group. This method assumes that the groups have
+     * already been sorted.
+     *
+     * This method assumes that only image views are in the children lists.
      */
+    private void removeTileLayerSide(boolean rightSide){
+        int startIndex = (screenTilesWide) * (screenTilesTall - 1);
+        if(rightSide){
+            startIndex += screenTilesWide - 1;
+        }
+
+        for (int i = startIndex; i >= 0; i -= screenTilesWide) {
+            ImageView tile = (ImageView)visibleTiles.getChildren().get(i);
+            int x = (int)tile.getX();
+            int y = (int)tile.getY();
+            int w = Tile.getTileWidth();
+
+            for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
+                ImageView stander = (ImageView) standingGroup.getChildren().get(j);
+                int xx = (int) stander.getX();
+
+                // y axis does not matter since
+                if(xx >= x && xx < x + w){
+                    standingGroup.getChildren().remove(j);
+                }
+            }
+
+
+            visibleTiles.getChildren().remove(i);
+        }
+    }
+
+    private void removeTileLayerTopBot(boolean topSide){
+        int startIndex = screenTilesWide * (screenTilesTall - 1);
+        if(topSide){
+            // top left corner
+            startIndex = 0;
+        }
+
+        // - 1 for 0 based indexing
+        for (int i = startIndex + screenTilesWide - 1; i >= startIndex; i --) {
+            ImageView tile = (ImageView)visibleTiles.getChildren().get(i);
+            int x = (int)tile.getX();
+            int y = (int)tile.getY();
+            int w = Tile.getTileWidth();
+
+            for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
+                ImageView stander = (ImageView) standingGroup.getChildren().get(j);
+                int yy = (int) stander.getY();
+
+                // x axis does not matter since
+                if(yy >= y && yy < y + w){
+                    standingGroup.getChildren().remove(j);
+                }
+            }
+
+            visibleTiles.getChildren().remove(i);
+        }
+    }
+
+    /**
+     * This method adds a vertical layer of tiles and their plants to the given side of
+     * the screen.
+     *
+     * WARNING: This method breaks sorting.
+     */
+    private void addTileLayerSide(boolean rightSide){
+        int j = 0;
+        if(rightSide){
+            j = screenTilesWide - 1;
+        }
+
+        for (int i = 0; i < screenTilesTall; i++) {
+            display(Tile.getAllTiles()[topLeftY + i][topLeftX + j]);
+            // it does not matter where it is placed in the children list since it will be sorted afterwords
+        }
+    }
+
+    private void addTileLayerTopBot(boolean topSide){
+        int j = screenTilesTall - 1;
+        if(topSide){
+            j = 0;
+        }
+
+        for (int i = 0; i < screenTilesWide; i++) {
+            display(Tile.getAllTiles()[topLeftY + j][topLeftX + i]);
+            // it does not matter where it is placed in the children list since it will be sorted afterwords
+        }
+    }
+
     private void updateCords() {
         int changeX = oldScreenCenterX - screenCenterX;
         int changeY = oldScreenCenterY - screenCenterY;
 
-        for (ArrayList<Node> a : visibleTilesArray) {
-            for (Node n : a) {
-                // visibleTilesArray will only ever contain a rectangle or and image view
-                if (n instanceof ImageView) {
-                    ImageView i = (ImageView) n;
-                    i.setX(i.getX() + changeX);
-                    i.setY(i.getY() + changeY);
-                } else {
-                    Rectangle r = (Rectangle) n;
-                    r.setX(r.getX() + changeX);
-                    r.setY(r.getY() + changeY);
-                }
+        for (Node n : visibleTiles.getChildren()){
+            // visibleTiles will only ever contain a rectangle or and image view
+            if (n instanceof ImageView) {
+                ImageView i = (ImageView) n;
+                i.setX(i.getX() + changeX);
+                i.setY(i.getY() + changeY);
+            } else {
+                Rectangle r = (Rectangle) n;
+                r.setX(r.getX() + changeX);
+                r.setY(r.getY() + changeY);
+            }
+        }
+        for (Node n : standingGroup.getChildren()){
+            // visibleTiles will only ever contain a rectangle or and image view
+            if (n instanceof ImageView) {
+                ImageView i = (ImageView) n;
+                i.setX(i.getX() + changeX);
+                i.setY(i.getY() + changeY);
+            } else {
+                Rectangle r = (Rectangle) n;
+                r.setX(r.getX() + changeX);
+                r.setY(r.getY() + changeY);
             }
         }
     }
@@ -347,8 +413,6 @@ public class Camera extends Pane {
      * the screens width and height after subtracting the screens center.
      */
     private int[] shift(int x, int y) {
-        int px = (int) Math.round(Main.getPlayer().getPosX());
-        int py = (int) Math.round(Main.getPlayer().getPosY());
         int halfWidth = (int) getWidth() / 2;
         int halfHeight = (int) getHeight() / 2;
 
@@ -368,7 +432,7 @@ public class Camera extends Pane {
         screenCenterX = (int) Main.getPlayer().getPosX();
         screenCenterY = (int) Main.getPlayer().getPosY();
 
-        screenCenterTileX = screenCenterX / Tile.getWidth();
-        screenCenterTileY = screenCenterY / Tile.getWidth();
+        screenCenterTileX = screenCenterX / Tile.getTileWidth();
+        screenCenterTileY = screenCenterY / Tile.getTileWidth();
     }
 }

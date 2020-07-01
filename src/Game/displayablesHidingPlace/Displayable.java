@@ -1,7 +1,6 @@
-package Game;
+package Game.displayablesHidingPlace;
 
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 
 /**
  * Everything that needs to be displayed shares a few things in common and
@@ -10,15 +9,14 @@ import javafx.scene.shape.Rectangle;
 public abstract class Displayable {
     protected double x, y;
     protected int width, height;
-    protected boolean drawFromTopLeft;
-    protected Rectangle boundsBox;
+    protected boolean cordsAtCorner;
 
-    public Displayable(double x, double y, int width, int height, boolean drawFromTopLeft) {
+    public Displayable(double x, double y, int width, int height, boolean cordsAtCorner) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.drawFromTopLeft = drawFromTopLeft;
+        this.cordsAtCorner = cordsAtCorner;
     }
 
     public abstract Image getImage();
@@ -37,5 +35,9 @@ public abstract class Displayable {
 
     public int getHeight() {
         return height;
+    }
+
+    public boolean cordsAtCorner() {
+        return cordsAtCorner;
     }
 }

@@ -19,7 +19,7 @@ public class WaterTile extends Tile {
         this.isInteractiveTile = true;
     }
 
-    public Image getTexture() {
+    public Image getImage() {
         return texture;
     }
 

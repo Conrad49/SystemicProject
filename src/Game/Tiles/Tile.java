@@ -1,5 +1,6 @@
 package Game.Tiles;
 
+import Game.displayablesHidingPlace.Displayable;
 import Game.plants.Plant;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -8,13 +9,11 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 
-public abstract class Tile {
+public abstract class Tile extends Displayable {
 
     static int width = 16 * 4;
 
     Color backColor;
-    int posX;
-    int posY;
     static boolean isTextured = false;
     boolean isInteractiveTile;
     private static int mapWidth;
@@ -29,14 +28,12 @@ public abstract class Tile {
     protected ArrayList<Plant> plants = new ArrayList<>(); // Plants growing on this tile.
 
     public Tile(int posX, int posY, Color backColor){
-        this.posX = posX;
-        this.posY = posY;
-
+        super(posX, posY, width, width, true);
         this.backColor = backColor;
 
         this.isTextured = false;
 
-        this.boundsBox = new Rectangle(this.posX, this.posY, width, width);
+        this.boundsBox = new Rectangle(posX, posY, width, width);
         //this.boundsBox.setFill(backColor);
 
         allTiles[xCount][yCount] = this;
@@ -48,12 +45,11 @@ public abstract class Tile {
     }
 
     public Tile(int posX, int posY){
-        this.posX = posX;
-        this.posY = posY;
+        super(posX, posY, width, width, true);
 
         this.isTextured = true;
 
-        this.boundsBox = new Rectangle(this.posX, this.posY, width, width);
+        this.boundsBox = new Rectangle(posX, posY, width, width);
         //this.boundsBox.setFill(backColor);
 
         allTiles[xCount][yCount] = this;
@@ -82,20 +78,12 @@ public abstract class Tile {
     }
 
 
-    public static int getWidth() {
+    public static int getTileWidth() {
         return width;
     }
 
     public Color getBackColor() {
         return backColor;
-    }
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
     }
 
     public boolean isTextured() {
