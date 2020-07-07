@@ -58,7 +58,7 @@ public class Player extends Entity {
             //this.currentAnimation = this.walkDown;
 
             this.xSpeed = speed * -1;
-            this.posX += this.xSpeed;
+            //this.posX += this.xSpeed;
             this.tileX = (int)this.posX / Tile.getWidth();
             moving = true;
         } else {
@@ -72,7 +72,7 @@ public class Player extends Entity {
             //this.setCurrentAnimation(walkRight);
 
             this.xSpeed = speed;
-            this.posX += this.xSpeed;
+            //this.posX += this.xSpeed;
             this.tileX = (int)this.posX / Tile.getWidth();
             moving = true;
         } else {
@@ -86,7 +86,7 @@ public class Player extends Entity {
             //this.currentAnimation = walkDown;
 
             this.ySpeed = speed * -1;
-            this.posY += this.ySpeed;
+            //this.posY += this.ySpeed;
             this.tileY = (int)this.posY / Tile.getWidth();
             moving = true;
         } else {
@@ -100,7 +100,7 @@ public class Player extends Entity {
             //this.setCurrentAnimation(this.walkDown);
 
             this.ySpeed = speed;
-            this.posY += this.ySpeed;
+            //this.posY += this.ySpeed;
             this.tileY = (int)this.posY / Tile.getWidth();
             moving = true;
         } else {

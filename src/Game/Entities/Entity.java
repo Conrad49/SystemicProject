@@ -61,6 +61,8 @@ public abstract class Entity {
 
     public void tick(){
         // update positions and velocities / speeds
+        this.posX += this.xSpeed;
+        this.posY += this.ySpeed;
     }
 
     public void checkVisiblity(Player p){
