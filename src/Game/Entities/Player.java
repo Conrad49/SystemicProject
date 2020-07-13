@@ -4,6 +4,7 @@ import Game.Animation;
 import Game.Chunk;
 import Game.Main;
 import Game.Tiles.Tile;
+import com.sun.javafx.geom.Vec2d;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -20,6 +21,11 @@ public class Player extends Entity {
     private static boolean a;
     private static boolean s;
     private static boolean d;
+
+    private Vec2d direction;
+    private Vec2d velocity = new Vec2d(5, 0);
+    private Vec2d acceleration;
+
 
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
     private boolean hasChangedFullscreen;
@@ -44,6 +50,9 @@ public class Player extends Entity {
         super.tick();
         moving = false;
 
+        this.setPositionX(velocity.x);
+        this.setPositionY(velocity.y);
+
         handleKeyPresses();
     }
 
@@ -57,7 +66,8 @@ public class Player extends Entity {
             a = true;
             //this.currentAnimation = this.walkDown;
 
-            this.xSpeed = speed * -1;
+            //this.xSpeed = speed * -1;
+            //this.velocity.x = speed * -1;
             //this.posX += this.xSpeed;
             this.tileX = (int)this.posX / Tile.getWidth();
             moving = true;
@@ -71,9 +81,10 @@ public class Player extends Entity {
             d = true;
             //this.setCurrentAnimation(walkRight);
 
-            this.xSpeed = speed;
+            //this.xSpeed = speed;
+            //this.velocity.x = speed;
             //this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.getWidth();
+
             moving = true;
         } else {
             d = false;
@@ -85,7 +96,8 @@ public class Player extends Entity {
             w = true;
             //this.currentAnimation = walkDown;
 
-            this.ySpeed = speed * -1;
+            //this.ySpeed = speed * -1;
+            //this.velocity.y = speed * -1;
             //this.posY += this.ySpeed;
             this.tileY = (int)this.posY / Tile.getWidth();
             moving = true;
@@ -99,7 +111,8 @@ public class Player extends Entity {
             s = true;
             //this.setCurrentAnimation(this.walkDown);
 
-            this.ySpeed = speed;
+            //this.ySpeed = speed;
+            //this.velocity.y = speed;
             //this.posY += this.ySpeed;
             this.tileY = (int)this.posY / Tile.getWidth();
             moving = true;

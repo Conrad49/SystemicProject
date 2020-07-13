@@ -4,6 +4,7 @@ import Game.Animation;
 import Game.Chunk;
 import Game.Entities.Player;
 import Game.Tiles.Tile;
+import com.sun.javafx.geom.Vec2d;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,6 +25,8 @@ public abstract class Entity {
     protected int width;
     protected int height;
     private Animation currentAnimation;
+    Vec2d direction;
+    private Vec2d position = new Vec2d();
 
     public Animation getCurrentAnimation() {
         return currentAnimation;
@@ -40,6 +43,9 @@ public abstract class Entity {
         this.posY = boundsBox.getY();
         this.tileX = (int)posX/ Tile.getWidth();
         this.tileY = (int)posY/ Tile.getWidth();
+
+        this.position.x = this.posX;
+        this.position.y = this.posY;
     }
 
     public Entity(Image texture, Rectangle boundsBox) {
@@ -61,8 +67,12 @@ public abstract class Entity {
 
     public void tick(){
         // update positions and velocities / speeds
-        this.posX += this.xSpeed;
-        this.posY += this.ySpeed;
+        //this.posX += this.xSpeed;
+        //this.posY += this.ySpeed;
+        this.tileX = (int)this.posX / Tile.getWidth();
+        this.tileY = (int)this.posY / Tile.getWidth();
+        this.posX = this.position.x;
+        this.posY = this.position.y;
     }
 
     public void checkVisiblity(Player p){
@@ -90,33 +100,33 @@ public abstract class Entity {
 
             Rectangle shiftedRect = new Rectangle(this.posX - (this.boundsBox.getWidth() / 2), this.posY - (this.boundsBox.getHeight() / 2), this.boundsBox.getWidth(), this.boundsBox.getHeight());
 
-            boolean intersects = tileBounds.intersects(shiftedRect.getBoundsInLocal());
+            //boolean intersects = tileBounds.intersects(shiftedRect.getBoundsInLocal());
 
             Shape intersect = Shape.intersect(shiftedRect, tileBounds);
             if (intersect.getBoundsInLocal().getWidth() != -1) {
 
                 // left
                 if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.posX = this.posX + intersect.getBoundsInLocal().getWidth();
-                    this.xSpeed = 0;
+                    this.posX += intersect.getBoundsInLocal().getWidth();
+                    //this.xSpeed = 0;
                 }
 
                 // right
                 if(tileBounds.getX() > this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.posX = this.posX - intersect.getBoundsInLocal().getWidth();
-                    this.xSpeed = 0;
+                    this.posX -= intersect.getBoundsInLocal().getWidth();
+                    //this.xSpeed = 0;
                 }
 
                 // above
                 if(tileBounds.getY() + tileBounds.getHeight() < this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.posY = this.posY + intersect.getBoundsInLocal().getHeight();
-                    this.ySpeed = 0;
+                    this.posY += intersect.getBoundsInLocal().getHeight();
+                    //this.ySpeed = 0;
                 }
 
                 // below
                 if(tileBounds.getY() > this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.posY = this.posY - intersect.getBoundsInLocal().getHeight();
-                    this.ySpeed = 0;
+                    this.posY -= intersect.getBoundsInLocal().getHeight();
+                    //this.ySpeed = 0;
                 }
             }
 
@@ -130,6 +140,19 @@ public abstract class Entity {
     public double getPosY() {
         return posY;
     }
+
+    public Vec2d getPosition() {
+        return position;
+    }
+
+    public void setPositionX(double x) {
+        this.position.x += x;
+    }
+
+    public void setPositionY(double y) {
+        this.position.y += y;
+    }
+
 
     public Image getTexture() {
         return this.texture;
