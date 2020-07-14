@@ -84,22 +84,22 @@ public class Player extends Entity {
             speed = maxSpeed;
 
             setDirection();
+        }
 
-            if (!currentlyActiveKeys.contains("A")) {
-                this.walkLeft.resetCount();
-            }
+        if (!currentlyActiveKeys.contains("A")) {
+            this.walkLeft.resetCount();
+        }
 
-            if (!currentlyActiveKeys.contains("D")) {
-                this.walkRight.resetCount();
-            }
+        if (!currentlyActiveKeys.contains("D")) {
+            this.walkRight.resetCount();
+        }
 
-            if (!currentlyActiveKeys.contains("W")) {
-                this.walkUp.resetCount();
-            }
+        if (!currentlyActiveKeys.contains("W")) {
+            this.walkUp.resetCount();
+        }
 
-            if (!currentlyActiveKeys.contains("S")) {
-                this.walkDown.resetCount();
-            }
+        if (!currentlyActiveKeys.contains("S")) {
+            this.walkDown.resetCount();
         }
 
 
