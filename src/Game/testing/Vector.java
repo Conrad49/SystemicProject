@@ -16,14 +16,14 @@ public class Vector {
         this.y += vector.y;
     }
 
-    public void multiply(Vector vector){
-        this.x *= vector.x;
-        this.y *= vector.y;
+    public void multiply(Vector vector1, Vector vector2){
+        vector1.x *= vector2.x;
+        vector1.y *= vector2.y;
     }
 
-    public void multiply(int num){
-        this.x *= num;
-        this.y *= num;
+    public void multiply(Vector vector, int num){
+        vector.x *= num;
+        vector.y *= num;
     }
 
     public void setX(int x) {

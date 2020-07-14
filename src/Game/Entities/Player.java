@@ -57,10 +57,9 @@ public class Player extends Entity {
         super.tick();
         moving = false;
 
-        System.out.println(direction.x + ", " + direction.y);
-
         velocity.x = direction.x * speed;
         velocity.y = direction.y * speed;
+
 
         this.addToPositionX(velocity.x);
         this.addToPositionY(velocity.y);
@@ -77,56 +76,28 @@ public class Player extends Entity {
     }
 
     public void handleKeyPresses(){
-        //this.posX += this.xSpeed;
-        //this.posY += this.ySpeed;
-
-        //this.currentAnimation = this.walkDown;
         direction = new Vector(0, 0);
         boolean isMoving = currentlyActiveKeys.contains("A") || currentlyActiveKeys.contains("D") || currentlyActiveKeys.contains("W") || currentlyActiveKeys.contains("S");
 
         if (isMoving) {
+            moving = true;
             speed = maxSpeed;
 
             setDirection();
 
-            if (currentlyActiveKeys.contains("A")) {
-                //a = true;
-                //this.direction = left;
-                this.tileX = (int)this.posX / Tile.getWidth();
-                moving = true;
-            } else {
-                //a = false;
+            if (!currentlyActiveKeys.contains("A")) {
                 this.walkLeft.resetCount();
             }
 
-            if (currentlyActiveKeys.contains("D")) {
-                d = true;
-                //this.direction = right;
-
-                moving = true;
-            } else {
-                d = false;
+            if (!currentlyActiveKeys.contains("D")) {
                 this.walkRight.resetCount();
             }
 
-            if (currentlyActiveKeys.contains("W")) {
-                w = true;
-                //this.direction = up;
-                this.tileY = (int)this.posY / Tile.getWidth();
-                moving = true;
-            } else {
-                w = false;
+            if (!currentlyActiveKeys.contains("W")) {
                 this.walkUp.resetCount();
             }
 
-            if (currentlyActiveKeys.contains("S")) {
-                s = true;
-                //this.direction = down;
-
-                this.tileY = (int)this.posY / Tile.getWidth();
-                moving = true;
-            } else {
-                s = false;
+            if (!currentlyActiveKeys.contains("S")) {
                 this.walkDown.resetCount();
             }
         }
@@ -142,13 +113,6 @@ public class Player extends Entity {
             hasChangedFullscreen = true;
         }
 
-        if(!a && !d){
-            this.xSpeed = 0;
-        }
-
-        if(!w && !s){
-            this.ySpeed = 0;
-        }
 
         if(!moving){
             this.setCurrentAnimation(this.idleAnimation);
@@ -233,19 +197,15 @@ public class Player extends Entity {
 
             if(this.direction.x < 0){
                 this.setCurrentAnimation(this.walkLeft);
-                System.out.println("l");
             }
             if(this.direction.y < 0){
                 this.setCurrentAnimation(this.walkUp);
-                System.out.println("u");
             }
             if(this.direction.y > 0){
                 this.setCurrentAnimation(this.walkDown);
-                System.out.println("d");
             }
             if(this.direction.x > 0){
                 this.setCurrentAnimation(this.walkRight);
-                System.out.println("r");
             }
         }
     }
