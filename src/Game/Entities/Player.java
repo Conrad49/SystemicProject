@@ -57,6 +57,19 @@ public class Player extends Entity {
         super.tick();
         moving = false;
 
+        //direction.normalize();
+
+        double magnitude = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
+        System.out.println(magnitude);
+
+        if (magnitude != 0) {
+            direction.x = (direction.x / magnitude);
+            direction.y = (direction.y / magnitude);
+        }
+
+
+
+
         velocity.x = direction.x * speed;
         velocity.y = direction.y * speed;
 

@@ -1,7 +1,7 @@
 package Game.testing;
 
 public class Vector {
-    public int x, y;
+    public double x, y;
 
     public Vector(int x, int y) {
         this.x = x;
@@ -26,6 +26,16 @@ public class Vector {
         vector.y *= num;
     }
 
+    public void normalize(){
+
+        if (Math.abs(this.x) != 0) {
+            this.x = this.x / Math.abs(this.x);
+        }
+        if (Math.abs(this.y) != 0) {
+            this.y = this.y / Math.abs(this.y);
+        }
+    }
+
     public void setX(int x) {
         this.x = x;
     }
@@ -34,11 +44,11 @@ public class Vector {
         this.y = y;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 }
