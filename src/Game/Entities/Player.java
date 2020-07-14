@@ -231,19 +231,19 @@ public class Player extends Entity {
     public void setCurrentAnimation(){
         if(moving){
 
-            if(this.xSpeed < 0){
+            if(this.direction.x < 0){
                 this.setCurrentAnimation(this.walkLeft);
                 System.out.println("l");
             }
-            if(this.ySpeed < 0){
+            if(this.direction.y < 0){
                 this.setCurrentAnimation(this.walkUp);
                 System.out.println("u");
             }
-            if(this.ySpeed > 0){
+            if(this.direction.y > 0){
                 this.setCurrentAnimation(this.walkDown);
                 System.out.println("d");
             }
-            if(this.xSpeed > 0){
+            if(this.direction.x > 0){
                 this.setCurrentAnimation(this.walkRight);
                 System.out.println("r");
             }
