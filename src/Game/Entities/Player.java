@@ -17,6 +17,7 @@ public class Player extends Entity {
 
     Tile[][] visibleTiles = new Tile[10][10];
     private static int speed = 5;
+    private static int maxSpeed = 5;
     private static boolean moving;
 
     private static boolean w;
@@ -67,6 +68,7 @@ public class Player extends Entity {
         handleKeyPresses();
 
         if(!moving){
+            speed = 0;
             //velocity.x = 0;
             //velocity.y = 0;
             //direction.x = 0;
@@ -79,69 +81,54 @@ public class Player extends Entity {
         //this.posY += this.ySpeed;
 
         //this.currentAnimation = this.walkDown;
+        direction = new Vector(0, 0);
+        boolean isMoving = currentlyActiveKeys.contains("A") || currentlyActiveKeys.contains("D") || currentlyActiveKeys.contains("W") || currentlyActiveKeys.contains("S");
 
-        if (currentlyActiveKeys.contains("A")) {
-            a = true;
-            this.direction = left;
-            //this.currentAnimation = this.walkDown;
+        if (isMoving) {
+            speed = maxSpeed;
 
-            //this.xSpeed = speed * -1;
-            //this.velocity.x = speed * -1;
-            //this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.getWidth();
-            moving = true;
-        } else {
-            a = false;
-            this.walkLeft.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
-        }
+            setDirection();
 
-        if (currentlyActiveKeys.contains("D")) {
-            d = true;
-            this.direction = right;
-                    //this.setCurrentAnimation(walkRight);
+            if (currentlyActiveKeys.contains("A")) {
+                //a = true;
+                //this.direction = left;
+                this.tileX = (int)this.posX / Tile.getWidth();
+                moving = true;
+            } else {
+                //a = false;
+                this.walkLeft.resetCount();
+            }
 
-            //this.xSpeed = speed;
-            //this.velocity.x = speed;
-            //this.posX += this.xSpeed;
+            if (currentlyActiveKeys.contains("D")) {
+                d = true;
+                //this.direction = right;
 
-            moving = true;
-        } else {
-            d = false;
-            this.walkRight.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
-        }
+                moving = true;
+            } else {
+                d = false;
+                this.walkRight.resetCount();
+            }
 
-        if (currentlyActiveKeys.contains("W")) {
-            w = true;
-            this.direction = up;
-                    //this.currentAnimation = walkDown;
+            if (currentlyActiveKeys.contains("W")) {
+                w = true;
+                //this.direction = up;
+                this.tileY = (int)this.posY / Tile.getWidth();
+                moving = true;
+            } else {
+                w = false;
+                this.walkUp.resetCount();
+            }
 
-            //this.ySpeed = speed * -1;
-            //this.velocity.y = speed * -1;
-            //this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.getWidth();
-            moving = true;
-        } else {
-            w = false;
-            this.walkUp.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
-        }
+            if (currentlyActiveKeys.contains("S")) {
+                s = true;
+                //this.direction = down;
 
-        if (currentlyActiveKeys.contains("S")) {
-            s = true;
-            this.direction = down;
-                    //this.setCurrentAnimation(this.walkDown);
-
-            //this.ySpeed = speed;
-            //this.velocity.y = speed;
-            //this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.getWidth();
-            moving = true;
-        } else {
-            s = false;
-            this.walkDown.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
+                this.tileY = (int)this.posY / Tile.getWidth();
+                moving = true;
+            } else {
+                s = false;
+                this.walkDown.resetCount();
+            }
         }
 
 
@@ -260,6 +247,20 @@ public class Player extends Entity {
                 this.setCurrentAnimation(this.walkRight);
                 System.out.println("r");
             }
+        }
+    }
+
+    public void setDirection(){
+        if (currentlyActiveKeys.contains("A")) {
+            this.direction.add(left);
+        } else if (currentlyActiveKeys.contains("D")) {
+            this.direction.add(right);
+        }
+
+        if (currentlyActiveKeys.contains("W")) {
+            this.direction.add(up);
+        } else if (currentlyActiveKeys.contains("S")) {
+            this.direction.add(down);
         }
     }
 }
