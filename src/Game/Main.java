@@ -34,8 +34,8 @@ public class Main extends Application {
     private static Stage stage; //
     private static Scene mainScene;
     private static Camera root;
-    private static int WIDTH = 512;
-    private static int HEIGHT = 256;
+    private static int WIDTH = 320;
+    private static int HEIGHT = 320;
 
     private static HashSet<String> currentlyActiveKeys;
 
@@ -53,10 +53,10 @@ public class Main extends Application {
 
         root = new Camera();
 
-        mainScene = new Scene(root);
+        mainScene = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(mainScene);
 
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
 
         prepareActionHandlers();
 
@@ -84,7 +84,6 @@ public class Main extends Application {
             }
         }
 
-        System.out.println("done");
         //Game.Main "game" loop
         new AnimationTimer()
         {
