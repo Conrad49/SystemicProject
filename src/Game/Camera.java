@@ -74,9 +74,6 @@ public class Camera extends Pane {
                 updateCords();
             }
         }else if(adjacentCenterBlock){
-            System.out.println();
-            System.out.println("it's a whole new block :D");
-            System.out.println();
             updateSome();
         }else{
             updateAll();
@@ -294,7 +291,7 @@ public class Camera extends Pane {
 
             for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
                 ImageView stander = (ImageView) standingGroup.getChildren().get(j);
-                double xx = stander.getX();
+                double xx = stander.getX() + stander.getImage().getWidth() / 2;
 
                 // y axis does not matter since
                 if(xx >= x && xx < x + w){
@@ -323,7 +320,7 @@ public class Camera extends Pane {
 
             for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
                 ImageView stander = (ImageView) standingGroup.getChildren().get(j);
-                double yy = stander.getY();
+                double yy = stander.getY() + stander.getImage().getHeight();
 
                 // x axis does not matter since
                 if(yy >= y && yy < y + w){
