@@ -4,7 +4,9 @@ import Game.Animation;
 import Game.Chunk;
 import Game.Main;
 import Game.Tiles.Tile;
+import Game.testing.Vector;
 import com.sun.javafx.geom.Vec2d;
+import com.sun.javafx.geom.Vec2f;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -22,8 +24,12 @@ public class Player extends Entity {
     private static boolean s;
     private static boolean d;
 
-    private Vec2d direction;
-    private Vec2d velocity = new Vec2d(5, 0);
+    private Vector direction = new Vector(0, 0);
+    private Vector velocity = new Vector(1, 1);
+    private Vector up = new Vector(0, -1);
+    private Vector down = new Vector(0, 1);
+    private Vector left = new Vector(-1, 0);
+    private Vector right = new Vector(1, 0);
     private Vec2d acceleration;
 
 
@@ -50,10 +56,22 @@ public class Player extends Entity {
         super.tick();
         moving = false;
 
-        this.setPositionX(velocity.x);
-        this.setPositionY(velocity.y);
+        System.out.println(direction.x + ", " + direction.y);
+
+        velocity.x = direction.x * speed;
+        velocity.y = direction.y * speed;
+
+        this.addToPositionX(velocity.x);
+        this.addToPositionY(velocity.y);
 
         handleKeyPresses();
+
+        if(!moving){
+            //velocity.x = 0;
+            //velocity.y = 0;
+            //direction.x = 0;
+            //direction.y = 0;
+        }
     }
 
     public void handleKeyPresses(){
@@ -64,6 +82,7 @@ public class Player extends Entity {
 
         if (currentlyActiveKeys.contains("A")) {
             a = true;
+            this.direction = left;
             //this.currentAnimation = this.walkDown;
 
             //this.xSpeed = speed * -1;
@@ -79,7 +98,8 @@ public class Player extends Entity {
 
         if (currentlyActiveKeys.contains("D")) {
             d = true;
-            //this.setCurrentAnimation(walkRight);
+            this.direction = right;
+                    //this.setCurrentAnimation(walkRight);
 
             //this.xSpeed = speed;
             //this.velocity.x = speed;
@@ -94,7 +114,8 @@ public class Player extends Entity {
 
         if (currentlyActiveKeys.contains("W")) {
             w = true;
-            //this.currentAnimation = walkDown;
+            this.direction = up;
+                    //this.currentAnimation = walkDown;
 
             //this.ySpeed = speed * -1;
             //this.velocity.y = speed * -1;
@@ -109,7 +130,8 @@ public class Player extends Entity {
 
         if (currentlyActiveKeys.contains("S")) {
             s = true;
-            //this.setCurrentAnimation(this.walkDown);
+            this.direction = down;
+                    //this.setCurrentAnimation(this.walkDown);
 
             //this.ySpeed = speed;
             //this.velocity.y = speed;
@@ -143,6 +165,14 @@ public class Player extends Entity {
 
         if(!moving){
             this.setCurrentAnimation(this.idleAnimation);
+        }
+
+        if (currentlyActiveKeys.contains("Z")) {
+            direction.x ++;
+        }
+
+        if (currentlyActiveKeys.contains("X")) {
+            direction.y ++;
         }
     }
 
