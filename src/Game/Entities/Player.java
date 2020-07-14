@@ -20,10 +20,6 @@ public class Player extends Entity {
     private static int maxSpeed = 5;
     private static boolean moving;
 
-    private static boolean w;
-    private static boolean a;
-    private static boolean s;
-    private static boolean d;
 
     private Vector direction = new Vector(0, 0);
     private Vector velocity = new Vector(1, 1);
@@ -68,11 +64,8 @@ public class Player extends Entity {
         }
 
 
-
-
         velocity.x = direction.x * speed;
         velocity.y = direction.y * speed;
-
 
         this.addToPositionX(velocity.x);
         this.addToPositionY(velocity.y);
@@ -81,10 +74,6 @@ public class Player extends Entity {
 
         if(!moving){
             speed = 0;
-            //velocity.x = 0;
-            //velocity.y = 0;
-            //direction.x = 0;
-            //direction.y = 0;
         }
     }
 
@@ -189,8 +178,6 @@ public class Player extends Entity {
         }
 
         idle[0] = new Image("res/player1.png");
-        // walkUp[0] = new Image("res/player1.png");
-        // walkLeft[0] = new Image("res/player1.png");
 
         this.idleAnimation.setImages(idle);
 
@@ -224,6 +211,7 @@ public class Player extends Entity {
     }
 
     public void setDirection(){
+
         if (currentlyActiveKeys.contains("A")) {
             this.direction.add(left);
         } else if (currentlyActiveKeys.contains("D")) {
