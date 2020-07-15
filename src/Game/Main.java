@@ -34,8 +34,8 @@ public class Main extends Application {
     private static Stage stage; //
     private static Scene mainScene;
     private static Camera root;
-    private static int WIDTH = 320;
-    private static int HEIGHT = 320;
+    private static int WIDTH = 1024;
+    private static int HEIGHT = 768;
 
     private static HashSet<String> currentlyActiveKeys;
 
@@ -56,7 +56,7 @@ public class Main extends Application {
         mainScene = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(mainScene);
 
-        //stage.setFullScreen(true);
+        stage.setFullScreen(true);
 
         prepareActionHandlers();
 
@@ -187,16 +187,20 @@ public class Main extends Application {
 
     private static void tileTick(){
         //growth rate
-        if(numOfFrames % 6 == 0) {
+        if(numOfFrames % 600 == 0) {
+            root.doUpdateAll();
             ThreadLocalRandom rand = ThreadLocalRandom.current();
             int loadWidth = 50;
             for (int i = 0; i < loadWidth; i++) {
                 for (int j = 0; j < loadWidth; j++) {
-                    if(rand.nextInt(5) == 0) {
-                        int tx = ((int) player.getPosX() / Tile.getTileWidth()) - loadWidth / 2 + j;
-                        int ty = ((int) player.getPosY() / Tile.getTileWidth()) - loadWidth / 2 + i;
+                    int tx = ((int) player.getPosX() / Tile.getTileWidth()) - loadWidth / 2 + j;
+                    int ty = ((int) player.getPosY() / Tile.getTileWidth()) - loadWidth / 2 + i;
 
-                        Tile.getAllTiles()[ty][tx].tick();
+                    Tile t = Tile.getAllTiles()[ty][tx];
+                    if (t.getPlants().size() > 0) {
+                        if (rand.nextInt(10) == 0) {
+                            t.tick();
+                        }
                     }
                 }
             }
@@ -265,7 +269,7 @@ public class Main extends Application {
                         grassTile.setTexture(grassImage);
 
                         // For texting purposes this should add tall grass to every 4th grass tile
-                        int count = rand.nextInt(0, 3);
+                        int count = rand.nextInt(3);
                         for (int k = 0; k < count; k++) {
                             grassTile.addPlant(new SingleTallGrass(i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()), j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())));
                         }

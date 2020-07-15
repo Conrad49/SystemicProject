@@ -45,9 +45,18 @@ public class Camera extends Pane {
     private Group visibleTiles = new Group();
     private Group standingGroup = new Group();
 
+    private boolean updateAll = false;
+
     public Camera() {
         mainGroup.getChildren().addAll(visibleTiles, standingGroup);
         getChildren().add(mainGroup);
+    }
+
+    /**
+     * Signals the next frame to update everything
+     */
+    public void doUpdateAll(){
+        updateAll = true;
     }
 
     /**
@@ -58,25 +67,29 @@ public class Camera extends Pane {
         updateVariables();
 
         boolean sameCenterBlock = oldScreenCenterTileX == screenCenterTileX && oldScreenCenterTileY == screenCenterTileY;
-        boolean adjacentCenterBlock = changeTileX <= 1 && changeTileX >= -1 && changeTileY <= 1 && changeTileY >= -1;
+        boolean adjacentCenterBlock = (changeTileX <= 1 && changeTileX >= -1 && changeTileY == 0)
+                || changeTileX == 0 && changeTileY <= 1 && changeTileY >= -1;
         boolean sameScreenSize = (oldScreenTall == this.getHeight()) && (oldScreenWide == this.getWidth());
         boolean sameScreenCenter = screenCenterX == oldScreenCenterX && screenCenterY == oldScreenCenterY;
 
         oldScreenWide = this.getWidth();
         oldScreenTall = this.getHeight();
 
-        if(!sameScreenSize){
+        if (!sameScreenSize || updateAll) {
+            updateAll = false;
             updateAll();
-        }else if(sameCenterBlock){
-            if(sameScreenCenter){
+        } else{
+            if (sameCenterBlock) {
+                if (sameScreenCenter) {
 
-            }else {
-                updateCords();
+                } else {
+                    updateCords();
+                }
+            } else if (adjacentCenterBlock) {
+                updateSome();
+            } else {
+                updateAll();
             }
-        }else if(adjacentCenterBlock){
-            updateSome();
-        }else{
-            updateAll();
         }
 
         // Since entities move around we have to recheck their images source every frame.
@@ -85,6 +98,24 @@ public class Camera extends Pane {
 
         sortGroup(visibleTiles);
         sortGroup(standingGroup);
+    }
+
+
+
+    /**
+     * Removes the node in the given group that has the specified coordinates.
+     */
+    private void removeNode (double x, double y, Group g){
+        for (int i = 0; i < g.getChildren().size(); i++) {
+            double xx = ((ImageView)g.getChildren().get(i)).getX();
+            double yy = ((ImageView)g.getChildren().get(i)).getY();
+
+            if(x == xx && y == yy){
+                g.getChildren().remove(i);
+                return;
+            }
+        }
+        updateAll();
     }
 
     /**
@@ -183,8 +214,8 @@ public class Camera extends Pane {
         // get_____() + Tile.getTileWidth() - 1 adds 1 pixel less than a whole tile so any
         // partial tile will get counted but if the screen is at an exact tile value it
         // will not add anything
-        screenTilesWide = (int) ((getWidth() + Tile.getTileWidth() - 1) / Tile.getTileWidth() - 2);
-        screenTilesTall = (int) ((getHeight() + Tile.getTileWidth() - 1) / Tile.getTileWidth() - 2);
+        screenTilesWide = (int) ((getWidth() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + 2);
+        screenTilesTall = (int) ((getHeight() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + 2);
         // + 0.5 will only increase the value if there is already a 0.5 from division
         // + 1 only really makes sense if you draw out the tiles and realize which would be at the center without it
         topLeftX = screenCenterTileX - (int)(screenTilesWide / 2.0 + 0.5) + 1;
@@ -255,6 +286,8 @@ public class Camera extends Pane {
             removeTileLayerSide(true);
             addTileLayerSide(false);
         }
+
+        sortGroup(visibleTiles);
 
         if(changeTileY > 0){
             // down move means remove a layer on the top and add one to the bottom
