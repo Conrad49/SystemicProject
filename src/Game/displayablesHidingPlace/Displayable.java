@@ -9,14 +9,14 @@ import javafx.scene.image.Image;
 public abstract class Displayable {
     protected double x, y;
     protected int width, height;
-    protected boolean cordsAtCorner;
+    protected boolean coordsAtCorner;
 
-    public Displayable(double x, double y, int width, int height, boolean cordsAtCorner) {
+    public Displayable(double x, double y, int width, int height, boolean coordsAtCorner) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.cordsAtCorner = cordsAtCorner;
+        this.coordsAtCorner = coordsAtCorner;
     }
 
     public abstract Image getImage();
@@ -38,6 +38,6 @@ public abstract class Displayable {
     }
 
     public boolean cordsAtCorner() {
-        return cordsAtCorner;
+        return coordsAtCorner;
     }
 }
