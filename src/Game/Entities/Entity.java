@@ -3,6 +3,8 @@ package Game.Entities;
 import Game.Animation;
 import Game.Chunk;
 import Game.Tiles.Tile;
+import Game.testing.Vector;
+import com.sun.javafx.geom.Vec2d;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -23,6 +25,8 @@ public abstract class Entity {
     protected int width;
     protected int height;
     private Animation currentAnimation;
+    Vec2d direction;
+    private Vector position = new Vector();
 
     public Animation getCurrentAnimation() {
         return currentAnimation;
@@ -37,10 +41,12 @@ public abstract class Entity {
         this.boundsBox = boundsBox;
         this.posX = boundsBox.getX();
         this.posY = boundsBox.getY();
-        this.tileX = (int)posX/ Tile.getTileWidth();
-        this.tileY = (int)posY/ Tile.getTileWidth();
-        this.width = (int)boundsBox.getWidth();
-        this.height = (int)boundsBox.getHeight() * 4;
+
+        this.tileX = (int)posX/ Tile.getWidth();
+        this.tileY = (int)posY/ Tile.getWidth();
+
+        this.position.x = (int)this.posX;
+        this.position.y = (int)this.posY;
     }
 
     public Entity(Image texture, Rectangle boundsBox) {
@@ -52,16 +58,15 @@ public abstract class Entity {
         this.tileY = (int)posY/ Tile.getTileWidth();
     }
 
-    public void setxSpeed(int xSpeed) {
-        this.xSpeed = xSpeed;
-    }
-
-    public void setySpeed(int ySpeed) {
-        this.ySpeed = ySpeed;
-    }
 
     public void tick(){
         // update positions and velocities / speeds
+        //this.posX += this.xSpeed;
+        //this.posY += this.ySpeed;
+        this.tileX = (int)this.posX / Tile.getWidth();
+        this.tileY = (int)this.posY / Tile.getWidth();
+        this.posX = this.position.x;
+        this.posY = this.position.y;
     }
 
     public void checkVisiblity(Player p){
@@ -89,34 +94,42 @@ public abstract class Entity {
 
             Rectangle shiftedRect = new Rectangle(this.posX - (this.boundsBox.getWidth() / 2), this.posY - (this.boundsBox.getHeight() / 2), this.boundsBox.getWidth(), this.boundsBox.getHeight());
 
-            boolean intersects = tileBounds.intersects(shiftedRect.getBoundsInLocal());
+            //boolean intersects = tileBounds.intersects(shiftedRect.getBoundsInLocal());
 
             Shape intersect = Shape.intersect(shiftedRect, tileBounds);
             if (intersect.getBoundsInLocal().getWidth() != -1) {
 
                 // left
-                if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.posX = this.posX + intersect.getBoundsInLocal().getWidth();
-                    this.xSpeed = 0;
+                if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
+                    this.position.x += intersect.getBoundsInLocal().getWidth();
+                    this.posX += intersect.getBoundsInLocal().getWidth();
+                    //this.xSpeed = 0;
                 }
 
                 // right
-                if(tileBounds.getX() > this.boundsBox.getX() && (tile.getY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.posX = this.posX - intersect.getBoundsInLocal().getWidth();
-                    this.xSpeed = 0;
+                if(tileBounds.getX() > this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
+                    this.position.x -= intersect.getBoundsInLocal().getWidth();
+                    this.posX -= intersect.getBoundsInLocal().getWidth();
+                    //this.posX -= intersect.getBoundsInLocal().getWidth();
+                    //this.xSpeed = 0;
                 }
 
                 // above
-                if(tileBounds.getY() + tileBounds.getHeight() < this.boundsBox.getY() && (tile.getX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.posY = this.posY + intersect.getBoundsInLocal().getHeight();
-                    this.ySpeed = 0;
+                if(tileBounds.getY() + tileBounds.getHeight() < this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
+                    this.position.y += intersect.getBoundsInLocal().getHeight();
+                    this.posY += intersect.getBoundsInLocal().getHeight();
+                    //this.ySpeed = 0;
                 }
 
                 // below
-                if(tileBounds.getY() > this.boundsBox.getY() && (tile.getX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.posY = this.posY - intersect.getBoundsInLocal().getHeight();
-                    this.ySpeed = 0;
+                if(tileBounds.getY() > this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
+                    this.position.y -= intersect.getBoundsInLocal().getHeight();
+                    this.posY -= intersect.getBoundsInLocal().getHeight();
+                    //this.ySpeed = 0;
                 }
+
+                this.position.x = (int)this.position.x;
+                this.position.y = (int)this.position.y;
             }
 
         }
@@ -129,6 +142,23 @@ public abstract class Entity {
     public double getPosY() {
         return posY;
     }
+
+    public Vector getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector position) {
+        this.position = position;
+    }
+
+    public void addToPositionX(double x) {
+        this.position.x += x;
+    }
+
+    public void addToPositionY(double y) {
+        this.position.y += y;
+    }
+
 
     public Image getTexture() {
         return this.texture;

@@ -36,6 +36,8 @@ public class Main extends Application {
     private static Camera root;
     private static int WIDTH = 512;
     private static int HEIGHT = 256;
+    private static long last_time = System.nanoTime();
+    private static int delta_time = 0;
 
     private static HashSet<String> currentlyActiveKeys;
 
@@ -140,6 +142,12 @@ public class Main extends Application {
      * This method does all of that and everything related to displaying that frame.
      */
     private static void tickAndRender() {
+
+        // a calculation for the time between updates taken from:
+        // https://gamedev.stackexchange.com/questions/111741/calculating-delta-time
+        long time = System.nanoTime();
+        delta_time = (int) ((time - last_time) / 1000000);
+        last_time = time;
 
         Chunk[] chunks = player.getSurroundingChunks();
         player.tick();
@@ -295,4 +303,14 @@ public class Main extends Application {
             System.out.println("File not found!!!");
         }
     }
+
+    /**
+     *
+     * returns the time between frames in milliseconds?
+     *
+     */
+    public static int getDelta_time() {
+        return delta_time;
+    }
+
 }
