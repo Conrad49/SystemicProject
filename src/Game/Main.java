@@ -55,10 +55,10 @@ public class Main extends Application {
 
         root = new Camera();
 
-        mainScene = new Scene(root);
+        mainScene = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(mainScene);
 
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
 
         prepareActionHandlers();
 
@@ -86,7 +86,6 @@ public class Main extends Application {
             }
         }
 
-        System.out.println("done");
         //Game.Main "game" loop
         new AnimationTimer()
         {

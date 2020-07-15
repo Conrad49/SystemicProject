@@ -24,15 +24,15 @@ public class Camera extends Pane {
     private double oldScreenTall = 0;
     private double oldScreenWide = 0;
 
-    private int screenCenterX;
+    private double screenCenterX;
     private int screenCenterTileX;
-    private int oldScreenCenterX;
+    private double oldScreenCenterX;
     private int oldScreenCenterTileX;
     private int changeTileX;
 
-    private int screenCenterY;
+    private double screenCenterY;
     private int screenCenterTileY;
-    private int oldScreenCenterY;
+    private double oldScreenCenterY;
     private int oldScreenCenterTileY;
     private int changeTileY;
 
@@ -60,6 +60,7 @@ public class Camera extends Pane {
         boolean sameCenterBlock = oldScreenCenterTileX == screenCenterTileX && oldScreenCenterTileY == screenCenterTileY;
         boolean adjacentCenterBlock = changeTileX <= 1 && changeTileX >= -1 && changeTileY <= 1 && changeTileY >= -1;
         boolean sameScreenSize = (oldScreenTall == this.getHeight()) && (oldScreenWide == this.getWidth());
+        boolean sameScreenCenter = screenCenterX == oldScreenCenterX && screenCenterY == oldScreenCenterY;
 
         oldScreenWide = this.getWidth();
         oldScreenTall = this.getHeight();
@@ -67,7 +68,11 @@ public class Camera extends Pane {
         if(!sameScreenSize){
             updateAll();
         }else if(sameCenterBlock){
-            updateCords();
+            if(sameScreenCenter){
+
+            }else {
+                updateCords();
+            }
         }else if(adjacentCenterBlock){
             updateSome();
         }else{
@@ -86,13 +91,13 @@ public class Camera extends Pane {
      * Adds a new item to be displayed. This creates a new image view calculates a
      * position and adds it to the proper array. This assumes that all tiles and only
      * tiles are drawn from the top left and all entities are at the bottom middle of
-     * their feet. This method also displays any displayables inside the given
+     * their feet. This method also displays any displayabls inside the given
      * displayable.
      */
     private void display(Displayable dis){
-        int x = (int)Math.round(dis.getX());
-        int y = (int)Math.round(dis.getY());
-        int[] cords = shift(x, y);
+        double x = dis.getX();
+        double y = dis.getY();
+        double[] cords = shift(x, y);
         Image image = dis.getImage();
         ImageView i = new ImageView(image);
 
@@ -158,7 +163,8 @@ public class Camera extends Pane {
                     }
                     startNewCheck = true;
                 }
-            }else {
+            }else{
+                // only set to false if a check was skipped
                 startNewCheck = false;
             }
         }
@@ -210,7 +216,7 @@ public class Camera extends Pane {
      * sorted out easily.
      */
     private void addAllEntities(){
-        int[] playerCoords = shift((int) player.getPosX(), (int) player.getPosY());;
+        double[] playerCoords = shift(player.getPosX(), player.getPosY());;
         //player.setTexture(new Image("/res/player(1).png"));
         ImageView playerImage = (new ImageView(player.getTexture()));
         playerImage.setX(playerCoords[0] - player.getWidth() / 2);
@@ -236,8 +242,9 @@ public class Camera extends Pane {
      * row after moving off the tile you were on before. The previously stood on tile
      * will be compared to the current to find out how to change the groups properly.
      */
-
     private void updateSome(){
+        updateCords();
+
         if(changeTileX > 0){
             // right move means remove a layer on the left and add one to the right
             removeTileLayerSide(false);
@@ -260,7 +267,6 @@ public class Camera extends Pane {
             addTileLayerTopBot(true);
         }
 
-        updateCords();
         updateEntities();
     }
 
@@ -279,13 +285,13 @@ public class Camera extends Pane {
 
         for (int i = startIndex; i >= 0; i -= screenTilesWide) {
             ImageView tile = (ImageView)visibleTiles.getChildren().get(i);
-            int x = (int)tile.getX();
-            int y = (int)tile.getY();
-            int w = Tile.getTileWidth();
+            double x = tile.getX();
+            double y = tile.getY();
+            double w = Tile.getTileWidth();
 
             for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
                 ImageView stander = (ImageView) standingGroup.getChildren().get(j);
-                int xx = (int) stander.getX();
+                double xx = stander.getX() + stander.getImage().getWidth() / 2;
 
                 // y axis does not matter since
                 if(xx >= x && xx < x + w){
@@ -308,13 +314,13 @@ public class Camera extends Pane {
         // - 1 for 0 based indexing
         for (int i = startIndex + screenTilesWide - 1; i >= startIndex; i --) {
             ImageView tile = (ImageView)visibleTiles.getChildren().get(i);
-            int x = (int)tile.getX();
-            int y = (int)tile.getY();
-            int w = Tile.getTileWidth();
+            double x = tile.getX();
+            double y = tile.getY();
+            double w = Tile.getTileWidth();
 
             for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
                 ImageView stander = (ImageView) standingGroup.getChildren().get(j);
-                int yy = (int) stander.getY();
+                double yy = stander.getY() + stander.getImage().getHeight();
 
                 // x axis does not matter since
                 if(yy >= y && yy < y + w){
@@ -357,8 +363,9 @@ public class Camera extends Pane {
     }
 
     private void updateCords() {
-        int changeX = oldScreenCenterX - screenCenterX;
-        int changeY = oldScreenCenterY - screenCenterY;
+
+        double changeX = oldScreenCenterX - screenCenterX;
+        double changeY = oldScreenCenterY - screenCenterY;
 
         for (Node n : visibleTiles.getChildren()){
             // visibleTiles will only ever contain a rectangle or and image view
@@ -412,14 +419,14 @@ public class Camera extends Pane {
      * off the by 500 or half the screen length). So the simple solution is to add half
      * the screens width and height after subtracting the screens center.
      */
-    private int[] shift(int x, int y) {
-        int halfWidth = (int) getWidth() / 2;
-        int halfHeight = (int) getHeight() / 2;
+    private double[] shift(double x, double y) {
+        double halfWidth = getWidth() / 2.0;
+        double halfHeight = getHeight() / 2.0;
 
         x = x - screenCenterX + halfWidth;
         y = y - screenCenterY + halfHeight;
 
-        return new int[]{x, y};
+        return new double[]{x, y};
     }
 
     /**
@@ -429,10 +436,11 @@ public class Camera extends Pane {
      * screen and the players position to be the same.
      */
     private void findScreenCenter() {
-        screenCenterX = (int) Main.getPlayer().getPosX();
-        screenCenterY = (int) Main.getPlayer().getPosY();
+        screenCenterX = Main.getPlayer().getPosX();
+        screenCenterY = Main.getPlayer().getPosY();
 
-        screenCenterTileX = screenCenterX / Tile.getTileWidth();
-        screenCenterTileY = screenCenterY / Tile.getTileWidth();
+        // truncating is ok since even if you are 99.999999% of the way through a block you are still on it
+        screenCenterTileX = ((int)screenCenterX) / Tile.getTileWidth();
+        screenCenterTileY = ((int)screenCenterY) / Tile.getTileWidth();
     }
 }
