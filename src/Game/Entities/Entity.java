@@ -93,6 +93,8 @@ public abstract class Entity {
             Shape intersect = Shape.intersect(shiftedRect, tileBounds);
             if (intersect.getBoundsInLocal().getWidth() != -1) {
 
+                this.currentAnimation.resetCount();
+
                 // left
                 if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
                     this.posX = this.posX + intersect.getBoundsInLocal().getWidth();
