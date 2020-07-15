@@ -127,6 +127,9 @@ public abstract class Entity {
                     this.posY -= intersect.getBoundsInLocal().getHeight();
                     //this.ySpeed = 0;
                 }
+
+                this.position.x = (int)this.position.x;
+                this.position.y = (int)this.position.y;
             }
 
         }
@@ -142,6 +145,10 @@ public abstract class Entity {
 
     public Vector getPosition() {
         return position;
+    }
+
+    public void setPosition(Vector position) {
+        this.position = position;
     }
 
     public void addToPositionX(double x) {
