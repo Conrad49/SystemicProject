@@ -338,4 +338,20 @@ public class SimplexNoise {  // Simplex noise in 2D, 3D and 4D
             this.w = w;
         }
     }
+
+
+    public static float octavedNoise(int octaves, float roughness, float scale, double x, double y, double z) {
+        float noiseSum = 0;
+        float layerFrequency = scale;
+        float layerWeight = 1;
+        float weightSum = 0;
+
+        for (int octave = 0; octave < octaves; octave++) {
+            noiseSum += noise(x * layerFrequency, y * layerFrequency, z) * layerWeight;
+            layerFrequency *= 2;
+            weightSum += layerWeight;
+            layerWeight *= roughness;
+        }
+        return noiseSum / weightSum;
+    }
 }

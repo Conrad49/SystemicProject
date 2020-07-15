@@ -4,6 +4,9 @@ import Game.Animation;
 import Game.Chunk;
 import Game.Main;
 import Game.Tiles.Tile;
+import Game.testing.Vector;
+import com.sun.javafx.geom.Vec2d;
+import com.sun.javafx.geom.Vec2f;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -14,12 +17,18 @@ public class Player extends Entity {
 
     Tile[][] visibleTiles = new Tile[10][10];
     private static int speed = 5;
+    private static int maxSpeed = 5;
     private static boolean moving;
 
-    private static boolean w;
-    private static boolean a;
-    private static boolean s;
-    private static boolean d;
+
+    private Vector direction = new Vector(0, 0);
+    private Vector velocity = new Vector(1, 1);
+    private Vector up = new Vector(0, -1);
+    private Vector down = new Vector(0, 1);
+    private Vector left = new Vector(-1, 0);
+    private Vector right = new Vector(1, 0);
+    private Vec2d acceleration;
+
 
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
     private boolean hasChangedFullscreen;
@@ -44,69 +53,55 @@ public class Player extends Entity {
         super.tick();
         moving = false;
 
+        //direction.normalize();
+
+        double magnitude = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
+        System.out.println(magnitude);
+
+        if (magnitude != 0) {
+            direction.x = (direction.x / magnitude);
+            direction.y = (direction.y / magnitude);
+        }
+
+
+        velocity.x = direction.x * speed;
+        velocity.y = direction.y * speed;
+
+        this.addToPositionX(velocity.x);
+        this.addToPositionY(velocity.y);
+
         handleKeyPresses();
+
+        if(!moving){
+            speed = 0;
+        }
     }
 
     public void handleKeyPresses(){
-        //this.posX += this.xSpeed;
-        //this.posY += this.ySpeed;
+        direction = new Vector(0, 0);
+        boolean isMoving = currentlyActiveKeys.contains("A") || currentlyActiveKeys.contains("D") || currentlyActiveKeys.contains("W") || currentlyActiveKeys.contains("S");
 
-        //this.currentAnimation = this.walkDown;
-
-        if (currentlyActiveKeys.contains("A")) {
-            a = true;
-            //this.currentAnimation = this.walkDown;
-
-            this.xSpeed = speed * -1;
-            this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.getWidth();
+        if (isMoving) {
             moving = true;
-        } else {
-            a = false;
+            speed = maxSpeed;
+
+            setDirection();
+        }
+
+        if (!currentlyActiveKeys.contains("A")) {
             this.walkLeft.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
         }
 
-        if (currentlyActiveKeys.contains("D")) {
-            d = true;
-            //this.setCurrentAnimation(walkRight);
-
-            this.xSpeed = speed;
-            this.posX += this.xSpeed;
-            this.tileX = (int)this.posX / Tile.getWidth();
-            moving = true;
-        } else {
-            d = false;
+        if (!currentlyActiveKeys.contains("D")) {
             this.walkRight.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
         }
 
-        if (currentlyActiveKeys.contains("W")) {
-            w = true;
-            //this.currentAnimation = walkDown;
-
-            this.ySpeed = speed * -1;
-            this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.getWidth();
-            moving = true;
-        } else {
-            w = false;
+        if (!currentlyActiveKeys.contains("W")) {
             this.walkUp.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
         }
 
-        if (currentlyActiveKeys.contains("S")) {
-            s = true;
-            //this.setCurrentAnimation(this.walkDown);
-
-            this.ySpeed = speed;
-            this.posY += this.ySpeed;
-            this.tileY = (int)this.posY / Tile.getWidth();
-            moving = true;
-        } else {
-            s = false;
+        if (!currentlyActiveKeys.contains("S")) {
             this.walkDown.resetCount();
-            //this.setCurrentAnimation(this.idleAnimation);
         }
 
 
@@ -120,16 +115,17 @@ public class Player extends Entity {
             hasChangedFullscreen = true;
         }
 
-        if(!a && !d){
-            this.xSpeed = 0;
-        }
-
-        if(!w && !s){
-            this.ySpeed = 0;
-        }
 
         if(!moving){
             this.setCurrentAnimation(this.idleAnimation);
+        }
+
+        if (currentlyActiveKeys.contains("Z")) {
+            direction.x ++;
+        }
+
+        if (currentlyActiveKeys.contains("X")) {
+            direction.y ++;
         }
     }
 
@@ -182,8 +178,6 @@ public class Player extends Entity {
         }
 
         idle[0] = new Image("res/player1.png");
-        // walkUp[0] = new Image("res/player1.png");
-        // walkLeft[0] = new Image("res/player1.png");
 
         this.idleAnimation.setImages(idle);
 
@@ -201,22 +195,33 @@ public class Player extends Entity {
     public void setCurrentAnimation(){
         if(moving){
 
-            if(this.xSpeed < 0){
+            if(this.direction.x < 0){
                 this.setCurrentAnimation(this.walkLeft);
-                System.out.println("l");
             }
-            if(this.ySpeed < 0){
+            if(this.direction.y < 0){
                 this.setCurrentAnimation(this.walkUp);
-                System.out.println("u");
             }
-            if(this.ySpeed > 0){
+            if(this.direction.y > 0){
                 this.setCurrentAnimation(this.walkDown);
-                System.out.println("d");
             }
-            if(this.xSpeed > 0){
+            if(this.direction.x > 0){
                 this.setCurrentAnimation(this.walkRight);
-                System.out.println("r");
             }
+        }
+    }
+
+    public void setDirection(){
+
+        if (currentlyActiveKeys.contains("A")) {
+            this.direction.add(left);
+        } else if (currentlyActiveKeys.contains("D")) {
+            this.direction.add(right);
+        }
+
+        if (currentlyActiveKeys.contains("W")) {
+            this.direction.add(up);
+        } else if (currentlyActiveKeys.contains("S")) {
+            this.direction.add(down);
         }
     }
 }

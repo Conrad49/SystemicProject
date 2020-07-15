@@ -20,7 +20,7 @@ public abstract class Tile {
     private static int xCount = 0;
     private static int yCount = 0;
     Rectangle boundsBox;
-    private Image texture;
+    Image texture;
     boolean isSolid;
 
     public Tile(int posX, int posY, Color backColor){
@@ -47,6 +47,16 @@ public abstract class Tile {
         this.posY = posY;
 
         this.isTextured = true;
+
+        this.boundsBox = new Rectangle(this.posX, this.posY, width, width);
+        //this.boundsBox.setFill(backColor);
+
+        allTiles[xCount][yCount] = this;
+        xCount ++;
+        if(xCount >= allTiles.length){
+            yCount++;
+            xCount = 0;
+        }
     }
 
     public Rectangle getBoundsBox() {
@@ -107,5 +117,10 @@ public abstract class Tile {
 
     public static int getMapHeight() {
         return mapHeight;
+    }
+
+    public void setTexture(Image texture) {
+        this.texture = texture;
+        isTextured = true;
     }
 }

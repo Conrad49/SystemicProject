@@ -2,6 +2,7 @@ package Game;
 
 import Game.Entities.Player;
 import Game.Tiles.*;
+import Game.testing.NoiseBiomeGen;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,7 +13,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -34,6 +34,8 @@ public class Main extends Application {
     private static Camera root;
     private static int WIDTH = 512;
     private static int HEIGHT = 256;
+    private static long last_time = System.nanoTime();
+    private static int delta_time = 0;
 
     private static HashSet<String> currentlyActiveKeys;
 
@@ -67,7 +69,8 @@ public class Main extends Application {
 
         if (response == 1) {
             double rand = Math.random() * 50;
-            ImprovedNoise.generateNoiseArrayFile(rand);
+            NoiseBiomeGen.generateWorld();
+            //ImprovedNoise.generateNoiseArrayFile(rand);
             makeWorldFromFile();
         } else {
             boolean exists = new File("map.txt").exists();
@@ -138,6 +141,12 @@ public class Main extends Application {
      */
     private static void tickAndRender() {
 
+        // a calculation for the time between updates taken from:
+        // https://gamedev.stackexchange.com/questions/111741/calculating-delta-time
+        long time = System.nanoTime();
+        delta_time = (int) ((time - last_time) / 1000000);
+        last_time = time;
+
         Chunk[] chunks = player.getSurroundingChunks();
         player.tick();
         //for(Game.Chunk chunk : chunks){
@@ -189,17 +198,23 @@ public class Main extends Application {
      * very basic world generation method.
      */
     private static void makeWorld(){
-        GrassTile.setTexture(new Image("/res/GrassTile.png"));
-        StoneTile.setTexture(new Image("/res/StoneTile.png"));
+        //GrassTile.setTexture(new Image("/res/GrassTile.png"));
+        //StoneTile.setTexture(new Image("/res/StoneTile.png"));
+
+        Image grassImage = new Image("/res/GrassTile.png");
+        Image stoneImage = new Image("/res/StoneTile.png");
+
         Rectangle[][] noiseRectangles = ImprovedNoise.getNoiseArray();
         Tile[][] allTiles = Tile.getAllTiles();
         for (int i = 0; i < Tile.getMapHeight(); i++) {
             for (int j = 0; j < Tile.getMapWidth(); j++) {
                 Color color = (Color)noiseRectangles[i][j].getFill();
                 if (color.getBlue() < 0.5){
-                    new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    grassTile.setTexture(grassImage);
                 } else {
-                    new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    stoneTile.setTexture(stoneImage);
                 }
 
                 /*if(i == 30 || j == 30){
@@ -213,8 +228,14 @@ public class Main extends Application {
     }
 
     private static void makeWorldFromFile(){
-        GrassTile.setTexture(new Image("/res/GrassTile.png"));
-        StoneTile.setTexture(new Image("/res/StoneTile.png"));
+        Image grassImage = new Image("/res/GrassTile.png");
+        Image sandImage = new Image("/res/SandTile.png");
+        Image iceImage = new Image("/res/IceTile.png");
+        Image lavaImage = new Image("/res/LavaTile.png");
+        Image dirtImage = new Image("/res/DirtTile.png");
+        Image stoneImage = new Image("/res/StoneTile.png");
+        Image snowImage = new Image("/res/SnowTile.png");
+        Image waterImage = new Image("/res/WaterTile.png");
 
         File file = new File("map.txt");
         Scanner reader = null;
@@ -225,9 +246,26 @@ public class Main extends Application {
                 String[] line = reader.nextLine().split(",");
                 for (int j = 0; j < Tile.getMapWidth(); j++) {
                     if(line[j].equals("g")){
-                        new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        grassTile.setTexture(grassImage);
                     } else if(line[j].equals("s")){
-                        new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        stoneTile.setTexture(stoneImage);
+                    }else if(line[j].equals("a")){
+                        SandTile sandTile = new SandTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        sandTile.setTexture(sandImage);
+                    }else if(line[j].equals("i")){
+                        IceTile iceTile = new IceTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        iceTile.setTexture(iceImage);
+                    }else if(line[j].equals("l")){
+                        LavaTile lavaTile = new LavaTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        lavaTile.setTexture(lavaImage);
+                    }else if(line[j].equals("o")){
+                        SnowTile snowTile = new SnowTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        snowTile.setTexture(snowImage);
+                    }else if(line[j].equals("w")){
+                        WaterTile waterTile = new WaterTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        waterTile.setTexture(waterImage);
                     }
                 }
             }
@@ -237,4 +275,14 @@ public class Main extends Application {
 
 
     }
+
+    /**
+     *
+     * returns the time between frames in milliseconds?
+     *
+     */
+    public static int getDelta_time() {
+        return delta_time;
+    }
+
 }
