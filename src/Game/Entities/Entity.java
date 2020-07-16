@@ -28,6 +28,7 @@ public abstract class Entity {
     private Animation currentAnimation;
     Vec2d direction;
     private Vector position = new Vector();
+    public boolean isColliding;
 
     public Animation getCurrentAnimation() {
         return currentAnimation;
@@ -98,7 +99,7 @@ public abstract class Entity {
 
             Shape intersect = Shape.intersect(shiftedRect, tileBounds);
             if (intersect.getBoundsInLocal().getWidth() != -1) {
-
+                this.isColliding = true;
                 // left
                 if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
                     this.position.x += intersect.getBoundsInLocal().getWidth();

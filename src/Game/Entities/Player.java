@@ -16,8 +16,9 @@ import java.util.HashSet;
 public class Player extends Entity {
 
     Tile[][] visibleTiles = new Tile[10][10];
-    private static int speed = 5;
-    private static int maxSpeed = 5;
+    private static int speed = 500;
+    private static int maxSpeed = 500;
+    private static int accelVal = 1;
     private static boolean moving;
 
 
@@ -27,7 +28,7 @@ public class Player extends Entity {
     private Vector down = new Vector(0, 1);
     private Vector left = new Vector(-1, 0);
     private Vector right = new Vector(1, 0);
-    private Vec2d acceleration;
+    private Vector acceleration;
 
 
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
@@ -56,7 +57,7 @@ public class Player extends Entity {
         //direction.normalize();
 
         double magnitude = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
-        System.out.println(magnitude);
+        //System.out.println(magnitude);
 
         if (magnitude != 0) {
             direction.x = (direction.x / magnitude);
@@ -64,11 +65,11 @@ public class Player extends Entity {
         }
 
 
-        velocity.x = direction.x * speed;
-        velocity.y = direction.y * speed;
+        velocity.x = direction.x * speed * (Main.getDelta_time() / 1000.0);
+        velocity.y = direction.y * speed * (Main.getDelta_time() / 1000.0);
 
-        this.addToPositionX(velocity.x);
-        this.addToPositionY(velocity.y);
+            this.addToPositionX(velocity.x);
+            this.addToPositionY(velocity.y);
 
         handleKeyPresses();
 
