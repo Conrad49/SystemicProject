@@ -21,8 +21,10 @@ public abstract class Entity {
     double posX;
     double posY;
     boolean isVisible = false;
-    protected int width;
-    protected int height;
+    // this is a stupid sloppy fix for the special case that is our only entitiy the player
+    // when more are added this will be moved to displayable and the fixed values will be removed
+    protected int width = 64;
+    protected int height = 128;
     private Animation currentAnimation;
     private Vector position = new Vector();
 
