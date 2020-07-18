@@ -14,11 +14,11 @@ public abstract class Plant extends Displayable {
     protected int health; // health is essentially how much plant there is, if health goes down some of the plant has been cut off.
     protected double energy;
     protected final int maxHealth, maxEnergy;
-    protected final int collectionRate;
+    protected final double collectionRate;
     protected final double growthRate;
     protected final String type;
 
-    public Plant(int health, int maxHealth, int energy, int maxEnergy, int collectionRate, int x, int y, double growthRate, String type, int width, int height) {
+    public Plant(int health, int maxHealth, double energy, int maxEnergy, double collectionRate, int x, int y, double growthRate, String type, int width, int height) {
         super(x, y, width, height, false);
         this.health = health;
         this.maxHealth = maxHealth;
@@ -79,7 +79,13 @@ public abstract class Plant extends Displayable {
         grow();
         collect();
         reproduce();
+        extraTick();
     }
+
+    /**
+     * A continuation of tick that includes the specifics of each individual type of plant.
+     */
+    protected abstract void extraTick();
 
     /**
      * Finds out if a plant can / should reproduce at this second then does if it can.
@@ -101,4 +107,16 @@ public abstract class Plant extends Displayable {
      */
     @Override
     public abstract Image getImage();
+
+    public int getHealth() {
+        return health;
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public String getType() {
+        return type;
+    }
 }

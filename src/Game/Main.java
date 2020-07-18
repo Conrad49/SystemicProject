@@ -59,7 +59,7 @@ public class Main extends Application {
         mainScene = new Scene(root);
         stage.setScene(mainScene);
 
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
 
         prepareActionHandlers();
 
@@ -277,10 +277,15 @@ public class Main extends Application {
                         GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         grassTile.setTexture(grassImage);
 
-                        // For texting purposes this should add tall grass to every 4th grass tile
-                        int count = rand.nextInt(3);
+                        // For testing purposes this should add tall grass to every 4th grass tile
+                        int count = rand.nextInt(4, 6);
                         for (int k = 0; k < count; k++) {
-                            grassTile.addPlant(new SingleTallGrass(i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()), j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())));
+                            grassTile.addPlant(new SingleTallGrass(
+                                    rand.nextInt(0, SingleTallGrass.getMaxHealth()),
+                                    rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
+                                    i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
+                                    j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())
+                                    ));
                         }
                     }else if(line[j].equals("s")){
                         StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());

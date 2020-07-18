@@ -53,7 +53,6 @@ public class Player extends Entity {
         //direction.normalize();
 
         double magnitude = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
-        System.out.println(magnitude);
 
         if (magnitude != 0) {
             direction.x = (direction.x / magnitude);

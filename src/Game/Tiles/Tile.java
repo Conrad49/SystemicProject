@@ -118,7 +118,7 @@ public abstract class Tile extends Displayable {
     }
 
     /**
-     * adds a plant to the tiles list of plants growing on it
+     * adds a plant to the tiles list of plants growing on it if the plant can grow on it
      */
     public void addPlant(Plant plant){
         if(plant.canGrowOn(getTileCode())){
@@ -155,5 +155,12 @@ public abstract class Tile extends Displayable {
      */
     public ArrayList<Plant> getPlants(){
         return plants;
+    }
+
+    /**
+     * Removes the specified plant
+     */
+    public void removePlant (Plant p){
+        plants.remove(p);
     }
 }

@@ -2,6 +2,7 @@ package Game.plants;
 
 import Game.Tiles.DirtTile;
 import Game.Tiles.GrassTile;
+import Game.Tiles.Tile;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +18,8 @@ public class SingleTallGrass extends Plant{
     private static ArrayList<String> growsOn = new ArrayList<>();
     private static ArrayList<Image> images = new ArrayList<>();
     private static boolean firstPlant = true;
+    private static final double joinWidth = 32;//8 in game pixels
+    public static final int maxHealth = 20, maxEnergy = 10;
 
     /**
      * Constructor for making grass at any part of its life
@@ -24,8 +27,8 @@ public class SingleTallGrass extends Plant{
      * (well I guess technically it is used every time someone else used the other
      * constructor but that's an unnecessary detail))
      */
-    public SingleTallGrass(int health, int energy, int x, int y) {
-        super(health, 20, energy, 10, 2, x, y, 0.5, "grass", 16, 64);
+    public SingleTallGrass(int health, double energy, int x, int y) {
+        super(health, maxHealth, energy, maxEnergy, 2, x, y, 0.5, "grass", 16, 64);
 
         if(firstPlant){
             growsOn.add(GrassTile.tileCode);
@@ -80,5 +83,105 @@ public class SingleTallGrass extends Plant{
         // a simple 0 * 5 so we are now going 0 1 2 3 4
         int i = (int)(((double)(health - 1) / maxHealth) * 5);
         return images.get(i);
+    }
+
+    @Override
+    protected void extraTick() {
+        combineGrass();
+    }
+
+    /**
+     * checks for nearby grasses. If two other grasses are found they will combine into
+     * a new tall grass and remove the old grasses from existence.
+     */
+    private void combineGrass(){
+        ArrayList<SingleTallGrass> nearby = new ArrayList<>();
+        nearby.add(this);
+        Tile[][] tiles = Tile.getAllTiles();
+        // check all grasses withing a 3 by 3 area surrounding the tile this grass occupies
+        ArrayList<SingleTallGrass> grasses = getGrass(tiles [(int)y / Tile.getTileWidth()]  [(int)x / Tile.getTileWidth()]);
+        grasses.remove(this);
+
+        for (int i = 0; i < grasses.size(); i++) {
+            SingleTallGrass g = grasses.get(i);
+            // if any grass is withing the join width it will be added to a list
+            if(g.getX() <= x + joinWidth && g.getX() >= x - joinWidth &&
+                    g.getY() <= y + joinWidth && g.getY() >= y - joinWidth){
+                nearby.add(g);
+                // if 2 are found plus this one makes 3 total which is enough for a tallgrass
+                if (nearby.size() == 3){
+                    join(nearby);
+
+                    // remove the old singles so there will not be an infinite amount of new grasses
+                    for (int j = 0; j < nearby.size(); j++) {
+                        SingleTallGrass toRemove = nearby.get(j);
+                        int x = ((int)toRemove.getX()) / Tile.getTileWidth();
+                        int y = ((int)toRemove.getY()) / Tile.getTileWidth();
+                        tiles[y][x].removePlant(toRemove);
+                    }
+                    // there is no point looking for more grasses since this grass does not exist anymore
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns an arrayList of all the single tall grasses in touching tiles
+     */
+    private ArrayList<SingleTallGrass> getGrass(Tile t){
+        ArrayList<SingleTallGrass> grass = new ArrayList<>();
+
+        // -1 makes it the top left corner of the 3 by 3 square
+        int x = (int)t.getX() / Tile.getTileWidth() - 1;
+        int y = (int)t.getY() / Tile.getTileWidth() - 1;
+        Tile[][] tiles = Tile.getAllTiles();
+
+
+        // loop through all the tiles
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                // loop through their plants
+                for (Plant p : tiles[y + i][x + j].getPlants()) {
+                    //check if they are grass
+                    if (p instanceof SingleTallGrass) {
+                        SingleTallGrass g = (SingleTallGrass) p;
+                        grass.add(g);
+                    }
+                }
+            }
+        }
+
+        return grass;
+    }
+
+    /**
+     * 3 single tall grasses are added together to make a tall grass at the average of
+     * their coordinates. The new tall grass will have the totals of all their healths
+     * and energies not the averages since the tall grass is thicker and tougher than
+     * a single blade of tall grass.
+     */
+    private void join(ArrayList<SingleTallGrass> toJoin){
+        int health = 0;
+        double energy = 0, x = 0, y = 0;
+
+        // Health and energy become a mass but coordinates are averaged.
+        for(SingleTallGrass g : toJoin){
+            health += g.getHealth();
+            energy += g.getEnergy();
+            x += g.getX() / 3.0;
+            y += g.getY() / 3.0;
+        }
+
+        int xx = (int)Math.round(x), yy = (int)Math.round(y);
+        Tile.getAllTiles()[yy / Tile.getTileWidth()][xx / Tile.getTileWidth()].addPlant(new TallGrass(health, energy, xx, yy));
+    }
+
+    public static int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public static int getMaxEnergy() {
+        return maxEnergy;
     }
 }
