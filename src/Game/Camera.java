@@ -67,8 +67,7 @@ public class Camera extends Pane {
         updateVariables();
 
         boolean sameCenterBlock = oldScreenCenterTileX == screenCenterTileX && oldScreenCenterTileY == screenCenterTileY;
-        boolean adjacentCenterBlock = (changeTileX <= 1 && changeTileX >= -1 && changeTileY == 0)
-                || changeTileX == 0 && changeTileY <= 1 && changeTileY >= -1;
+        boolean adjacentCenterBlock = (changeTileX <= 1 && changeTileX >= -1) || changeTileY <= 1 && changeTileY >= -1;
         boolean sameScreenSize = (oldScreenTall == this.getHeight()) && (oldScreenWide == this.getWidth());
         boolean sameScreenCenter = screenCenterX == oldScreenCenterX && screenCenterY == oldScreenCenterY;
 
@@ -86,6 +85,7 @@ public class Camera extends Pane {
                     updateCords();
                 }
             } else if (adjacentCenterBlock) {
+                System.out.println(changeTileX + " " + changeTileY);
                 updateSome();
             } else {
                 updateAll();
@@ -276,31 +276,67 @@ public class Camera extends Pane {
     private void updateSome(){
         updateCords();
 
-        if(changeTileX > 0){
-            // right move means remove a layer on the left and add one to the right
-            removeTileLayerSide(false);
-            addTileLayerSide(true);
+        int oldX = topLeftX - changeTileX;
+        int oldY = topLeftY - changeTileY;
 
-        }else if(changeTileX < 0){
-            // left move means remove a layer on the right and add one to the left
-            removeTileLayerSide(true);
-            addTileLayerSide(false);
+        for (int i = visibleTiles.getChildren().size() - 1; i >= 0; i--) {
+            // get the x and y of the current node
+            int x = oldX + i % screenTilesWide; // extra tiles
+            int y = oldY + i / screenTilesWide; // whole layers
+
+            // determine if the node is outside the new screen
+            boolean outOfBoundsY = y < topLeftY || y >= topLeftY + screenTilesTall;
+            boolean outOfBoundsX = x < topLeftX || x >= topLeftX + screenTilesWide;
+            if(outOfBoundsY || outOfBoundsX){
+                // no longer visible
+                visibleTiles.getChildren().remove(i);
+
+
+                /* must be replaced
+                    The new tile will appear opposite this one.
+                    Say a downward movement is made that changes center tiles.
+                    This is the first tile removed so it is the top right tile.
+                    We want to add the bottom right tile.
+
+                    To get the opposite tile we need to account for the shift in center
+                    first so everything lines up nicely with the new screen
+                 */
+
+                x += changeTileX;
+                y += changeTileY;
+
+                /* Every tile can be thought of at its old position just shifted onto
+                the new screen now
+                The next step is to find the difference between the left side and x with leftx - x
+                Now we can add the screen width and the left side again so
+                we are at the right side - the how much bigger x was the -1 is for 0 based indexing
+                 */
+
+                x = (screenTilesWide - 1) - x + 2 * topLeftX;
+                y = (screenTilesTall - 1) - y + 2 * topLeftY;
+
+
+                display(Tile.getAllTiles()[y][x]);
+            }
         }
 
-        sortGroup(visibleTiles);
+        // All plants outside of the screen must now be removed
+        double[] topLeft = shift(topLeftX * Tile.getTileWidth(), topLeftY * Tile.getTileWidth());
+        double leftX = topLeft[0], rightX = leftX + screenTilesWide * Tile.getTileWidth();
+        double topY = topLeft[1], bottomY = topY + screenTilesTall * Tile.getTileWidth();
 
-        if(changeTileY > 0){
-            // down move means remove a layer on the top and add one to the bottom
-            removeTileLayerTopBot(true);
-            addTileLayerTopBot(false);
 
-        }else if(changeTileY < 0){
-            // up move means remove a layer on the bottom and add one to the top
-            removeTileLayerTopBot(false);
-            addTileLayerTopBot(true);
+        for (int i = standingGroup.getChildren().size() - 1; i >= 0; i--) {
+            ImageView stander = (ImageView)standingGroup.getChildren().get(i);
+            double x = stander.getX() + stander.getImage().getWidth() / 2;
+            double y = stander.getY() + stander.getImage().getHeight();
+
+            boolean outOfBoundsY = y < topY || y >= bottomY;
+            boolean outOfBoundsX = x < leftX || x >= rightX;
+            if(outOfBoundsY || outOfBoundsX){
+                standingGroup.getChildren().remove(i);
+            }
         }
-
-        updateEntities();
     }
 
     /**
