@@ -1,34 +1,39 @@
 package Game.Entities;
 
 import Game.Animation;
+import Game.Camera;
 import Game.Chunk;
 import Game.Main;
 import Game.Tiles.Tile;
 import Game.testing.Vector;
 import com.sun.javafx.geom.Vec2d;
 import com.sun.javafx.geom.Vec2f;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.sql.SQLOutput;
 import java.util.HashSet;
 
 public class Player extends Entity {
 
     Tile[][] visibleTiles = new Tile[10][10];
-    private static int speed = 500;
-    private static int maxSpeed = 500;
+    private static int speed = 0;
+    private static int maxSpeed = 5;
     private static int accelVal = 1;
     private static boolean moving;
 
-
-    private Vector direction = new Vector(0, 0);
-    private Vector velocity = new Vector(1, 1);
-    private Vector up = new Vector(0, -1);
-    private Vector down = new Vector(0, 1);
-    private Vector left = new Vector(-1, 0);
-    private Vector right = new Vector(1, 0);
     private Vector acceleration;
+
+
+
+
+    Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 
 
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
@@ -54,32 +59,30 @@ public class Player extends Entity {
         super.tick();
         moving = false;
 
-        //direction.normalize();
-
-        double magnitude = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
-        //System.out.println(magnitude);
+        double magnitude = Math.sqrt(Math.pow(this.getDirection().getX(), 2) + Math.pow(this.getDirection().getY(), 2));
 
         if (magnitude != 0) {
-            direction.x = (direction.x / magnitude);
-            direction.y = (direction.y / magnitude);
+            this.getDirection().normalize(magnitude);
         }
 
+        this.getDirection().setToVec(this.getDirection().multiply(speed));
 
-        velocity.x = direction.x * speed * (Main.getDelta_time() / 1000.0);
-        velocity.y = direction.y * speed * (Main.getDelta_time() / 1000.0);
+        this.getVelocity().setToVec(this.getDirection());
 
-            this.addToPositionX(velocity.x);
-            this.addToPositionY(velocity.y);
+        this.addToPositionX(this.getVelocity().getX());
+        this.addToPositionY(this.getVelocity().getY());
 
         handleKeyPresses();
 
         if(!moving){
             speed = 0;
+            this.getVelocity().setX(0);
+            this.getVelocity().setY(0);
         }
     }
 
     public void handleKeyPresses(){
-        direction = new Vector(0, 0);
+        this.setDirection(new Vector(0, 0));
         boolean isMoving = currentlyActiveKeys.contains("A") || currentlyActiveKeys.contains("D") || currentlyActiveKeys.contains("W") || currentlyActiveKeys.contains("S");
 
         if (isMoving) {
@@ -105,7 +108,6 @@ public class Player extends Entity {
             this.walkDown.resetCount();
         }
 
-
         setCurrentAnimation();
 
         // Binding for going in and out of fullscreen
@@ -122,11 +124,11 @@ public class Player extends Entity {
         }
 
         if (currentlyActiveKeys.contains("Z")) {
-            direction.x ++;
+            getDirection().setX(getDirection().getX() + 1);
         }
 
         if (currentlyActiveKeys.contains("X")) {
-            direction.y ++;
+            getDirection().setY(getDirection().getY() + 1);
         }
     }
 
@@ -196,16 +198,16 @@ public class Player extends Entity {
     public void setCurrentAnimation(){
         if(moving){
 
-            if(this.direction.x < 0){
+            if(this.getDirection().getX() < 0){
                 this.setCurrentAnimation(this.walkLeft);
             }
-            if(this.direction.y < 0){
+            if(this.getDirection().getY() < 0){
                 this.setCurrentAnimation(this.walkUp);
             }
-            if(this.direction.y > 0){
+            if(this.getDirection().getY() > 0){
                 this.setCurrentAnimation(this.walkDown);
             }
-            if(this.direction.x > 0){
+            if(this.getDirection().getX() > 0){
                 this.setCurrentAnimation(this.walkRight);
             }
         }
@@ -214,15 +216,19 @@ public class Player extends Entity {
     public void setDirection(){
 
         if (currentlyActiveKeys.contains("A")) {
-            this.direction.add(left);
+            this.getDirection().setToVec(this.getDirection().add(Entity.getLEFT()));
         } else if (currentlyActiveKeys.contains("D")) {
-            this.direction.add(right);
+            this.getDirection().setToVec(this.getDirection().add(Entity.getRIGHT()));
         }
 
         if (currentlyActiveKeys.contains("W")) {
-            this.direction.add(up);
+            this.getDirection().setToVec(this.getDirection().add(Entity.getUP()));
         } else if (currentlyActiveKeys.contains("S")) {
-            this.direction.add(down);
+            this.getDirection().setToVec(this.getDirection().add(Entity.getDOWN()));
         }
+    }
+
+    public static void setMoving(boolean moving) {
+        Player.moving = moving;
     }
 }

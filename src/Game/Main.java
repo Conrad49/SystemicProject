@@ -1,8 +1,10 @@
 package Game;
 
+import Game.Entities.Entity;
 import Game.Entities.Player;
 import Game.Tiles.*;
 import Game.testing.NoiseBiomeGen;
+import Game.testing.Vector;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -49,7 +51,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         Main.stage = stage;
-        stage.setTitle("Event Handling");
+        stage.setTitle("Systemic Project");
 
         root = new Camera();
 
@@ -184,7 +186,16 @@ public class Main extends Application {
         surroundingTiles[8] = allTiles[player.getTileY() + 1][player.getTileX() - 1];
 
         for(Tile tile : surroundingTiles){
-            player.checkTileCollision(tile);
+            Entity.drawContactPoint();
+            if (tile.isSolid()) {
+                if (player.movingRectVcRect(player, tile.getBoundsBox())) {
+                    player.setVelocity(new Vector(0, 0));
+                    Player.setMoving(false);
+                    System.out.println(player.getVelocity().getX());
+                } else {
+
+                }
+            }
         }
 
         root.update();
@@ -277,9 +288,7 @@ public class Main extends Application {
     }
 
     /**
-     *
      * returns the time between frames in milliseconds?
-     *
      */
     public static int getDelta_time() {
         return delta_time;

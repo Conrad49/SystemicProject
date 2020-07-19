@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -40,9 +41,10 @@ public class Camera extends Pane{
     private ArrayList<ArrayList<Node>> visibleTilesArray = new ArrayList<>();
     private Group visibleTiles = new Group();
     private Group entityGroup = new Group();
+    private static Group GUIGroup = new Group();
 
     public Camera(){
-        mainGroup.getChildren().addAll(visibleTiles, entityGroup);
+        mainGroup.getChildren().addAll(visibleTiles, entityGroup, GUIGroup);
         getChildren().add(mainGroup);
     }
 
@@ -78,7 +80,7 @@ public class Camera extends Pane{
             updateAll();
         }
 
-
+        drawGUI();
 
         //Temporary position
 
@@ -315,5 +317,17 @@ public class Camera extends Pane{
 
         screenCenterTileX = screenCenterX / Tile.getWidth();
         screenCenterTileY = screenCenterY / Tile.getWidth();
+    }
+
+    public void drawGUI(){
+
+    }
+
+    public static void setGUIGroup(Group Group) {
+        GUIGroup.getChildren().clear();
+
+        for (int i = 0; i < Group.getChildren().size(); i ++) {
+            GUIGroup.getChildren().add(Group.getChildren().get(i));
+        }
     }
 }

@@ -1,20 +1,23 @@
 package Game.Entities;
 
 import Game.Animation;
+import Game.Camera;
 import Game.Chunk;
-import Game.Entities.Player;
+import Game.Main;
 import Game.Tiles.Tile;
 import Game.testing.Vector;
-import com.sun.javafx.geom.Vec2d;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import org.w3c.dom.css.Rect;
+
+import java.awt.*;
 
 public abstract class Entity {
 
-    double xSpeed;
-    double ySpeed;
     Image texture;
     Color backColor;
     protected Rectangle boundsBox;
@@ -26,9 +29,22 @@ public abstract class Entity {
     protected int width;
     protected int height;
     private Animation currentAnimation;
-    Vec2d direction;
+
     private Vector position = new Vector();
-    public boolean isColliding;
+    private Vector direction = new Vector(0, 0);
+    private Vector velocity = new Vector(0, 0);
+
+    static Vector contactPoint = new Vector(0, 0);
+    Vector contactNormal = new Vector(0, 0);
+    Vector mouseVec = new Vector(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y);
+    Vector dir = mouseVec.subtract(position);
+
+    private static final Vector UP = new Vector(0, -1);
+    private static final Vector DOWN = new Vector(0, 1);
+    private static final Vector LEFT = new Vector(-1, 0);
+    private static final Vector RIGHT = new Vector(1, 0);
+
+    double time = 0;
 
     public Animation getCurrentAnimation() {
         return currentAnimation;
@@ -43,11 +59,12 @@ public abstract class Entity {
         this.boundsBox = boundsBox;
         this.posX = boundsBox.getX();
         this.posY = boundsBox.getY();
+
         this.tileX = (int)posX/ Tile.getWidth();
         this.tileY = (int)posY/ Tile.getWidth();
 
-        this.position.x = (int)this.posX;
-        this.position.y = (int)this.posY;
+        this.position.setX((int) this.posX);
+        this.position.setY((int) this.posY);
     }
 
     public Entity(Image texture, Rectangle boundsBox) {
@@ -66,8 +83,8 @@ public abstract class Entity {
         //this.posY += this.ySpeed;
         this.tileX = (int)this.posX / Tile.getWidth();
         this.tileY = (int)this.posY / Tile.getWidth();
-        this.posX = this.position.x;
-        this.posY = this.position.y;
+        this.posX = this.position.getX();
+        this.posY = this.position.getY();
     }
 
     public void checkVisiblity(Player p){
@@ -95,45 +112,137 @@ public abstract class Entity {
 
             Rectangle shiftedRect = new Rectangle(this.posX - (this.boundsBox.getWidth() / 2), this.posY - (this.boundsBox.getHeight() / 2), this.boundsBox.getWidth(), this.boundsBox.getHeight());
 
-            //boolean intersects = tileBounds.intersects(shiftedRect.getBoundsInLocal());
-
             Shape intersect = Shape.intersect(shiftedRect, tileBounds);
             if (intersect.getBoundsInLocal().getWidth() != -1) {
-                this.isColliding = true;
+
                 // left
                 if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.position.x += intersect.getBoundsInLocal().getWidth();
+                    this.position.setX(this.position.getX() + intersect.getBoundsInLocal().getWidth());
                     this.posX += intersect.getBoundsInLocal().getWidth();
-                    //this.xSpeed = 0;
                 }
 
                 // right
                 if(tileBounds.getX() > this.boundsBox.getX() && (tile.getPosY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.position.x -= intersect.getBoundsInLocal().getWidth();
+                    this.position.setX(this.position.getX() - intersect.getBoundsInLocal().getWidth());
                     this.posX -= intersect.getBoundsInLocal().getWidth();
-                    //this.posX -= intersect.getBoundsInLocal().getWidth();
-                    //this.xSpeed = 0;
+
                 }
 
                 // above
                 if(tileBounds.getY() + tileBounds.getHeight() < this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.position.y += intersect.getBoundsInLocal().getHeight();
+                    this.position.setY(this.position.getY() + intersect.getBoundsInLocal().getHeight());
                     this.posY += intersect.getBoundsInLocal().getHeight();
-                    //this.ySpeed = 0;
                 }
 
                 // below
                 if(tileBounds.getY() > this.boundsBox.getY() && (tile.getPosX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.position.y -= intersect.getBoundsInLocal().getHeight();
+                    this.position.setY(this.position.getY() - intersect.getBoundsInLocal().getHeight());
                     this.posY -= intersect.getBoundsInLocal().getHeight();
-                    //this.ySpeed = 0;
                 }
 
-                this.position.x = (int)this.position.x;
-                this.position.y = (int)this.position.y;
+                this.position.setX((int) this.position.getX());
+                this.position.setY((int) this.position.getY());
             }
 
         }
+    }
+
+
+    /**
+     * <p>Takes in a starting position, a vector that represents direction/velocity, and a Rectangle object that represents
+     * what you want to check for collision against. It then returns true if the vector/ray intersects with the given
+     * rectangle and produces the point at which the collision occurs, a "time" value, and another vector/ray that
+     * represents the direction a moving object would have to move in order to stop colliding.<p/>
+     *
+     * This method was made with the complete help of this video: https://www.youtube.com/watch?v=8JJ-4JgR7Dg
+     */
+    public boolean RayVsRect(Vector oPosition, Vector ray, Rectangle target){
+        Vector targetPos = new Vector(target.getX(), target.getY());
+        Vector near = targetPos.subtract(oPosition).divide(ray);
+        Vector far = targetPos.add(target.getHeight()).subtract(oPosition);
+        far.setToVec(far.divide(ray));
+
+        if(near.getX() > far.getX()){
+            double temp = near.getX();
+            near.setX(far.getX());
+            far.setX(temp);
+        }
+
+        if(near.getY() > far.getY()){
+            double temp = near.getY();
+            near.setY(far.getY());
+            far.setY(temp);
+        }
+
+        if(near.getX() > far.getY() || near.getY() > far.getX()){
+            return false;
+        }
+
+        double hitNearXVal = Math.max(near.getX(), near.getY());
+        time = hitNearXVal;
+        double hitFarXVal = Math.min(far.getX(), far.getY());
+
+        if(hitFarXVal < 0){
+            return false;
+        }
+
+        contactPoint = ray.multiply(hitNearXVal);
+        contactPoint = contactPoint.add(oPosition);
+
+
+        if(near.getX() > near.getY()){
+            if(ray.getX() < 0){
+                contactNormal.setX(1);
+                contactNormal.setY(0);
+            } else {
+                contactNormal.setX(-1);
+                contactNormal.setY(0);
+            }
+        } else if (near.getX() < near.getY()){
+            if(ray.getY() < 0){
+                contactNormal.setX(0);
+                contactNormal.setY(1);
+            } else {
+                contactNormal.setX(0);
+                contactNormal.setY(-1);
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * <p>Applies the logic of {@link Entity#RayVsRect(Vector, Vector, Rectangle)} to a moving rectangle that needs to be checked for collision with a given
+     * other Rectangle<p/>
+     * This method was made with the complete help of this video: https://www.youtube.com/watch?v=8JJ-4JgR7Dg
+     */
+    public boolean movingRectVcRect(Entity in, Rectangle target){
+        Rectangle inputRectangle = in.boundsBox;
+        if(in.getVelocity().getX() == 0 && in.getVelocity().getY() == 0){
+            return false;
+        }
+
+        Rectangle adjustedTarget = new Rectangle();
+        adjustedTarget.setX(target.getX() - (inputRectangle.getWidth() / 2));
+        adjustedTarget.setY(target.getY() - (inputRectangle.getHeight() / 2));
+
+        adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth());
+        adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight());
+
+        if(RayVsRect(in.position, in.getVelocity(), adjustedTarget)){
+            if(time <= 1){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void drawContactPoint(){
+        Group group = new Group();
+        group.getChildren().add(new Circle(contactPoint.getX(), contactPoint.getY(), 5));
+        Camera.setGUIGroup(group);
     }
 
     public double getPosX() {
@@ -152,12 +261,10 @@ public abstract class Entity {
         this.position = position;
     }
 
-    public void addToPositionX(double x) {
-        this.position.x += x;
-    }
+    public void addToPositionX(double x) { this.position.setX(this.position.getX() + x); }
 
     public void addToPositionY(double y) {
-        this.position.y += y;
+        this.position.setY(this.position.getY() + y);
     }
 
 
@@ -186,18 +293,6 @@ public abstract class Entity {
         this.boundsBox = boundsBox;
     }
 
-    public double getxSpeed() {
-        return xSpeed;
-    }
-
-    public double getySpeed() {
-        return ySpeed;
-    }
-
-    public Color getBackColor() {
-        return backColor;
-    }
-
     public int getTileX() {
         return tileX;
     }
@@ -206,16 +301,44 @@ public abstract class Entity {
         return tileY;
     }
 
-    public boolean isVisible() {
-        return isVisible;
-    }
-
     public int getWidth() {
         return width;
     }
 
     public int getHeight() {
         return height;
+    }
+
+    public Vector getVelocity() {
+        return velocity;
+    }
+
+    public Vector getDirection() {
+        return direction;
+    }
+
+    public static Vector getUP() {
+        return UP;
+    }
+
+    public static Vector getDOWN() {
+        return DOWN;
+    }
+
+    public static Vector getLEFT() {
+        return LEFT;
+    }
+
+    public static Vector getRIGHT() {
+        return RIGHT;
+    }
+
+    public void setDirection(Vector direction) {
+        this.direction = direction;
+    }
+
+    public void setVelocity(Vector velocity) {
+        this.velocity = velocity;
     }
 
     public void setTexture(Image texture) {

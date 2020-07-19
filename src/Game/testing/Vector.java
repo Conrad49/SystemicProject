@@ -1,7 +1,9 @@
 package Game.testing;
 
+import java.awt.*;
+
 public class Vector {
-    public double x, y;
+    private double x, y;
 
     public Vector(double x, double y) {
         this.x = x;
@@ -11,36 +13,80 @@ public class Vector {
     public Vector() {
     }
 
-    public void add(Vector vector){
-        this.x += vector.x;
-        this.y += vector.y;
+    public Vector(Vector vector){
+        this.setToVec(vector);
     }
 
-    public void multiply(Vector vector1, Vector vector2){
-        vector1.x *= vector2.x;
-        vector1.y *= vector2.y;
+    public void setToVec(Vector vec){
+        this.x = vec.x;
+        this.y = vec.y;
     }
 
-    public void multiply(Vector vector, int num){
-        vector.x *= num;
-        vector.y *= num;
+    public Vector add(Vector vector){
+        double newX = x + vector.x;
+        double newY = y + vector.y;
+
+        return new Vector(newX, newY);
     }
 
-    public void normalize(){
+    public Vector add(double num){
+        double newX = x + num;
+        double newY = y + num;
+
+        return new Vector(newX, newY);
+    }
+
+    public Vector subtract(Vector vector){
+        double newX = x - vector.x;
+        double newY = y - vector.y;
+
+        return new Vector(newX, newY);
+    }
+
+    public Vector multiply(Vector vector){
+        double newX = x * vector.x;
+        double newY = y * vector.y;
+
+        return new Vector(newX, newY);
+    }
+
+    public Vector multiply(double num){
+        double newX = x * num;
+        double newY = y * num;
+
+        return new Vector(newX, newY);
+    }
+
+    public void normalize(double magnitude){
 
         if (Math.abs(this.x) != 0) {
-            this.x = this.x / Math.abs(this.x);
+            this.x = this.x / magnitude;
         }
         if (Math.abs(this.y) != 0) {
-            this.y = this.y / Math.abs(this.y);
+            this.y = this.y / magnitude;
         }
     }
 
-    public void setX(int x) {
+    public Vector divide(Vector vector){
+        double newX = x / vector.x;
+        double newY = y / vector.y;
+
+        return new Vector(newX, newY);
+    }
+
+    public static Vector getVecFromPt(Point point){
+        return new Vector(point.x, point.y);
+    }
+
+    public double getMagnitude(){
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
