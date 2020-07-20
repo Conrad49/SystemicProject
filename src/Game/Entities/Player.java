@@ -67,10 +67,14 @@ public class Player extends Entity {
 
         this.getDirection().setToVec(this.getDirection().multiply(speed));
 
-        this.getVelocity().setToVec(this.getDirection());
+        if (!Main.colliding) {
+            this.getVelocity().setToVec(this.getDirection());
+        }
 
-        this.addToPositionX(this.getVelocity().getX());
-        this.addToPositionY(this.getVelocity().getY());
+        //if (Main.colliding) {
+            this.addToPositionX(this.getVelocity().getX());
+            this.addToPositionY(this.getVelocity().getY());
+        //}
 
         handleKeyPresses();
 

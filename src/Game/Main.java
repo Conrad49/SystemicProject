@@ -38,6 +38,7 @@ public class Main extends Application {
     private static int HEIGHT = 256;
     private static long last_time = System.nanoTime();
     private static int delta_time = 0;
+    public static boolean colliding;
 
     private static HashSet<String> currentlyActiveKeys;
 
@@ -145,12 +146,13 @@ public class Main extends Application {
 
         // a calculation for the time between updates taken from:
         // https://gamedev.stackexchange.com/questions/111741/calculating-delta-time
+        // don't use for now VVV
         long time = System.nanoTime();
         delta_time = (int) ((time - last_time) / 1000000);
         last_time = time;
 
         Chunk[] chunks = player.getSurroundingChunks();
-        player.tick();
+
         //for(Game.Chunk chunk : chunks){
         //    chunk.tick();
         //}
@@ -185,18 +187,25 @@ public class Main extends Application {
         surroundingTiles[7] = allTiles[player.getTileY() + 1][player.getTileX() + 1];
         surroundingTiles[8] = allTiles[player.getTileY() + 1][player.getTileX() - 1];
 
+        colliding = false;
+
         for(Tile tile : surroundingTiles){
             Entity.drawContactPoint();
             if (tile.isSolid()) {
                 if (player.movingRectVcRect(player, tile.getBoundsBox())) {
-                    player.setVelocity(new Vector(0, 0));
-                    Player.setMoving(false);
-                    System.out.println(player.getVelocity().getX());
-                } else {
 
+                    player.setVelocity(player.getContactNormal().multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-player.getTime()));
+
+                    /*player.setVelocity(new Vector(0, 0));
+                    Player.setMoving(false);
+                    System.out.println(player.getVelocity().getX());*/
+                    System.out.println(1-player.getTime());
+                    colliding = true;
                 }
             }
         }
+
+        player.tick();
 
         root.update();
     }

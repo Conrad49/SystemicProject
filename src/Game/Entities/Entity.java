@@ -35,7 +35,7 @@ public abstract class Entity {
     private Vector velocity = new Vector(0, 0);
 
     static Vector contactPoint = new Vector(0, 0);
-    Vector contactNormal = new Vector(0, 0);
+    private Vector contactNormal = new Vector(0, 0);
     Vector mouseVec = new Vector(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y);
     Vector dir = mouseVec.subtract(position);
 
@@ -224,9 +224,12 @@ public abstract class Entity {
         }
 
         Rectangle adjustedTarget = new Rectangle();
+
+        //expands left and upwards
         adjustedTarget.setX(target.getX() - (inputRectangle.getWidth() / 2));
         adjustedTarget.setY(target.getY() - (inputRectangle.getHeight() / 2));
 
+        //expands right and downwards
         adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth());
         adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight());
 
@@ -343,5 +346,13 @@ public abstract class Entity {
 
     public void setTexture(Image texture) {
         this.texture = texture;
+    }
+
+    public Vector getContactNormal() {
+        return contactNormal;
+    }
+
+    public double getTime() {
+        return time;
     }
 }
