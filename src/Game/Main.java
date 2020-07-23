@@ -285,7 +285,7 @@ public class Main extends Application {
                                     rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
                                     i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
                                     j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())
-                                    ));
+                            ));
                         }
                     }else if(line[j].equals("s")){
                         StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
