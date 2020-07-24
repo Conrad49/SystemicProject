@@ -97,4 +97,8 @@ public class Vector {
     public double getY() {
         return y;
     }
+
+    public void printComponents(){
+        System.out.println(this.getX() + ", " + this.getY());
+    }
 }
