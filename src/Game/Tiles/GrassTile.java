@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
  * A grass tile has no interesting things about it.
  */
 public class GrassTile extends Tile {
+    public static final String tileCode = "g";
 
     double movementSpeed;
     //static Image texture;
@@ -18,8 +19,12 @@ public class GrassTile extends Tile {
         this.isInteractiveTile = true;
     }
 
-    public Image getTexture() {
+    public Image getImage() {
         return texture;
     }
 
+    @Override
+    public String getTileCode() {
+        return tileCode;
+    }
 }

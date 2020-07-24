@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
  * A sand tile has no interesting things about it.
  */
 public class SandTile extends Tile {
+    public static final String tileCode = "a";
 
     double movementSpeed;
     //static Image texture;
@@ -18,8 +19,12 @@ public class SandTile extends Tile {
         this.isInteractiveTile = true;
     }
 
-    public Image getTexture() {
+    public Image getImage() {
         return texture;
     }
 
+    @Override
+    public String getTileCode() {
+        return tileCode;
+    }
 }

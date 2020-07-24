@@ -3,6 +3,7 @@ package Game;
 import Game.Entities.Entity;
 import Game.Entities.Player;
 import Game.Tiles.*;
+import Game.plants.SingleTallGrass;
 import Game.testing.NoiseBiomeGen;
 import Game.testing.Vector;
 import javafx.animation.AnimationTimer;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This is where the setup and running happens. Everything from drawing a frame to
@@ -34,6 +36,7 @@ public class Main extends Application {
     private static Stage stage; //
     private static Scene mainScene;
     private static Camera root;
+
     private static int WIDTH = 512;
     private static int HEIGHT = 256;
     private static long last_time = System.nanoTime();
@@ -45,7 +48,7 @@ public class Main extends Application {
     static final double speed = 5;
 
 
-    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 40));
+    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 32));
 
 
 
@@ -59,7 +62,7 @@ public class Main extends Application {
         mainScene = new Scene(root);
         stage.setScene(mainScene);
 
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
 
         prepareActionHandlers();
 
@@ -86,7 +89,6 @@ public class Main extends Application {
                 System.exit(0);
             }
         }
-
 
         //Game.Main "game" loop
         new AnimationTimer()
@@ -206,8 +208,31 @@ public class Main extends Application {
         }
 
         player.tick();
+        tileTick();
 
         root.update();
+    }
+
+    private static void tileTick(){
+        //growth rate
+        if(numOfFrames % 600 == 0) {
+            root.doUpdateAll();
+            ThreadLocalRandom rand = ThreadLocalRandom.current();
+            int loadWidth = 50;
+            for (int i = 0; i < loadWidth; i++) {
+                for (int j = 0; j < loadWidth; j++) {
+                    int tx = ((int) player.getPosX() / Tile.getTileWidth()) - loadWidth / 2 + j;
+                    int ty = ((int) player.getPosY() / Tile.getTileWidth()) - loadWidth / 2 + i;
+
+                    Tile t = Tile.getAllTiles()[ty][tx];
+                    if (t.getPlants().size() > 0) {
+                        if (rand.nextInt(10) == 0) {
+                            t.tick();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static Player getPlayer(){
@@ -230,10 +255,10 @@ public class Main extends Application {
             for (int j = 0; j < Tile.getMapWidth(); j++) {
                 Color color = (Color)noiseRectangles[i][j].getFill();
                 if (color.getBlue() < 0.5){
-                    GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                     grassTile.setTexture(grassImage);
                 } else {
-                    StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+                    StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                     stoneTile.setTexture(stoneImage);
                 }
 
@@ -262,29 +287,42 @@ public class Main extends Application {
         try {
             reader = new Scanner(file);
 
+            ThreadLocalRandom rand = ThreadLocalRandom.current();
+
             for (int i = 0; i < Tile.getMapHeight(); i++) {
                 String[] line = reader.nextLine().split(",");
                 for (int j = 0; j < Tile.getMapWidth(); j++) {
                     if(line[j].equals("g")){
-                        GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         grassTile.setTexture(grassImage);
-                    } else if(line[j].equals("s")){
-                        StoneTile stoneTile = new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
+
+                        // For testing purposes this should add tall grass to every 4th grass tile
+                        int count = rand.nextInt(4, 6);
+                        for (int k = 0; k < count; k++) {
+                            grassTile.addPlant(new SingleTallGrass(
+                                    rand.nextInt(0, SingleTallGrass.getMaxHealth()),
+                                    rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
+                                    i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
+                                    j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())
+                                    ));
+                        }
+                    }else if(line[j].equals("s")){
+                        StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         stoneTile.setTexture(stoneImage);
                     }else if(line[j].equals("a")){
-                        SandTile sandTile = new SandTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        SandTile sandTile = new SandTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         sandTile.setTexture(sandImage);
                     }else if(line[j].equals("i")){
-                        IceTile iceTile = new IceTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        IceTile iceTile = new IceTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         iceTile.setTexture(iceImage);
                     }else if(line[j].equals("l")){
-                        LavaTile lavaTile = new LavaTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        LavaTile lavaTile = new LavaTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         lavaTile.setTexture(lavaImage);
                     }else if(line[j].equals("o")){
-                        SnowTile snowTile = new SnowTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        SnowTile snowTile = new SnowTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         snowTile.setTexture(snowImage);
                     }else if(line[j].equals("w")){
-                        WaterTile waterTile = new WaterTile(i * Tile.getWidth(), j * Tile.getWidth());
+                        WaterTile waterTile = new WaterTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                         waterTile.setTexture(waterImage);
                     }
                 }
@@ -292,8 +330,6 @@ public class Main extends Application {
         } catch (FileNotFoundException e) {
             System.out.println("File not found!!!");
         }
-
-
     }
 
     /**

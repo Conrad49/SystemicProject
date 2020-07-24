@@ -326,6 +326,4 @@ public class NoiseBiomeGen extends Application {
             e.printStackTrace();
         }
     }
-
-
 }

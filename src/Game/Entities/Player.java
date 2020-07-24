@@ -6,9 +6,6 @@ import Game.Chunk;
 import Game.Main;
 import Game.Tiles.Tile;
 import Game.testing.Vector;
-import com.sun.javafx.geom.Vec2d;
-import com.sun.javafx.geom.Vec2f;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -17,7 +14,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.awt.*;
-import java.sql.SQLOutput;
 import java.util.HashSet;
 
 public class Player extends Entity {
@@ -31,21 +27,17 @@ public class Player extends Entity {
     private Vector acceleration;
 
 
-
-
-    Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-
-
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
     private boolean hasChangedFullscreen;
 
-    static Image texture;
     public Player(Color backColor, javafx.scene.shape.Rectangle boundsBox) {
         super(backColor, boundsBox);
+        setTexture();
     }
 
     public Player(Image texture, javafx.scene.shape.Rectangle boundsBox) {
         super(texture, boundsBox);
+        setTexture();
     }
 
     public Animation walkDown = new Animation();
@@ -60,6 +52,7 @@ public class Player extends Entity {
         moving = false;
 
         double magnitude = Math.sqrt(Math.pow(this.getDirection().getX(), 2) + Math.pow(this.getDirection().getY(), 2));
+
 
         if (magnitude != 0) {
             this.getDirection().normalize(magnitude);
@@ -95,6 +88,7 @@ public class Player extends Entity {
 
             setDirection();
         }
+
 
         if (!currentlyActiveKeys.contains("A")) {
             this.walkLeft.resetCount();
@@ -156,8 +150,7 @@ public class Player extends Entity {
 
     }
 
-    public void setTexture(Image image){
-        texture = image;
+    public void setTexture(){
         Image[] walkDown = new Image[6];
         Image[] walkRight = new Image[8];
         Image[] idle = new Image[1];
