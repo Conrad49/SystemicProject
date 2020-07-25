@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -37,6 +38,7 @@ public class Main extends Application {
     private static Stage stage; //
     private static Scene mainScene;
     private static Camera root;
+    public static int slowVal = 1;
 
     private static int WIDTH = 512;
     private static int HEIGHT = 256;
@@ -97,7 +99,10 @@ public class Main extends Application {
             public void handle(long currentNanoTime)
             {
                 numOfFrames ++;
-                tickAndRender();
+
+                if (numOfFrames % slowVal == 0) {
+                    tickAndRender();
+                }
             }
 
         }.start();
@@ -205,20 +210,18 @@ public class Main extends Application {
                 if ((boolean)stuffs[0]) {
                     Vector normal = (Vector) stuffs[1];
                     Vector point = (Vector) stuffs[2];
+                    double[] pointShift = shift(point.getX(), point.getY());
+                    Entity.group.getChildren().add(new Circle(pointShift[0], pointShift[1], 5));
                     double ctime = (double) stuffs[3];
 
                     //player.setVelocity(player.getContactNormal().multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-player.getTime()));
                     player.setVelocity(normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime));
-
-                    /*player.setVelocity(new Vector(0, 0));
-                    Player.setMoving(false);
-                    System.out.println(player.getVelocity().getX());*/
                     System.out.println(1-ctime);
                     colliding = true;
                 }
             }
         }
-        Camera.setGUIGroup(group);
+        Camera.setGUIGroup(Entity.group);
 
         player.tick();
         tileTick();
@@ -352,7 +355,7 @@ public class Main extends Application {
         return delta_time;
     }
 
-    private static double[] shift(double x, double y){
+    public static double[] shift(double x, double y){
         int px = (int)Math.round(Main.getPlayer().getPosX());
         int py = (int)Math.round(Main.getPlayer().getPosY());
         int halfWidth = (int)root.getWidth() / 2;

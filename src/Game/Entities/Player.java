@@ -116,6 +116,16 @@ public class Player extends Entity {
             hasChangedFullscreen = true;
         }
 
+        if(currentlyActiveKeys.contains("I")) {
+            Main.slowVal ++;
+        }
+
+        if(currentlyActiveKeys.contains("K")) {
+            if (Main.slowVal > 1) {
+                Main.slowVal --;
+            }
+        }
+
 
         if(!moving){
             this.setCurrentAnimation(this.idleAnimation);

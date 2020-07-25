@@ -46,6 +46,7 @@ public abstract class Entity {
     private static final Vector DOWN = new Vector(0, 1);
     private static final Vector LEFT = new Vector(-1, 0);
     private static final Vector RIGHT = new Vector(1, 0);
+    public static Group group = new Group();
 
     public Animation getCurrentAnimation() {
         return currentAnimation;
@@ -229,12 +230,17 @@ public abstract class Entity {
         Rectangle adjustedTarget = new Rectangle();
 
         //expands left and upwards
-        adjustedTarget.setX(target.getX() - (inputRectangle.getWidth() / 2));
-        adjustedTarget.setY(target.getY() - (inputRectangle.getHeight() / 2));
+        adjustedTarget.setX(target.getX() - (inputRectangle.getWidth() / 2) + 1);
+        adjustedTarget.setY(target.getY() - (inputRectangle.getHeight() / 2) + 1);
 
         //expands right and downwards
-        adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth());
-        adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight());
+        adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth() + 1);
+        adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight() + 1);
+
+
+        double[] coords = Main.shift(adjustedTarget.getX(), adjustedTarget.getY());
+        Rectangle displayRect = new Rectangle(coords[0], coords[1], adjustedTarget.getWidth(), adjustedTarget.getHeight());
+        //group.getChildren().add(displayRect);
 
         Object[] results = rayVsRect(in.position, in.getVelocity(), adjustedTarget);
 
@@ -246,6 +252,7 @@ public abstract class Entity {
 
         return new Object[] {false};
     }
+
 
     public static void drawContactPoint(){
         Group group = new Group();
