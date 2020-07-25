@@ -198,6 +198,7 @@ public class Main extends Application {
             double[] coords = shift(box.getX(), box.getY());
             box.setX(coords[0]);
             box.setY(coords[1]);
+            box.setOpacity(0.5);
             group.getChildren().add(box);
             if (tile.isSolid()) {
                 Object[] stuffs = player.movingRectVcRect(player, tile.getBoundsBox());

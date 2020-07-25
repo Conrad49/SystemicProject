@@ -528,7 +528,7 @@ public class Camera extends Pane {
     public static void setGUIGroup(Group Group) {
         GUIGroup.getChildren().clear();
 
-        for (int i = 0; i < Group.getChildren().size(); i ++) {
+        for (int i = Group.getChildren().size() - 1; i >= 0; i--) {
             GUIGroup.getChildren().add(Group.getChildren().get(i));
         }
     }
