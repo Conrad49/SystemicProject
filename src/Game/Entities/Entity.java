@@ -160,7 +160,7 @@ public abstract class Entity {
      *
      * This method was made with the complete help of this video: https://www.youtube.com/watch?v=8JJ-4JgR7Dg
      */
-    public boolean RayVsRect(Vector oPosition, Vector ray, Rectangle target){
+    public boolean rayVsRect(Vector oPosition, Vector ray, Rectangle target){
         Vector targetPos = new Vector(target.getX(), target.getY());
         Vector near = targetPos.subtract(oPosition).divide(ray);
         Vector far = targetPos.add(target.getHeight()).subtract(oPosition);
@@ -217,7 +217,7 @@ public abstract class Entity {
 
 
     /**
-     * <p>Applies the logic of {@link Entity#RayVsRect(Vector, Vector, Rectangle)} to a moving rectangle that needs to be checked for collision with a given
+     * <p>Applies the logic of {@link Entity#rayVsRect(Vector, Vector, Rectangle)} to a moving rectangle that needs to be checked for collision with a given
      * other Rectangle<p/>
      * This method was made with the complete help of this video: https://www.youtube.com/watch?v=8JJ-4JgR7Dg
      */
@@ -237,7 +237,7 @@ public abstract class Entity {
         adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth());
         adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight());
 
-        if(RayVsRect(in.position, in.getVelocity(), adjustedTarget)){
+        if(rayVsRect(in.position, in.getVelocity(), adjustedTarget)){
             if(time <= 1){
                 return true;
             }

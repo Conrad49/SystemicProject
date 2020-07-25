@@ -8,6 +8,7 @@ import Game.testing.NoiseBiomeGen;
 import Game.testing.Vector;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -190,11 +191,17 @@ public class Main extends Application {
         surroundingTiles[8] = allTiles[player.getTileY() + 1][player.getTileX() - 1];
 
         colliding = false;
-
+        Group group = new Group();
         for(Tile tile : surroundingTiles){
             Entity.drawContactPoint();
+            Rectangle box = new Rectangle(tile.getBoundsBox().getX(), tile.getBoundsBox().getY(), tile.getBoundsBox().getWidth(), tile.getBoundsBox().getHeight());
+            double[] coords = shift(box.getX(), box.getY());
+            box.setX(coords[0]);
+            box.setY(coords[1]);
+            group.getChildren().add(box);
             if (tile.isSolid()) {
                 if (player.movingRectVcRect(player, tile.getBoundsBox())) {
+
 
                     player.setVelocity(player.getContactNormal().multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-player.getTime()));
 
@@ -206,6 +213,7 @@ public class Main extends Application {
                 }
             }
         }
+        Camera.setGUIGroup(group);
 
         player.tick();
         tileTick();
@@ -304,7 +312,7 @@ public class Main extends Application {
                                     rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
                                     i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
                                     j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())
-                                    ));
+                            ));
                         }
                     }else if(line[j].equals("s")){
                         StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
@@ -337,6 +345,18 @@ public class Main extends Application {
      */
     public static int getDelta_time() {
         return delta_time;
+    }
+
+    private static double[] shift(double x, double y){
+        int px = (int)Math.round(Main.getPlayer().getPosX());
+        int py = (int)Math.round(Main.getPlayer().getPosY());
+        int halfWidth = (int)root.getWidth() / 2;
+        int halfHeight = (int)root.getHeight() / 2;
+
+        x = x - root.getScreenCenterX() + halfWidth;
+        y = y - root.getScreenCenterY() + halfHeight;
+
+        return new double[] {x, y};
     }
 
 }

@@ -9,8 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class Camera extends Pane {
     private int screenTilesWide;
     private double oldScreenTall = 0;
     private double oldScreenWide = 0;
+    private int tileGap = 2;
 
     private double screenCenterX;
     private int screenCenterTileX;
@@ -42,15 +41,20 @@ public class Camera extends Pane {
     private static Player player = Main.getPlayer();
 
     private Group mainGroup = new Group();
-    private ArrayList<Node> entities = new ArrayList<>();
     private Group visibleTiles = new Group();
 
     private Group standingGroup = new Group();
     private static Group GUIGroup = new Group();
+    private ArrayList<Node> entities = new ArrayList<>();
+    private final int numGroups = 30;
 
     private boolean updateAll = false;
 
     public Camera() {
+        for (int i = 0; i < numGroups; i++) {
+            Group g = new Group();
+            standingGroup.getChildren().add(g);
+        }
         mainGroup.getChildren().addAll(visibleTiles, standingGroup, GUIGroup);
         getChildren().add(mainGroup);
     }
@@ -67,6 +71,7 @@ public class Camera extends Pane {
      * Uses findScreenCenter in the process so the screen center variables will be updated too.
      */
     public void update() {
+
         updateVariables();
 
         boolean sameCenterBlock = oldScreenCenterTileX == screenCenterTileX && oldScreenCenterTileY == screenCenterTileY;
@@ -86,6 +91,7 @@ public class Camera extends Pane {
 
                 } else {
                     updateCords();
+                    updateStandingGroupPositions();
                 }
             } else if (adjacentCenterBlock) {
                 updateSome();
@@ -97,35 +103,20 @@ public class Camera extends Pane {
 
         // Since entities move around we have to recheck their images source every frame.
         // We cannot find it's real position from the image so we update it all every time.
-        updateEntities();
+        removeEntities();
+        addAllEntities();
 
         sortGroup(visibleTiles);
-        sortGroup(standingGroup);
-    }
-
-
-
-    /**
-     * Removes the node in the given group that has the specified coordinates.
-     */
-    private void removeNode (double x, double y, Group g){
-        for (int i = 0; i < g.getChildren().size(); i++) {
-            double xx = ((ImageView)g.getChildren().get(i)).getX();
-            double yy = ((ImageView)g.getChildren().get(i)).getY();
-
-            if(x == xx && y == yy){
-                g.getChildren().remove(i);
-                return;
-            }
+        for (int i = 0; i < standingGroup.getChildren().size(); i++) {
+            sortGroup((Group)standingGroup.getChildren().get(i));
         }
-        updateAll();
     }
 
     /**
      * Adds a new item to be displayed. This creates a new image view calculates a
      * position and adds it to the proper array. This assumes that all tiles and only
      * tiles are drawn from the top left and all entities are at the bottom middle of
-     * their feet. This method also displays any displayabls inside the given
+     * their feet. This method also displays any displayables inside the given
      * displayable.
      */
     private void display(Displayable dis){
@@ -148,8 +139,38 @@ public class Camera extends Pane {
             // this is something that stands up off the ground.
             i.setX(cords[0] - image.getWidth() / 2);
             i.setY(cords[1] - image.getHeight());
-            standingGroup.getChildren().add(i);
+
+            double percentDown = (y - topLeftY * Tile.getTileWidth()) / (screenTilesTall * Tile.getTileWidth());
+            double percentInterval = 1 / ((double)standingGroup.getChildren().size());
+
+            for (int j = 1; j <= standingGroup.getChildren().size(); j++) {
+                // the or case is in case of accuracy lost making it < 1 and something being above it and not enter a group
+                if(percentDown < j * percentInterval || j == standingGroup.getChildren().size()){
+                    addAtSortedPos((Group)standingGroup.getChildren().get(j - 1), cords[1], i);
+                    break;
+                }
+            }
         }
+    }
+
+    /**
+     * Add a node at it's proper position in a group.
+     *
+     * @param y must be the shifted position of the displayable not actual coordinates nor display coordinates.
+     */
+    private void addAtSortedPos(Group g, double y, Node n){
+        for (int i = 0; i < g.getChildren().size(); i++) {
+            ImageView iv = (ImageView)g.getChildren().get(i);
+            double checkY = iv.getY() + iv.getImage().getHeight();
+
+            if(checkY >= y){
+                g.getChildren().add(i, n);
+                // mission accomplished
+                return;
+            }
+        }
+
+        g.getChildren().add(n);
     }
 
     /**
@@ -162,6 +183,7 @@ public class Camera extends Pane {
         double y = -1000;
         double x = -1000;
         boolean startNewCheck = true;
+        int count = 0;
         for (int j = 0; j < g.getChildren().size(); j++) {
             Node n = g.getChildren().get(j);
             oldY = y;
@@ -184,6 +206,9 @@ public class Camera extends Pane {
             if (!startNewCheck) {
                 // check if a higher up thing is being drawn after a lower
                 if (y < oldY || (y == oldY && x < oldX)) {
+
+                    count++;
+
                     // Remove this item and re-add it one space to the left
                     g.getChildren().remove(n);
                     g.getChildren().add(j - 1, n);
@@ -217,12 +242,12 @@ public class Camera extends Pane {
         // get_____() + Tile.getTileWidth() - 1 adds 1 pixel less than a whole tile so any
         // partial tile will get counted but if the screen is at an exact tile value it
         // will not add anything
-        screenTilesWide = (int) ((getWidth() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + 2);
-        screenTilesTall = (int) ((getHeight() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + 2);
+        screenTilesWide = (int) ((getWidth() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + tileGap);
+        screenTilesTall = (int) ((getHeight() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + tileGap);
         // + 0.5 will only increase the value if there is already a 0.5 from division
         // + 1 only really makes sense if you draw out the tiles and realize which would be at the center without it
-        topLeftX = screenCenterTileX - (int)(screenTilesWide / 2.0 + 0.5) + 1;
-        topLeftY = screenCenterTileY - (int)(screenTilesTall / 2.0 + 0.5) + 1;
+        topLeftX = screenCenterTileX - (int)((double)screenTilesWide / 2.0 + 0.5) + 1;
+        topLeftY = screenCenterTileY - (int)((double)screenTilesTall / 2.0 + 0.5) + 1;
         changeTileX = screenCenterTileX - oldScreenCenterTileX;
         changeTileY = screenCenterTileY - oldScreenCenterTileY;
     }
@@ -235,12 +260,14 @@ public class Camera extends Pane {
      */
     private void updateAll() {
         visibleTiles.getChildren().clear();
-        standingGroup.getChildren().clear();
-        Tile[][] allTiles = Tile.getAllTiles();
+        for (int i = 0; i < standingGroup.getChildren().size(); i++) {
+            ((Group)standingGroup.getChildren().get(i)).getChildren().clear();
+        }
+        entities.clear();
 
         for (int i = topLeftY; i < topLeftY + screenTilesTall; i++) {
             for (int j = topLeftX; j < topLeftX + screenTilesWide; j++) {
-                display(allTiles[i][j]);
+                display(Tile.getAllTiles()[i][j]);
             }
         }
     }
@@ -250,12 +277,13 @@ public class Camera extends Pane {
      * sorted out easily.
      */
     private void addAllEntities(){
-        double[] playerCoords = shift(player.getPosX(), player.getPosY());;
-        //player.setTexture(new Image("/res/player(1).png"));
+        double[] playerCoords = shift(player.getPosX(), player.getPosY());
         ImageView playerImage = (new ImageView(player.getTexture()));
         playerImage.setX(playerCoords[0] - player.getWidth() / 2);
         playerImage.setY(playerCoords[1] - player.getHeight());
-        standingGroup.getChildren().add(playerImage);
+
+        int index = standingGroup.getChildren().size() / 2;
+        ((Group)standingGroup.getChildren().get(index)).getChildren().add(playerImage);
         entities.add(playerImage);
     }
 
@@ -264,11 +292,20 @@ public class Camera extends Pane {
      * Standing group will need to be sorted afterwords.
      */
     private void updateEntities(){
-        for (int i = 0; i < entities.size(); i++) {
-            standingGroup.getChildren().remove(entities.get(i));
+        removeEntities();
+        addAllEntities();
+    }
+
+    private void removeEntities(){
+        for (int i = standingGroup.getChildren().size() - 1; i >= 0; i--) {
+            Group g = (Group)standingGroup.getChildren().get(i);
+            for (int j = entities.size() - 1; j >= 0; j--) {
+                if(g.getChildren().remove(entities.get(j))){
+                    entities.remove(j);
+                }
+            }
         }
         entities.clear();
-        addAllEntities();
     }
 
     /**
@@ -278,6 +315,7 @@ public class Camera extends Pane {
      */
     private void updateSome(){
         updateCords();
+        updateStandingGroupPositions();
 
         int oldX = topLeftX - changeTileX;
         int oldY = topLeftY - changeTileY;
@@ -313,7 +351,7 @@ public class Camera extends Pane {
                 The next step is to find the difference between the left side and x with leftx - x
                 Now we can add the screen width and the left side again so
                 we are at the right side - the how much bigger x was the -1 is for 0 based indexing
-                 */
+                */
 
                 x = (screenTilesWide - 1) - x + 2 * topLeftX;
                 y = (screenTilesTall - 1) - y + 2 * topLeftY;
@@ -328,109 +366,19 @@ public class Camera extends Pane {
         double leftX = topLeft[0], rightX = leftX + screenTilesWide * Tile.getTileWidth();
         double topY = topLeft[1], bottomY = topY + screenTilesTall * Tile.getTileWidth();
 
+        for (int j = 0; j < standingGroup.getChildren().size(); j++) {
+            Group g = (Group)standingGroup.getChildren().get(j);
+            for (int i = g.getChildren().size() - 1; i >= 0; i--) {
+                ImageView stander = (ImageView) g.getChildren().get(i);
+                double x = stander.getX() + stander.getImage().getWidth() / 2;
+                double y = stander.getY() + stander.getImage().getHeight();
 
-        for (int i = standingGroup.getChildren().size() - 1; i >= 0; i--) {
-            ImageView stander = (ImageView)standingGroup.getChildren().get(i);
-            double x = stander.getX() + stander.getImage().getWidth() / 2;
-            double y = stander.getY() + stander.getImage().getHeight();
-
-            boolean outOfBoundsY = y < topY || y >= bottomY;
-            boolean outOfBoundsX = x < leftX || x >= rightX;
-            if(outOfBoundsY || outOfBoundsX){
-                standingGroup.getChildren().remove(i);
-            }
-        }
-    }
-
-    /**
-     * This method removes a vertical layer on the far right or left out of visible tiles
-     * and all their plants and entities from standing group. This method assumes that the groups have
-     * already been sorted.
-     *
-     * This method assumes that only image views are in the children lists.
-     */
-    private void removeTileLayerSide(boolean rightSide){
-        int startIndex = (screenTilesWide) * (screenTilesTall - 1);
-        if(rightSide){
-            startIndex += screenTilesWide - 1;
-        }
-
-        for (int i = startIndex; i >= 0; i -= screenTilesWide) {
-            ImageView tile = (ImageView)visibleTiles.getChildren().get(i);
-            double x = tile.getX();
-            double y = tile.getY();
-            double w = Tile.getTileWidth();
-
-            for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
-                ImageView stander = (ImageView) standingGroup.getChildren().get(j);
-                double xx = stander.getX() + stander.getImage().getWidth() / 2;
-
-                // y axis does not matter since
-                if(xx >= x && xx < x + w){
-                    standingGroup.getChildren().remove(j);
+                boolean outOfBoundsY = y < topY || y >= bottomY;
+                boolean outOfBoundsX = x < leftX || x >= rightX;
+                if (outOfBoundsY || outOfBoundsX) {
+                    g.getChildren().remove(i);
                 }
             }
-
-
-            visibleTiles.getChildren().remove(i);
-        }
-    }
-
-    private void removeTileLayerTopBot(boolean topSide){
-        int startIndex = screenTilesWide * (screenTilesTall - 1);
-        if(topSide){
-            // top left corner
-            startIndex = 0;
-        }
-
-        // - 1 for 0 based indexing
-        for (int i = startIndex + screenTilesWide - 1; i >= startIndex; i --) {
-            ImageView tile = (ImageView)visibleTiles.getChildren().get(i);
-            double x = tile.getX();
-            double y = tile.getY();
-            double w = Tile.getTileWidth();
-
-            for (int j = standingGroup.getChildren().size() - 1; j >= 0; j--) {
-                ImageView stander = (ImageView) standingGroup.getChildren().get(j);
-                double yy = stander.getY() + stander.getImage().getHeight();
-
-                // x axis does not matter since
-                if(yy >= y && yy < y + w){
-                    standingGroup.getChildren().remove(j);
-                }
-            }
-
-            visibleTiles.getChildren().remove(i);
-        }
-    }
-
-    /**
-     * This method adds a vertical layer of tiles and their plants to the given side of
-     * the screen.
-     *
-     * WARNING: This method breaks sorting.
-     */
-    private void addTileLayerSide(boolean rightSide){
-        int j = 0;
-        if(rightSide){
-            j = screenTilesWide - 1;
-        }
-
-        for (int i = 0; i < screenTilesTall; i++) {
-            display(Tile.getAllTiles()[topLeftY + i][topLeftX + j]);
-            // it does not matter where it is placed in the children list since it will be sorted afterwords
-        }
-    }
-
-    private void addTileLayerTopBot(boolean topSide){
-        int j = screenTilesTall - 1;
-        if(topSide){
-            j = 0;
-        }
-
-        for (int i = 0; i < screenTilesWide; i++) {
-            display(Tile.getAllTiles()[topLeftY + j][topLeftX + i]);
-            // it does not matter where it is placed in the children list since it will be sorted afterwords
         }
     }
 
@@ -451,16 +399,73 @@ public class Camera extends Pane {
                 r.setY(r.getY() + changeY);
             }
         }
-        for (Node n : standingGroup.getChildren()){
-            // visibleTiles will only ever contain a rectangle or and image view
-            if (n instanceof ImageView) {
-                ImageView i = (ImageView) n;
-                i.setX(i.getX() + changeX);
-                i.setY(i.getY() + changeY);
-            } else {
-                Rectangle r = (Rectangle) n;
-                r.setX(r.getX() + changeX);
-                r.setY(r.getY() + changeY);
+
+        for (int j = 0; j < standingGroup.getChildren().size(); j++) {
+            Group g = (Group) standingGroup.getChildren().get(j);
+            for (Node n : g.getChildren()) {
+                // visibleTiles will only ever contain a rectangle or and image view
+                if (n instanceof ImageView) {
+                    ImageView i = (ImageView) n;
+                    i.setX(i.getX() + changeX);
+                    i.setY(i.getY() + changeY);
+                } else {
+                    Rectangle r = (Rectangle) n;
+                    r.setX(r.getX() + changeX);
+                    r.setY(r.getY() + changeY);
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks to see if every stander is still in the right group and if not moves it.
+     */
+    private void updateStandingGroupPositions(){
+        for (int j = 0; j < standingGroup.getChildren().size(); j++) {
+            Group g = (Group) standingGroup.getChildren().get(j);
+            for (int l = 0; l < g.getChildren().size(); l++) {
+                Node n = g.getChildren().get(l);
+                double y = 0;
+                if (n instanceof ImageView) {
+                    ImageView i = (ImageView) n;
+                    y = i.getY();
+                    y += i.getImage().getHeight();
+                } else if (n instanceof Rectangle) {
+                    Rectangle r = (Rectangle) n;
+                    y = r.getY();
+                    y += r.getHeight();
+                }
+
+                double percentDown = ((y + screenCenterY - getHeight() / 2.0)
+                        - topLeftY * Tile.getTileWidth()) / (screenTilesTall * Tile.getTileWidth());
+                double percentInterval = 1 / ((double)standingGroup.getChildren().size());
+
+                for (int k = 1; k <= standingGroup.getChildren().size(); k++) {
+                    // find the group the node should be in
+                    if(percentDown < k * percentInterval || k == standingGroup.getChildren().size()){
+                        // check if it is the same as the group it is already in
+                        if(k != j){
+
+                            // Check for index out of bounds
+                            if(k >= standingGroup.getChildren().size()){
+                                k = standingGroup.getChildren().size() - 1;
+                            }else if(k < 0){
+                                k = 0;
+                            }
+                            // check if an index out of bounds put it back to the same group
+                            if(k == j){
+                                // no need to move it out of it's positonto the back of the list just to be sorted back here
+                                break;
+                            }
+
+                            g.getChildren().remove(n);
+                            l--; // so we don't skip the next node which has just been moved to this slot
+                            ((Group)standingGroup.getChildren().get(k)).getChildren().add(n);
+                        }
+                        //((Group)standingGroup.getChildren().get(j - 1)).getChildren().add(i);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -526,5 +531,13 @@ public class Camera extends Pane {
         for (int i = 0; i < Group.getChildren().size(); i ++) {
             GUIGroup.getChildren().add(Group.getChildren().get(i));
         }
+    }
+
+    public double getScreenCenterY() {
+        return screenCenterY;
+    }
+
+    public double getScreenCenterX() {
+        return screenCenterX;
     }
 }
