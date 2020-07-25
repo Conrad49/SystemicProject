@@ -38,6 +38,7 @@ public abstract class Entity {
 
     static Vector contactPoint = new Vector(0, 0);
     private Vector contactNormal = new Vector(0, 0);
+    double time = 0;
     Vector mouseVec = new Vector(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y);
     Vector dir = mouseVec.subtract(position);
 
@@ -45,8 +46,6 @@ public abstract class Entity {
     private static final Vector DOWN = new Vector(0, 1);
     private static final Vector LEFT = new Vector(-1, 0);
     private static final Vector RIGHT = new Vector(1, 0);
-
-    double time = 0;
 
     public Animation getCurrentAnimation() {
         return currentAnimation;
@@ -160,7 +159,7 @@ public abstract class Entity {
      *
      * This method was made with the complete help of this video: https://www.youtube.com/watch?v=8JJ-4JgR7Dg
      */
-    public boolean rayVsRect(Vector oPosition, Vector ray, Rectangle target){
+    public Object[] rayVsRect(Vector oPosition, Vector ray, Rectangle target){
         Vector targetPos = new Vector(target.getX(), target.getY());
         Vector near = targetPos.subtract(oPosition).divide(ray);
         Vector far = targetPos.add(target.getHeight()).subtract(oPosition);
@@ -179,7 +178,7 @@ public abstract class Entity {
         }
 
         if(near.getX() > far.getY() || near.getY() > far.getX()){
-            return false;
+            return new Object[] {false};
         }
 
         double hitNearXVal = Math.max(near.getX(), near.getY());
@@ -187,7 +186,7 @@ public abstract class Entity {
         double hitFarXVal = Math.min(far.getX(), far.getY());
 
         if(hitFarXVal < 0){
-            return false;
+            return new Object[] {false};
         }
 
         contactPoint = ray.multiply(hitNearXVal);
@@ -212,7 +211,7 @@ public abstract class Entity {
             }
         }
 
-        return true;
+        return new Object[] {true, contactNormal, contactPoint, time};
     }
 
 
@@ -221,10 +220,10 @@ public abstract class Entity {
      * other Rectangle<p/>
      * This method was made with the complete help of this video: https://www.youtube.com/watch?v=8JJ-4JgR7Dg
      */
-    public boolean movingRectVcRect(Entity in, Rectangle target){
+    public Object[] movingRectVcRect(Entity in, Rectangle target){
         Rectangle inputRectangle = in.boundsBox;
         if(in.getVelocity().getX() == 0 && in.getVelocity().getY() == 0){
-            return false;
+            return new Object[] {false};
         }
 
         Rectangle adjustedTarget = new Rectangle();
@@ -237,13 +236,15 @@ public abstract class Entity {
         adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth());
         adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight());
 
-        if(rayVsRect(in.position, in.getVelocity(), adjustedTarget)){
+        Object[] results = rayVsRect(in.position, in.getVelocity(), adjustedTarget);
+
+        if((boolean)results[0]){
             if(time <= 1){
-                return true;
+                return results;
             }
         }
 
-        return false;
+        return new Object[] {false};
     }
 
     public static void drawContactPoint(){

@@ -200,15 +200,19 @@ public class Main extends Application {
             box.setY(coords[1]);
             group.getChildren().add(box);
             if (tile.isSolid()) {
-                if (player.movingRectVcRect(player, tile.getBoundsBox())) {
+                Object[] stuffs = player.movingRectVcRect(player, tile.getBoundsBox());
+                if ((boolean)stuffs[0]) {
+                    Vector normal = (Vector) stuffs[1];
+                    Vector point = (Vector) stuffs[2];
+                    double ctime = (double) stuffs[3];
 
-
-                    player.setVelocity(player.getContactNormal().multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-player.getTime()));
+                    //player.setVelocity(player.getContactNormal().multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-player.getTime()));
+                    player.setVelocity(normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime));
 
                     /*player.setVelocity(new Vector(0, 0));
                     Player.setMoving(false);
                     System.out.println(player.getVelocity().getX());*/
-                    System.out.println(1-player.getTime());
+                    System.out.println(1-ctime);
                     colliding = true;
                 }
             }
