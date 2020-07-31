@@ -152,7 +152,6 @@ public class Main extends Application {
      * This method does all of that and everything related to displaying that frame.
      */
     private static void tickAndRender() {
-
         // a calculation for the time between updates taken from:
         // https://gamedev.stackexchange.com/questions/111741/calculating-delta-time
         // don't use for now VVV
@@ -160,19 +159,22 @@ public class Main extends Application {
         delta_time = (int) ((time - last_time) / 1000000);
         last_time = time;
 
-        Chunk[] chunks = player.getSurroundingChunks();
         player.tick();
-
+        checkPlayerCollision();
         //for(Game.Chunk chunk : chunks){
         //    chunk.tick();
         //}
 
+        // ?????????
         player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
                 player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
+        tileTick();
+        root.update();
+    }
 
+    private static void checkPlayerCollision(){
         Tile[] surroundingTiles = new Tile[9];
         Tile[][] allTiles = Tile.getAllTiles();
-
 
         // above
         surroundingTiles[0] = allTiles[player.getTileY() - 1][player.getTileX()];
@@ -225,10 +227,6 @@ public class Main extends Application {
             }
         }
         Camera.setGUIGroup(Entity.group);
-
-        tileTick();
-
-        root.update();
     }
 
     private static void tileTick(){
