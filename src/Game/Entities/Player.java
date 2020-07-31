@@ -49,25 +49,6 @@ public class Player extends Entity {
     @Override
     public void tick() {
         super.tick();
-        moving = false;
-
-        double magnitude = Math.sqrt(Math.pow(this.getDirection().getX(), 2) + Math.pow(this.getDirection().getY(), 2));
-
-
-        if (magnitude != 0) {
-            this.getDirection().normalize(magnitude);
-        }
-
-        this.getDirection().setToVec(this.getDirection().multiply(speed));
-
-        if (!Main.colliding) {
-            this.getVelocity().setToVec(this.getDirection());
-        }
-
-        //if (Main.colliding) {
-            this.addToPositionX(this.getVelocity().getX());
-            this.addToPositionY(this.getVelocity().getY());
-        //}
 
         handleKeyPresses();
 

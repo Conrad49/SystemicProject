@@ -161,6 +161,7 @@ public class Main extends Application {
         last_time = time;
 
         Chunk[] chunks = player.getSurroundingChunks();
+        player.tick();
 
         //for(Game.Chunk chunk : chunks){
         //    chunk.tick();
@@ -191,6 +192,7 @@ public class Main extends Application {
 
         surroundingTiles[4] = allTiles[player.getTileY()][player.getTileX()];
 
+        //diagonals
         surroundingTiles[5] = allTiles[player.getTileY() - 1][player.getTileX() - 1];
         surroundingTiles[6] = allTiles[player.getTileY() - 1][player.getTileX() + 1];
         surroundingTiles[7] = allTiles[player.getTileY() + 1][player.getTileX() + 1];
@@ -211,20 +213,19 @@ public class Main extends Application {
                 if ((boolean)stuffs[0]) {
                     Vector normal = (Vector) stuffs[1];
                     Vector point = (Vector) stuffs[2];
+
                     double[] pointShift = shift(point.getX(), point.getY());
                     Entity.group.getChildren().add(new Circle(pointShift[0], pointShift[1], 5));
+
                     double ctime = (double) stuffs[3];
 
-                    //player.setVelocity(player.getContactNormal().multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-player.getTime()));
                     player.setVelocity(player.getVelocity().add(((normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime)))));
-                    System.out.println(1-ctime);
                     colliding = true;
                 }
             }
         }
         Camera.setGUIGroup(Entity.group);
 
-        player.tick();
         tileTick();
 
         root.update();

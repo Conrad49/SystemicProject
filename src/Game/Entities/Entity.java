@@ -26,6 +26,7 @@ public abstract class Entity {
     int tileY;
     double posX;
     double posY;
+    double speed = 5;
     boolean isVisible = false;
     // this is a stupid sloppy fix for the special case that is our only entitiy the player
     // when more are added this will be moved to displayable and the fixed values will be removed
@@ -90,6 +91,21 @@ public abstract class Entity {
         this.tileY = (int)this.posY / Tile.getTileWidth();
         this.posX = this.position.getX();
         this.posY = this.position.getY();
+
+        this.addToPositionX(this.getVelocity().getX());
+        this.addToPositionY(this.getVelocity().getY());
+
+        System.out.println(this.position.getX() + ", " + this.position.getY());
+
+        double magnitude = Math.sqrt(Math.pow(this.getDirection().getX(), 2) + Math.pow(this.getDirection().getY(), 2));
+
+
+        if (magnitude != 0) {
+            this.getDirection().normalize(magnitude);
+        }
+
+        this.getVelocity().setToVec(this.getDirection().multiply(speed));
+
     }
 
     public void checkVisiblity(Player p){
@@ -239,7 +255,7 @@ public abstract class Entity {
         adjustedTarget.setY(target.getY() - (inputRectangle.getHeight() / 2));
 
         //expands right and downwards
-        adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth());
+        adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth() / 2);
         adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight());
 
 
@@ -247,7 +263,7 @@ public abstract class Entity {
         Rectangle displayRect = new Rectangle(coords[0], coords[1], adjustedTarget.getWidth(), adjustedTarget.getHeight());
         //group.getChildren().add(displayRect);
 
-        Object[] results = rayVsRect(in.position, in.getVelocity(), adjustedTarget);
+        Object[] results = rayVsRect(in.position, in.getVelocity().multiply(3), adjustedTarget);
 
         if((boolean)results[0]){
             if(time <= 1){
