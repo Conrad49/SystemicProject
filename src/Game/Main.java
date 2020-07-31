@@ -35,7 +35,7 @@ public class Main extends Application {
         Tile.setMapDimensions(999, 999);
         launch(args);
     }
-    private static Stage stage; //
+    private static Stage stage;
     private static Scene mainScene;
     private static Camera root;
     public static int slowVal = 1;
@@ -52,6 +52,7 @@ public class Main extends Application {
 
 
     private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 32));
+    public static Group group = new Group();
 
 
 
@@ -196,7 +197,7 @@ public class Main extends Application {
         surroundingTiles[8] = allTiles[player.getTileY() + 1][player.getTileX() - 1];
 
         colliding = false;
-        Group group = new Group();
+        group = new Group();
         for(Tile tile : surroundingTiles){
             Entity.drawContactPoint();
             Rectangle box = new Rectangle(tile.getBoundsBox().getX(), tile.getBoundsBox().getY(), tile.getBoundsBox().getWidth(), tile.getBoundsBox().getHeight());
@@ -215,7 +216,7 @@ public class Main extends Application {
                     double ctime = (double) stuffs[3];
 
                     //player.setVelocity(player.getContactNormal().multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-player.getTime()));
-                    player.setVelocity(normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime));
+                    player.setVelocity(player.getVelocity().add(((normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime)))));
                     System.out.println(1-ctime);
                     colliding = true;
                 }

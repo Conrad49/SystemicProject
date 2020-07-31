@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import org.w3c.dom.css.Rect;
@@ -165,6 +166,10 @@ public abstract class Entity {
         Vector near = targetPos.subtract(oPosition).divide(ray);
         Vector far = targetPos.add(target.getHeight()).subtract(oPosition);
         far.setToVec(far.divide(ray));
+        double[] coords = Main.shift(oPosition.getX(), oPosition.getY());
+        Vector displayPos = new Vector(coords[0], coords[1]);
+        Line rayLine = new Line(displayPos.getX(), displayPos.getY(), displayPos.getX() + ray.getX(), displayPos.getY() + ray.getY());
+        group.getChildren().add(rayLine);
 
         if(near.getX() > far.getX()){
             double temp = near.getX();
@@ -230,12 +235,12 @@ public abstract class Entity {
         Rectangle adjustedTarget = new Rectangle();
 
         //expands left and upwards
-        adjustedTarget.setX(target.getX() - (inputRectangle.getWidth() / 2) + 1);
-        adjustedTarget.setY(target.getY() - (inputRectangle.getHeight() / 2) + 1);
+        adjustedTarget.setX(target.getX() - (inputRectangle.getWidth() / 2));
+        adjustedTarget.setY(target.getY() - (inputRectangle.getHeight() / 2));
 
         //expands right and downwards
-        adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth() + 1);
-        adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight() + 1);
+        adjustedTarget.setWidth(target.getWidth() + inputRectangle.getWidth());
+        adjustedTarget.setHeight(target.getHeight() + inputRectangle.getHeight());
 
 
         double[] coords = Main.shift(adjustedTarget.getX(), adjustedTarget.getY());
