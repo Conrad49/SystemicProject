@@ -95,8 +95,6 @@ public abstract class Entity {
         this.addToPositionX(this.getVelocity().getX());
         this.addToPositionY(this.getVelocity().getY());
 
-        System.out.println(this.position.getX() + ", " + this.position.getY());
-
         double magnitude = Math.sqrt(Math.pow(this.getDirection().getX(), 2) + Math.pow(this.getDirection().getY(), 2));
 
 
