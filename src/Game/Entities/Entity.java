@@ -134,6 +134,8 @@ public abstract class Entity {
             Shape intersect = Shape.intersect(shiftedRect, tileBounds);
             if (intersect.getBoundsInLocal().getWidth() != -1) {
 
+                this.currentAnimation.resetCount();
+
                 // left
                 if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getY() / tile.getBoundsBox().getHeight()) == this.tileY){
                     this.position.setX(this.position.getX() + intersect.getBoundsInLocal().getWidth());
