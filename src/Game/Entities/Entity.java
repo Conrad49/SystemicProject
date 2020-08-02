@@ -267,6 +267,7 @@ public abstract class Entity {
 
         if((boolean)results[0]){
             if(time <= 1){
+                this.currentAnimation.resetCount();
                 return results;
             }
         }
