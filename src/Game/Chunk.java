@@ -7,7 +7,7 @@ import Game.plants.Plant;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Chunk {
+public class Chunk implements Serializable{
     private static final int size = 10;
     ArrayList<Entity> entities;
     Tile[][] tiles;
@@ -46,6 +46,7 @@ public class Chunk {
         this.y = y;
 
         allChunks[x][y] = this;
+        save();
     }
 
     public void tick (){

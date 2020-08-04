@@ -32,7 +32,7 @@ public class Main extends Application {
 
     public static void main(String[] args)
     {
-        Tile.setMapDimensions(1000, 1000);
+        Tile.setMapDimensions(100, 100);
         launch(args);
     }
     private static Stage stage;
@@ -82,9 +82,15 @@ public class Main extends Application {
             System.out.println("generated");
             //makeWorldFromFile();
         } else {
-            boolean exists = new File("map.txt").exists();
+            boolean exists = true;//new File("map.txt").exists();
             if(exists){
-                System.out.println("Running with existing map file");
+                System.out.println("Running with existing map files");
+
+                for (int chunkY = 0; chunkY < Tile.getMapHeight() / Chunk.getSize(); chunkY++) {
+                    for (int chunkX = 0; chunkX < Tile.getMapWidth() / Chunk.getSize(); chunkX++) {
+                        Chunk.loadChunk(chunkX, chunkY);
+                    }
+                }
                 //makeWorldFromFile();
             } else {
                 System.out.println("No existing map file");

@@ -1,19 +1,21 @@
 package Game.Tiles;
 
+import Game.SerializableImage;
 import Game.displayablesHidingPlace.Displayable;
 import Game.plants.Plant;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public abstract class Tile extends Displayable {
+public abstract class Tile extends Displayable implements Serializable {
 
     static int width = 16 * 4;
 
-    Color backColor;
+    //Color backColor;
     static boolean isTextured = false;
     boolean isInteractiveTile;
     private static int mapWidth;
@@ -21,20 +23,17 @@ public abstract class Tile extends Displayable {
     private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
     private static int xCount = 0;
     private static int yCount = 0;
-    Rectangle boundsBox;
-    Image texture;
+    SerializableImage texture;
     boolean isSolid;
 
     protected ArrayList<Plant> plants = new ArrayList<>(); // Plants growing on this tile.
 
     public Tile(int posX, int posY, Color backColor){
         super(posX, posY, width, width, true);
-        this.backColor = backColor;
+        //this.backColor = backColor;
 
         this.isTextured = false;
 
-        this.boundsBox = new Rectangle(posX, posY, width, width);
-        //this.boundsBox.setFill(backColor);
 
         allTiles[posX / width][posY / width] = this;
     }
@@ -44,7 +43,6 @@ public abstract class Tile extends Displayable {
 
         this.isTextured = true;
 
-        this.boundsBox = new Rectangle(posX, posY, width, width);
         //this.boundsBox.setFill(backColor);
 
         allTiles[xCount][yCount] = this;
@@ -56,7 +54,7 @@ public abstract class Tile extends Displayable {
     }
 
     public Rectangle getBoundsBox() {
-        return boundsBox;
+        return new Rectangle(x, y, width, width);
     }
 
     public void boundingLines(){         /* TODO: either use rectangle object for ray intersection or four lines
@@ -77,9 +75,9 @@ public abstract class Tile extends Displayable {
         return width;
     }
 
-    public Color getBackColor() {
-        return backColor;
-    }
+    //public Color getBackColor() {
+    //    return backColor;
+    //}
 
     public boolean isTextured() {
         return isTextured;
@@ -108,7 +106,7 @@ public abstract class Tile extends Displayable {
     }
 
     public void setTexture(Image texture) {
-        this.texture = texture;
+        this.texture = new SerializableImage(texture);
         isTextured = true;
     }
 

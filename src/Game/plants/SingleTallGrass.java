@@ -1,5 +1,6 @@
 package Game.plants;
 
+import Game.SerializableImage;
 import Game.Tiles.DirtTile;
 import Game.Tiles.GrassTile;
 import Game.Tiles.Tile;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  */
 public class SingleTallGrass extends Plant{
     private static ArrayList<String> growsOn = new ArrayList<>();
-    private static ArrayList<Image> images = new ArrayList<>();
+    private static ArrayList<SerializableImage> images = new ArrayList<>();
     private static boolean firstPlant = true;
     private static final double joinWidth = 32;//8 in game pixels
     public static final int maxHealth = 20, maxEnergy = 10;
@@ -33,7 +34,7 @@ public class SingleTallGrass extends Plant{
         if(firstPlant){
             growsOn.add(GrassTile.tileCode);
             for (int i = 1; i <= 5; i++) {
-                images.add(new Image("/res/plants/TallGrass/SingleTallGrass" + i + ".png"));
+                images.add(new SerializableImage("/res/plants/TallGrass/SingleTallGrass" + i + ".png"));
             }
 
             firstPlant = false;
