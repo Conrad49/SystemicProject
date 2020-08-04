@@ -1,6 +1,5 @@
 package Game.plants;
 
-import Game.SerializableImage;
 import Game.Tiles.DirtTile;
 import Game.Tiles.GrassTile;
 import Game.Tiles.Tile;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
  */
 public class SingleTallGrass extends Plant{
     private static ArrayList<String> growsOn = new ArrayList<>();
-    private static ArrayList<SerializableImage> images = new ArrayList<>();
+    private static ArrayList<String> images = new ArrayList<>();
     private static boolean firstPlant = true;
     private static final double joinWidth = 32;//8 in game pixels
     public static final int maxHealth = 20, maxEnergy = 10;
@@ -34,7 +33,7 @@ public class SingleTallGrass extends Plant{
         if(firstPlant){
             growsOn.add(GrassTile.tileCode);
             for (int i = 1; i <= 5; i++) {
-                images.add(new SerializableImage("/res/plants/TallGrass/SingleTallGrass" + i + ".png"));
+                images.add("/res/plants/TallGrass/SingleTallGrass" + i + ".png");
             }
 
             firstPlant = false;
@@ -83,7 +82,7 @@ public class SingleTallGrass extends Plant{
         // the -1 on health takes away the one special case of 1 * 5 and replaces it with
         // a simple 0 * 5 so we are now going 0 1 2 3 4
         int i = (int)(((double)(health - 1) / maxHealth) * 5);
-        return images.get(i);
+        return new Image(images.get(i));
     }
 
     @Override

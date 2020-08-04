@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class TallGrass extends Plant{
     private static ArrayList<String> growsOn = new ArrayList<>();
-    private static ArrayList<Image> images = new ArrayList<>();
+    private static ArrayList<String> images = new ArrayList<>();
     private static boolean firstPlant = true;
     private static final double joinWidth = 10;
 
@@ -26,7 +26,7 @@ public class TallGrass extends Plant{
         if(firstPlant){
             growsOn.add(GrassTile.tileCode);
             for (int i = 1; i <= 5; i++) {
-                images.add(new Image("/res/plants/TallGrass/TallGrass" + i + ".png"));
+                images.add("/res/plants/TallGrass/TallGrass" + i + ".png");
             }
 
             firstPlant = false;
@@ -75,7 +75,7 @@ public class TallGrass extends Plant{
         // the -1 on health takes away the one special case of 1 * 5 and replaces it with
         // a simple 0 * 5 so we are now going 0 1 2 3 4
         int i = (int)(((double)(health - 1) / maxHealth) * 5);
-        return images.get(i);
+        return new Image(images.get(i));
     }
 
     @Override
