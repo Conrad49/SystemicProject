@@ -135,6 +135,12 @@ public class SingleTallGrass extends Plant{
         // -1 makes it the top left corner of the 3 by 3 square
         int x = (int)t.getX() / Tile.getTileWidth() - 1;
         int y = (int)t.getY() / Tile.getTileWidth() - 1;
+        if(x < 0){
+            x = 0;
+        }
+        if(y < 0){
+            y = 0;
+        }
         Tile[][] tiles = Tile.getAllTiles();
 
 

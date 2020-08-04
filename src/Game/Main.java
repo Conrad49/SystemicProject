@@ -32,7 +32,7 @@ public class Main extends Application {
 
     public static void main(String[] args)
     {
-        Tile.setMapDimensions(999, 999);
+        Tile.setMapDimensions(1000, 1000);
         launch(args);
     }
     private static Stage stage;
@@ -78,15 +78,13 @@ public class Main extends Application {
         int response = reader.nextInt();
 
         if (response == 1) {
-            double rand = Math.random() * 50;
             NoiseBiomeGen.generateWorld();
-            //ImprovedNoise.generateNoiseArrayFile(rand);
-            makeWorldFromFile();
+            //makeWorldFromFile();
         } else {
             boolean exists = new File("map.txt").exists();
             if(exists){
                 System.out.println("Running with existing map file");
-                makeWorldFromFile();
+                //makeWorldFromFile();
             } else {
                 System.out.println("No existing map file");
                 System.out.println("Stopping...");

@@ -1,17 +1,20 @@
 package Game.testing;
 
-import Game.Tiles.Tile;
+import Game.Chunk;
+import Game.Tiles.*;
 import Game.biomes.Biome;
+import Game.plants.Plant;
+import Game.plants.SingleTallGrass;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class NoiseBiomeGen extends Application {
@@ -230,100 +233,141 @@ public class NoiseBiomeGen extends Application {
      * Generates a new text document using this form of biome based generation
      */
     public static void generateWorld() {
-        FileWriter fw;
-        try {
-            fw = new FileWriter("map.txt");
 
-            double xCount = 0;
-            double yCount = 0;
-            zCount += 50;
-            double zOffset = 10;
-            double inc = 0.005;
-            float roughness = 0.55f;
-            int octaves = 10;
+        double xCount = 0;
+        double yCount = 0;
+        zCount += 50;
+        double zOffset = 10;
+        double inc = 0.005;
+        float roughness = 0.55f;
+        int octaves = 10;
 
-            new Biome("frozen lake", "low", "low", "low");
-            new Biome("lake", "high", "low", "low");
-            new Biome("swamp", "medium", "low", "low");
-            new Biome("ocean", "low medium high", "high", "low");
-            new Biome("valley", "low medium high", "medium", "low");
+        new Biome("frozen lake", "low", "low", "low");
+        new Biome("lake", "high", "low", "low");
+        new Biome("swamp", "medium", "low", "low");
+        new Biome("ocean", "low medium high", "high", "low");
+        new Biome("valley", "low medium high", "medium", "low");
 
-            new Biome("fields", "medium", "low medium", "medium");
-            new Biome("snow", "low", "low medium", "medium");
-            new Biome("forest", "low medium high", "high", "medium");
-            new Biome("desert", "high", "low medium", "medium");
+        new Biome("fields", "medium", "low medium", "medium");
+        new Biome("snow", "low", "low medium", "medium");
+        new Biome("forest", "low medium high", "high", "medium");
+        new Biome("desert", "high", "low medium", "medium");
 
-            new Biome("volcano", "high", "low", "high");
-            new Biome("peaks", "high", "medium", "high");
-            new Biome("peaks", "medium", "low", "high");
-            new Biome("hills", "low medium high", "high", "high");
-            new Biome("plateau", "medium", "medium", "high");
-            new Biome("snow peaks", "low", "low medium", "high");
+        new Biome("volcano", "high", "low", "high");
+        new Biome("peaks", "high", "medium", "high");
+        new Biome("peaks", "medium", "low", "high");
+        new Biome("hills", "low medium high", "high", "high");
+        new Biome("plateau", "medium", "medium", "high");
+        new Biome("snow peaks", "low", "low medium", "high");
 
-            for(int i = 0; i < Tile.getMapHeight(); i ++) {
-                for (int j = 0; j < Tile.getMapWidth(); j++) {
-                    double noiseVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount,  zCount) + 1) / 2.0;
-                    double tempVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount,  zCount + zOffset) + 1) / 2.0;
-                    double moistureVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + 2 * zOffset) + 1) / 2.0;
-                    double elevation = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount+ 3 * zOffset) + 1) / 2.0;
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
 
-                    String biome = biome(elevation, tempVal, moistureVal);
+        Image grassImage = new Image("/res/GrassTile.png");
+        Image sandImage = new Image("/res/SandTile.png");
+        Image iceImage = new Image("/res/IceTile.png");
+        Image lavaImage = new Image("/res/LavaTile.png");
+        Image dirtImage = new Image("/res/DirtTile.png");
+        Image stoneImage = new Image("/res/StoneTile.png");
+        Image snowImage = new Image("/res/SnowTile.png");
+        Image waterImage = new Image("/res/WaterTile.png");
 
-                    if(i == 183 && j == 172){
-                        System.out.println("hi");
+        int size = Chunk.getSize();
+
+        for (int chunkY = 0; chunkY < Tile.getMapHeight() / size; chunkY++) {
+            for (int chunkX = 0; chunkX < Tile.getMapWidth() / size; chunkX++) {
+                xCount = chunkX * inc * size;
+                yCount = chunkY * inc * size;
+
+                // new chunk
+                Tile[][] tiles = new Tile[size][size];
+                ArrayList<Plant> plants = new ArrayList<>();
+
+                for (int j = 0; j < size; j++) {
+                    for (int i = 0; i < size; i++) {
+                        double tempVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + zOffset) + 1) / 2.0;
+                        double moistureVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + 2 * zOffset) + 1) / 2.0;
+                        double elevation = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + 3 * zOffset) + 1) / 2.0;
+
+                        String biome = biome(elevation, tempVal, moistureVal);
+
+                        Tile tile;
+
+                        double test = (chunkX * size + i) * Tile.getTileWidth();
+                        double test2 = (chunkY * size + j) * Tile.getTileWidth();
+
+                        switch (biome) {
+                            case "fields":
+
+                            case "forest":
+
+                            case "valley":
+
+                            case "hills":
+
+                            case "plateau":
+                                tile = new GrassTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
+                                tile.setTexture(grassImage);
+
+                                // For testing purposes this should add tall grass to every 4th grass tile
+                                int count = rand.nextInt(4, 6);
+                                for (int k = 0; k < count; k++) {
+                                    Plant p = new SingleTallGrass(
+                                            rand.nextInt(0, SingleTallGrass.getMaxHealth()),
+                                            rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
+                                            i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
+                                            j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()));
+
+                                    tile.addPlant(p);
+                                    plants.add(p);
+                                }
+                                break;
+                            case "snow":
+
+                            case "snow peaks":
+                                tile = new SnowTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
+                                tile.setTexture(snowImage);
+                                break;
+                            case "desert":
+                                tile = new SandTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
+                                tile.setTexture(sandImage);
+                                break;
+                            case "volcano":
+                                tile = new LavaTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
+                                tile.setTexture(lavaImage);
+                                break;
+                            case "peaks":
+                                tile = new StoneTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
+                                tile.setTexture(stoneImage);
+                                break;
+                            case "frozen lake":
+                                tile = new IceTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
+                                tile.setTexture(iceImage);
+                                break;
+                            case "swamp":
+
+                            case "lake":
+
+                            case "ocean":
+                                tile = new WaterTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
+                                tile.setTexture(waterImage);
+                                break;
+                            default:
+                                System.out.println("No biome case found");
+                                tile = new GrassTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());;
+                                break;
+                        }
+
+                        tiles[i][j] = tile;
+                        xCount += inc;
                     }
-
-                    switch(biome){
-                        case "fields":
-
-                        case "forest":
-
-                        case "valley":
-
-                        case "hills":
-
-                        case "swamp":
-
-                        case "plateau":
-                            fw.write("g,");
-                            break;
-                        case "snow":
-
-                        case "snow peaks":
-                            fw.write("o,");
-                            break;
-                        case "desert":
-                            fw.write("a,");
-                            break;
-                        case "volcano":
-                            fw.write("l,");
-                            break;
-                        case "peaks":
-                            fw.write("s,");
-                            break;
-                        case "frozen lake":
-                            fw.write("i,");
-                            break;
-                        case "lake":
-
-                        case "ocean":
-                            fw.write("w,");
-                            break;
-                        default:
-                            System.out.println("eek");
-                            fw.write("g,");
-                            break;
-                    }
-                    xCount += inc;
+                    xCount = chunkX * inc * size;
+                    yCount += inc;
                 }
-                xCount = 0;
-                yCount += inc;
-                fw.write("\n");
+                //chunk complete
+                Chunk c = new Chunk(null, tiles, plants, chunkX, chunkY);
             }
-
-            fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
+
+
 }
