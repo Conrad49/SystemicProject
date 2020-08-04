@@ -176,28 +176,28 @@ public class Main extends Application {
         Tile[][] allTiles = Tile.getAllTiles();
 
         // above
-        surroundingTiles[0] = allTiles[player.getTileY() - 1][player.getTileX()];
+        surroundingTiles[0] = allTiles[player.getTileX()][player.getTileY() - 1];
         //surroundingTiles[0].backColor = Color.RED;
 
         // below
-        surroundingTiles[1] = allTiles[player.getTileY() + 1][player.getTileX()];
+        surroundingTiles[1] = allTiles[player.getTileX()][player.getTileY() + 1];
         //surroundingTiles[1].backColor = Color.BLUE;
 
         // left
-        surroundingTiles[2] = allTiles[player.getTileY()][player.getTileX() - 1];
+        surroundingTiles[2] = allTiles[player.getTileX() - 1][player.getTileY()];
         //surroundingTiles[2].backColor = Color.PALEGOLDENROD;
 
         // right
-        surroundingTiles[3] = allTiles[player.getTileY()][player.getTileX() + 1];
+        surroundingTiles[3] = allTiles[player.getTileX() + 1][player.getTileY()];
         //surroundingTiles[3].backColor = Color.GRAY;
 
-        surroundingTiles[4] = allTiles[player.getTileY()][player.getTileX()];
+        surroundingTiles[4] = allTiles[player.getTileX()][player.getTileY()];
 
         //diagonals
-        surroundingTiles[5] = allTiles[player.getTileY() - 1][player.getTileX() - 1];
-        surroundingTiles[6] = allTiles[player.getTileY() - 1][player.getTileX() + 1];
-        surroundingTiles[7] = allTiles[player.getTileY() + 1][player.getTileX() + 1];
-        surroundingTiles[8] = allTiles[player.getTileY() + 1][player.getTileX() - 1];
+        surroundingTiles[5] = allTiles[player.getTileX() - 1][player.getTileY() - 1];
+        surroundingTiles[6] = allTiles[player.getTileX() + 1][player.getTileY() - 1];
+        surroundingTiles[7] = allTiles[player.getTileX() + 1][player.getTileY() + 1];
+        surroundingTiles[8] = allTiles[player.getTileX() - 1][player.getTileY() + 1];
 
         colliding = false;
         group = new Group();
