@@ -315,8 +315,8 @@ public class NoiseBiomeGen extends Application {
                                     Plant p = new SingleTallGrass(
                                             rand.nextInt(0, SingleTallGrass.getMaxHealth()),
                                             rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
-                                            i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
-                                            j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()));
+                                            (chunkX * size + i) * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
+                                            (chunkY * size + j) * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()));
 
                                     tile.addPlant(p);
                                     plants.add(p);
@@ -367,6 +367,7 @@ public class NoiseBiomeGen extends Application {
                 //chunk complete
                 Chunk c = new Chunk(null, tiles, plants, chunkX, chunkY);
             }
+            System.out.println(chunkY);
         }
     }
 

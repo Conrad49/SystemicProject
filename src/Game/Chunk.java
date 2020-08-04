@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Chunk implements Serializable{
-    private static final int size = 10;
+    private static final int size = 100;
     ArrayList<Entity> entities;
     Tile[][] tiles;
     ArrayList<Plant> plants;
@@ -22,17 +22,21 @@ public class Chunk implements Serializable{
     /**
      * Loads the specified chunk from memory.
      */
-    public static Chunk loadChunk(int x, int y) {
+    public static void loadChunk(int x, int y) {
         File chunk = new File("chunk " + x + ", " + y);
         try {
-            FileInputStream fos = new FileInputStream(chunk);
-            ObjectInputStream oos = new ObjectInputStream(fos);
+            FileInputStream fis = new FileInputStream(chunk);
+            ObjectInputStream ois = new ObjectInputStream(fis);
 
-            return (Chunk)oos.readObject();
+            allChunks[x][y] = (Chunk)ois.readObject();
         }catch(Exception e){
             e.printStackTrace();
         }
-        return null;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Tile.getAllTiles()[x * size + j][y * size + i] = allChunks[x][y].tiles[j][i];
+            }
+        }
     }
 
     /**

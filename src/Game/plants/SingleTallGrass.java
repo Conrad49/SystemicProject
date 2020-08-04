@@ -77,6 +77,16 @@ public class SingleTallGrass extends Plant{
 
     @Override
     public Image getImage() {
+
+        if(firstPlant){
+            growsOn.add(GrassTile.tileCode);
+            for (int i = 1; i <= 5; i++) {
+                images.add("/res/plants/TallGrass/SingleTallGrass" + i + ".png");
+            }
+
+            firstPlant = false;
+        }
+
         // health / maxHealth returns 0.05-1 and the desired range is 0-4
         // * 5  changes the range to 0.25-5 and after the int it's 0 1 2 3 4 or 5
         // the -1 on health takes away the one special case of 1 * 5 and replaces it with
