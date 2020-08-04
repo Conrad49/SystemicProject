@@ -1,6 +1,5 @@
 package Game.Tiles;
 
-import Game.SerializableImage;
 import Game.displayablesHidingPlace.Displayable;
 import Game.plants.Plant;
 import javafx.scene.image.Image;
@@ -23,7 +22,7 @@ public abstract class Tile extends Displayable implements Serializable {
     private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
     private static int xCount = 0;
     private static int yCount = 0;
-    SerializableImage texture;
+    String url;
     boolean isSolid;
 
     protected ArrayList<Plant> plants = new ArrayList<>(); // Plants growing on this tile.
@@ -54,7 +53,7 @@ public abstract class Tile extends Displayable implements Serializable {
     }
 
     public Rectangle getBoundsBox() {
-        return new Rectangle(x, y, width, width);
+        return new Rectangle(this.x, this.y, width, width);
     }
 
     public void boundingLines(){         /* TODO: either use rectangle object for ray intersection or four lines
@@ -67,7 +66,7 @@ public abstract class Tile extends Displayable implements Serializable {
     }
 
     public Image getTexture() {
-        return this.texture;
+        return new Image(this.url);
     }
 
 
@@ -105,8 +104,8 @@ public abstract class Tile extends Displayable implements Serializable {
         return mapHeight;
     }
 
-    public void setTexture(Image texture) {
-        this.texture = new SerializableImage(texture);
+    public void setTexture(String url) {
+        this.url = url;
         isTextured = true;
     }
 

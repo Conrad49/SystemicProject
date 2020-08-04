@@ -307,7 +307,7 @@ public class NoiseBiomeGen extends Application {
 
                             case "plateau":
                                 tile = new GrassTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture(grassImage);
+                                tile.setTexture("/res/GrassTile.png");
 
                                 // For testing purposes this should add tall grass to every 4th grass tile
                                 int count = rand.nextInt(4, 6);
@@ -326,23 +326,23 @@ public class NoiseBiomeGen extends Application {
 
                             case "snow peaks":
                                 tile = new SnowTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture(snowImage);
+                                tile.setTexture("/res/SnowTile.png");
                                 break;
                             case "desert":
                                 tile = new SandTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture(sandImage);
+                                tile.setTexture("/res/SandTile.png");
                                 break;
                             case "volcano":
                                 tile = new LavaTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture(lavaImage);
+                                tile.setTexture("/res/LavaTile.png");
                                 break;
                             case "peaks":
                                 tile = new StoneTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture(stoneImage);
+                                tile.setTexture("/res/StoneTile.png");
                                 break;
                             case "frozen lake":
                                 tile = new IceTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture(iceImage);
+                                tile.setTexture("/res/IceTile.png");
                                 break;
                             case "swamp":
 
@@ -350,7 +350,7 @@ public class NoiseBiomeGen extends Application {
 
                             case "ocean":
                                 tile = new WaterTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture(waterImage);
+                                tile.setTexture("/res/WaterTile.png");
                                 break;
                             default:
                                 System.out.println("No biome case found");

@@ -209,7 +209,7 @@ public class Main extends Application {
         group = new Group();
         for(Tile tile : surroundingTiles){
             Entity.drawContactPoint();
-            Rectangle box = new Rectangle(tile.getBoundsBox().getX(), tile.getBoundsBox().getY(), tile.getBoundsBox().getWidth(), tile.getBoundsBox().getHeight());
+            Rectangle box = tile.getBoundsBox();
             double[] coords = shift(box.getX(), box.getY());
             box.setX(coords[0]);
             box.setY(coords[1]);
@@ -277,10 +277,10 @@ public class Main extends Application {
                 Color color = (Color)noiseRectangles[i][j].getFill();
                 if (color.getBlue() < 0.5){
                     GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                    grassTile.setTexture(grassImage);
+                    grassTile.setTexture("/res/GrassTile.png");
                 } else {
                     StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                    stoneTile.setTexture(stoneImage);
+                    stoneTile.setTexture("/res/StoneTile.png");
                 }
 
                 /*if(i == 30 || j == 30){
@@ -315,7 +315,7 @@ public class Main extends Application {
                 for (int j = 0; j < Tile.getMapWidth(); j++) {
                     if(line[j].equals("g")){
                         GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        grassTile.setTexture(grassImage);
+                        grassTile.setTexture("/res/GrassTile.png");
 
                         // For testing purposes this should add tall grass to every 4th grass tile
                         int count = rand.nextInt(4, 6);
@@ -329,22 +329,22 @@ public class Main extends Application {
                         }
                     }else if(line[j].equals("s")){
                         StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        stoneTile.setTexture(stoneImage);
+                        stoneTile.setTexture("/res/StoneTile.png");
                     }else if(line[j].equals("a")){
                         SandTile sandTile = new SandTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        sandTile.setTexture(sandImage);
+                        sandTile.setTexture("/res/SandTile.png");
                     }else if(line[j].equals("i")){
                         IceTile iceTile = new IceTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        iceTile.setTexture(iceImage);
+                        iceTile.setTexture("/res/IceTile.png");
                     }else if(line[j].equals("l")){
                         LavaTile lavaTile = new LavaTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        lavaTile.setTexture(lavaImage);
+                        lavaTile.setTexture("/res/LavaTile.png");
                     }else if(line[j].equals("o")){
                         SnowTile snowTile = new SnowTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        snowTile.setTexture(snowImage);
+                        snowTile.setTexture("/res/SnowTile.png");
                     }else if(line[j].equals("w")){
                         WaterTile waterTile = new WaterTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        waterTile.setTexture(waterImage);
+                        waterTile.setTexture("/res/WaterTile.png");
                     }
                 }
             }
