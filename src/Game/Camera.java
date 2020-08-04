@@ -267,7 +267,7 @@ public class Camera extends Pane {
 
         for (int i = topLeftY; i < topLeftY + screenTilesTall; i++) {
             for (int j = topLeftX; j < topLeftX + screenTilesWide; j++) {
-                display(Tile.getAllTiles()[i][j]);
+                display(Tile.getAllTiles()[j][i]);
             }
         }
     }
@@ -357,7 +357,7 @@ public class Camera extends Pane {
                 y = (screenTilesTall - 1) - y + 2 * topLeftY;
 
 
-                display(Tile.getAllTiles()[y][x]);
+                display(Tile.getAllTiles()[x][y]);
             }
         }
 

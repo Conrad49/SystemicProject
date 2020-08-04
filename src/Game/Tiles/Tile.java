@@ -36,12 +36,7 @@ public abstract class Tile extends Displayable {
         this.boundsBox = new Rectangle(posX, posY, width, width);
         //this.boundsBox.setFill(backColor);
 
-        allTiles[xCount][yCount] = this;
-        xCount ++;
-        if(xCount >= allTiles.length){
-            yCount++;
-            xCount = 0;
-        }
+        allTiles[posX / width][posY / width] = this;
     }
 
     public Tile(int posX, int posY){

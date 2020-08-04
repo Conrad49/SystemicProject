@@ -7,7 +7,8 @@ import javafx.scene.image.Image;
  * it's also nice to be able to use the same logic to display everything.
  */
 public abstract class Displayable {
-    protected double x, y;
+    protected double x,
+            y;
     protected int width, height;
     protected boolean coordsAtCorner;
 

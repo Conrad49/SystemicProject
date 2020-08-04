@@ -275,10 +275,11 @@ public class NoiseBiomeGen extends Application {
 
         for (int chunkY = 0; chunkY < Tile.getMapHeight() / size; chunkY++) {
             for (int chunkX = 0; chunkX < Tile.getMapWidth() / size; chunkX++) {
+                // new chunk
+
                 xCount = chunkX * inc * size;
                 yCount = chunkY * inc * size;
 
-                // new chunk
                 Tile[][] tiles = new Tile[size][size];
                 ArrayList<Plant> plants = new ArrayList<>();
 

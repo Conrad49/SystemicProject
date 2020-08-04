@@ -79,6 +79,7 @@ public class Main extends Application {
 
         if (response == 1) {
             NoiseBiomeGen.generateWorld();
+            System.out.println("generated");
             //makeWorldFromFile();
         } else {
             boolean exists = new File("map.txt").exists();
