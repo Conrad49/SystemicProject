@@ -24,10 +24,7 @@ public abstract class Entity {
     protected Rectangle boundsBox;
     int tileX;
     int tileY;
-    double posX;
-    double posY;
     double speed = 5;
-    boolean isVisible = false;
     // this is a stupid sloppy fix for the special case that is our only entitiy the player
     // when more are added this will be moved to displayable and the fixed values will be removed
     protected int width = 64;
@@ -61,24 +58,26 @@ public abstract class Entity {
     public Entity(Color backColor, Rectangle boundsBox) {
         this.backColor = backColor;
         this.boundsBox = boundsBox;
-        this.posX = boundsBox.getX();
-        this.posY = boundsBox.getY();
+        this.position.setX(boundsBox.getX());
+        this.position.setY(boundsBox.getY());
+        //this.position.setX(boundsBox.getX() + boundsBox.getWidth() / 2);
+        //this.position.setY(boundsBox.getY() + boundsBox.getHeight() / 2);
 
 
-        this.tileX = (int)posX/ Tile.getTileWidth();
-        this.tileY = (int)posY/ Tile.getTileWidth();
+        this.tileX = (int)position.getX()/ Tile.getTileWidth();
+        this.tileY = (int)position.getY()/ Tile.getTileWidth();
 
-        this.position.setX((int) this.posX);
-        this.position.setY((int) this.posY);
     }
 
     public Entity(Image texture, Rectangle boundsBox) {
         this.texture = texture;
         this.boundsBox = boundsBox;
-        this.posX = boundsBox.getX();
-        this.posY = boundsBox.getY();
-        this.tileX = (int)posX/ Tile.getTileWidth();
-        this.tileY = (int)posY/ Tile.getTileWidth();
+        this.position.setX(boundsBox.getX());
+        this.position.setY(boundsBox.getY());
+        //this.position.setX(boundsBox.getX() + boundsBox.getWidth() / 2);
+        //this.position.setY(boundsBox.getY() + boundsBox.getHeight() / 2);
+        this.tileX = (int)position.getX()/ Tile.getTileWidth();
+        this.tileY = (int)position.getY()/ Tile.getTileWidth();
     }
 
 
@@ -87,15 +86,13 @@ public abstract class Entity {
         //this.posX += this.xSpeed;
         //this.posY += this.ySpeed;
 
-        this.tileX = (int)this.posX / Tile.getTileWidth();
-        this.tileY = (int)this.posY / Tile.getTileWidth();
-        this.posX = this.position.getX();
-        this.posY = this.position.getY();
+        this.tileX = (int)this.position.getX() / Tile.getTileWidth();
+        this.tileY = (int)this.position.getY() / Tile.getTileWidth();
 
         this.addToPositionX(this.getVelocity().getX());
         this.addToPositionY(this.getVelocity().getY());
 
-        System.out.println(this.position.getX() + ", " + this.position.getY());
+        //System.out.println(this.position.getX() + ", " + this.position.getY());
 
         double magnitude = Math.sqrt(Math.pow(this.getDirection().getX(), 2) + Math.pow(this.getDirection().getY(), 2));
 
@@ -126,7 +123,7 @@ public abstract class Entity {
     /**
      * Checks the entity that this method is called on for collision with a given tile
      */
-    public void checkTileCollision(Tile tile){
+    /*public void checkTileCollision(Tile tile){
         Rectangle tileBounds = tile.getBoundsBox();
 
         if (tile.isSolid()) {
@@ -166,7 +163,7 @@ public abstract class Entity {
             }
 
         }
-    }
+    }*/
 
 
     /**
@@ -261,7 +258,17 @@ public abstract class Entity {
 
         double[] coords = Main.shift(adjustedTarget.getX(), adjustedTarget.getY());
         Rectangle displayRect = new Rectangle(coords[0], coords[1], adjustedTarget.getWidth(), adjustedTarget.getHeight());
-        //group.getChildren().add(displayRect);
+        displayRect.setOpacity(0.5);
+        group.getChildren().add(displayRect);
+
+        double[] coords2 = Main.shift(target.getX(), target.getY());
+        Rectangle displayTile = new Rectangle(coords2[0], coords2[1], target.getWidth(), target.getHeight());
+        displayTile.setFill(Color.RED);
+        group.getChildren().add(displayTile);
+
+        double[] coords3 = Main.shift(in.getPosX(), in.getPosY());
+        Rectangle displayPlayer = new Rectangle(coords3[0], coords3[1], in.boundsBox.getWidth(), in.boundsBox.getHeight());
+        group.getChildren().add(displayPlayer);
 
         Object[] results = rayVsRect(in.position, in.getVelocity().multiply(3), adjustedTarget);
 
@@ -282,11 +289,11 @@ public abstract class Entity {
     }
 
     public double getPosX() {
-        return posX;
+        return position.getX();
     }
 
     public double getPosY() {
-        return posY;
+        return position.getY();
     }
 
     public Vector getPosition() {
@@ -337,12 +344,14 @@ public abstract class Entity {
         return tileY;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
+        //return boundsBox.getWidth();
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
+        //return boundsBox.getWidth();
     }
 
     public Vector getVelocity() {
