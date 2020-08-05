@@ -82,6 +82,7 @@ public class Camera extends Pane {
         oldScreenWide = this.getWidth();
         oldScreenTall = this.getHeight();
 
+
         if (!sameScreenSize || updateAll) {
             updateAll = false;
             updateAll();
@@ -236,18 +237,18 @@ public class Camera extends Pane {
     private void updateVariables(){
         oldScreenCenterTileX = screenCenterTileX;
         oldScreenCenterTileY = screenCenterTileY;
+
         oldScreenCenterY = screenCenterY;
         oldScreenCenterX = screenCenterX;
-        findScreenCenter();
+
         // get_____() + Tile.getTileWidth() - 1 adds 1 pixel less than a whole tile so any
         // partial tile will get counted but if the screen is at an exact tile value it
         // will not add anything
         screenTilesWide = (int) ((getWidth() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + tileGap);
         screenTilesTall = (int) ((getHeight() + Tile.getTileWidth() - 1) / Tile.getTileWidth() + tileGap);
-        // + 0.5 will only increase the value if there is already a 0.5 from division
-        // + 1 only really makes sense if you draw out the tiles and realize which would be at the center without it
-        topLeftX = screenCenterTileX - (int)((double)screenTilesWide / 2.0 + 0.5) + 1;
-        topLeftY = screenCenterTileY - (int)((double)screenTilesTall / 2.0 + 0.5) + 1;
+
+        findScreenCenter();
+
         changeTileX = screenCenterTileX - oldScreenCenterTileX;
         changeTileY = screenCenterTileY - oldScreenCenterTileY;
     }
@@ -513,8 +514,49 @@ public class Camera extends Pane {
      * screen and the players position to be the same.
      */
     private void findScreenCenter() {
-        screenCenterX = Main.getPlayer().getPosX();
-        screenCenterY = Main.getPlayer().getPosY();
+        double px = Main.getPlayer().getPosX(), py = Main.getPlayer().getPosY();
+        double halfWidth = screenTilesWide * Tile.getTileWidth() / 2.0,
+                halfHeight = screenTilesTall * Tile.getTileWidth() / 2.0;
+
+        if(px - halfWidth < 0){
+            screenCenterX = halfWidth;
+
+            topLeftX = 0;
+        }else if(px + halfWidth > Tile.getMapWidth() * Tile.getTileWidth()){
+            screenCenterX = Tile.getMapWidth() * Tile.getTileWidth() - halfWidth;
+
+            topLeftX = Tile.getMapWidth() - screenTilesWide;
+        }else{
+            screenCenterX = px;
+
+            // needs to be done earlier
+            screenCenterTileX = ((int)screenCenterX) / Tile.getTileWidth();
+
+            // + 0.5 will only increase the value if there is already a 0.5 from division
+            // + 1 only really makes sense if you draw out the tiles and realize which would be at the center without it
+            topLeftX = screenCenterTileX - (int)((double)screenTilesWide / 2.0 + 0.5) + 1;
+        }
+
+        if(py - halfHeight < 0){
+            screenCenterY = halfHeight;
+
+            topLeftY = 0;
+        }else if(py + halfHeight > Tile.getMapHeight() * Tile.getTileWidth()){
+            screenCenterY = Tile.getMapHeight() * Tile.getTileWidth() - halfHeight;
+
+            topLeftY = Tile.getMapHeight() - screenTilesTall;
+        }else{
+            screenCenterY = py;
+
+            // needs to be done earlier
+            screenCenterTileY = ((int)screenCenterY) / Tile.getTileWidth();
+
+            // + 0.5 will only increase the value if there is already a 0.5 from division
+            // + 1 only really makes sense if you draw out the tiles and realize which would be at the center without it
+            topLeftY = screenCenterTileY - (int)((double)screenTilesTall / 2.0 + 0.5) + 1;
+        }
+
+
 
         // truncating is ok since even if you are 99.999999% of the way through a block you are still on it
         screenCenterTileX = ((int)screenCenterX) / Tile.getTileWidth();

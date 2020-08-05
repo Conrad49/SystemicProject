@@ -32,7 +32,7 @@ public class Main extends Application {
 
     public static void main(String[] args)
     {
-        Tile.setMapDimensions(1000, 1000);
+        Tile.setMapDimensions(100, 100);
         launch(args);
     }
     private static Stage stage;
@@ -176,7 +176,9 @@ public class Main extends Application {
         // ?????????
         player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
                 player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
-        tileTick();
+
+        //tileTick();
+
         root.update();
     }
 
