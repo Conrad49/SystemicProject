@@ -1,11 +1,10 @@
 package Game.Entities;
 
-import Game.Animation;
-import Game.Camera;
-import Game.Chunk;
-import Game.Main;
+import Game.*;
 import Game.Tiles.Tile;
 import Game.testing.Vector;
+import handlers.AnimationHandler;
+import handlers.MovementHandler;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -13,7 +12,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 
@@ -48,6 +46,10 @@ public abstract class Entity {
     private static final Vector DOWN = new Vector(0, 1);
     private static final Vector LEFT = new Vector(-1, 0);
     private static final Vector RIGHT = new Vector(1, 0);
+
+    MovementHandler movementHandler = new MovementHandler(this);
+    AnimationHandler animationHandler = new AnimationHandler(this);
+
     public static Group group = new Group();
 
     public Animation getCurrentAnimation() {
@@ -83,89 +85,10 @@ public abstract class Entity {
 
 
     public void tick(){
-        // update positions and velocities / speeds
-        //this.posX += this.xSpeed;
-        //this.posY += this.ySpeed;
-
-        this.tileX = (int)this.posX / Tile.getTileWidth();
-        this.tileY = (int)this.posY / Tile.getTileWidth();
-        this.posX = this.position.getX();
-        this.posY = this.position.getY();
-
-        this.addToPositionX(this.getVelocity().getX());
-        this.addToPositionY(this.getVelocity().getY());
-
-        double magnitude = Math.sqrt(Math.pow(this.getDirection().getX(), 2) + Math.pow(this.getDirection().getY(), 2));
-
-
-        if (magnitude != 0) {
-            this.getDirection().normalize(magnitude);
-        }
-
-        this.getVelocity().setToVec(this.getDirection().multiply(speed));
-
-    }
-
-    public void checkVisiblity(Player p){
-        Tile[][] visibleTiles = p.visibleTiles;
-
-        if(this.tileX >= visibleTiles[0][0].getX() && this.tileY >= visibleTiles[0][0].getY()){
-            if(this.tileX <= visibleTiles[visibleTiles.length-1][0].getX()){
-                if(this.tileY <= visibleTiles[visibleTiles.length-1][visibleTiles.length-1].getY()){
-
-
-
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Checks the entity that this method is called on for collision with a given tile
-     */
-    public void checkTileCollision(Tile tile){
-        Rectangle tileBounds = tile.getBoundsBox();
-
-        if (tile.isSolid()) {
-
-            Rectangle shiftedRect = new Rectangle(this.posX - (this.boundsBox.getWidth() / 2), this.posY - (this.boundsBox.getHeight() / 2), this.boundsBox.getWidth(), this.boundsBox.getHeight());
-
-            Shape intersect = Shape.intersect(shiftedRect, tileBounds);
-            if (intersect.getBoundsInLocal().getWidth() != -1) {
-
-                this.currentAnimation.resetCount();
-
-                // left
-                if(tileBounds.getX() + tileBounds.getWidth() < this.boundsBox.getX() && (tile.getY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.position.setX(this.position.getX() + intersect.getBoundsInLocal().getWidth());
-                    this.posX += intersect.getBoundsInLocal().getWidth();
-                }
-
-                // right
-                if(tileBounds.getX() > this.boundsBox.getX() && (tile.getY() / tile.getBoundsBox().getHeight()) == this.tileY){
-                    this.position.setX(this.position.getX() - intersect.getBoundsInLocal().getWidth());
-                    this.posX -= intersect.getBoundsInLocal().getWidth();
-
-                }
-
-                // above
-                if(tileBounds.getY() + tileBounds.getHeight() < this.boundsBox.getY() && (tile.getX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.position.setY(this.position.getY() + intersect.getBoundsInLocal().getHeight());
-                    this.posY += intersect.getBoundsInLocal().getHeight();
-                }
-
-                // below
-                if(tileBounds.getY() > this.boundsBox.getY() && (tile.getX() / tile.getBoundsBox().getWidth()) == this.tileX){
-                    this.position.setY(this.position.getY() - intersect.getBoundsInLocal().getHeight());
-                    this.posY -= intersect.getBoundsInLocal().getHeight();
-                }
-
-                this.position.setX((int) this.position.getX());
-                this.position.setY((int) this.position.getY());
-            }
-
-        }
+        this.movementHandler.move();
+        this.animationHandler.animate();
+        //this.collisionHandler.check();
+        //this.animationHandler.handle();
     }
 
 
@@ -338,6 +261,22 @@ public abstract class Entity {
         return tileY;
     }
 
+    public void setTileX(int tileX) {
+        this.tileX = tileX;
+    }
+
+    public void setTileY(int tileY) {
+        this.tileY = tileY;
+    }
+
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
+
+    public void setPosY(double posY) {
+        this.posY = posY;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -388,5 +327,13 @@ public abstract class Entity {
 
     public double getTime() {
         return time;
+    }
+
+    public void setMovementHandler(MovementHandler movementHandler) {
+        this.movementHandler = movementHandler;
+    }
+
+    public void setAnimationHandler(AnimationHandler animationHandler) {
+        this.animationHandler = animationHandler;
     }
 }

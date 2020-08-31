@@ -6,6 +6,7 @@ import Game.Tiles.*;
 import Game.plants.SingleTallGrass;
 import Game.testing.NoiseBiomeGen;
 import Game.testing.Vector;
+import handlers.MovementHandler;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -128,7 +129,7 @@ public class Main extends Application {
     private static void prepareActionHandlers() {
         // HashSets don't allow duplicate values
         //currentlyActiveKeys = new HashSet<String>();
-        currentlyActiveKeys = Player.getCurrentlyActiveKeys();
+        currentlyActiveKeys = MovementHandler.getCurrentlyActiveKeys();
         mainScene.setOnKeyPressed(e -> {
             currentlyActiveKeys.add(e.getCode().toString());
         });

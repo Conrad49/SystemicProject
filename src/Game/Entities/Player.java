@@ -1,38 +1,29 @@
 package Game.Entities;
 
 import Game.Animation;
-import Game.Camera;
 import Game.Chunk;
-import Game.Main;
-import Game.Tiles.Tile;
+import handlers.PlayerMovementHandler;
 import Game.testing.Vector;
+import handlers.player.PlayerAnimationHandler;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-
-import java.awt.*;
-import java.util.HashSet;
 
 public class Player extends Entity {
 
-    Tile[][] visibleTiles = new Tile[10][10];
-    private static int speed = 0;
-    private static int maxSpeed = 5;
-    private static int accelVal = 1;
-    private static boolean moving;
+    public static int speed = 0;
+    public static int maxSpeed = 5;
+    public static int accelVal = 1;
+    public static boolean moving;
 
     private Vector acceleration;
 
-
-    private static HashSet<String> currentlyActiveKeys = new HashSet<String>(1);
-    private boolean hasChangedFullscreen;
+    public boolean hasChangedFullscreen;
 
     public Player(Color backColor, javafx.scene.shape.Rectangle boundsBox) {
         super(backColor, boundsBox);
         setTexture();
+        this.setMovementHandler(new PlayerMovementHandler(this));
+        this.setAnimationHandler(new PlayerAnimationHandler(this));
     }
 
     public Player(Image texture, javafx.scene.shape.Rectangle boundsBox) {
@@ -41,83 +32,19 @@ public class Player extends Entity {
     }
 
     public Animation walkDown = new Animation();
-    private Animation walkUp = new Animation();
-    private Animation walkLeft = new Animation();
-    private Animation walkRight = new Animation();
-    private Animation idleAnimation = new Animation();
+    public Animation walkUp = new Animation();
+    public Animation walkLeft = new Animation();
+    public Animation walkRight = new Animation();
+    public Animation idleAnimation = new Animation();
 
     @Override
     public void tick() {
         super.tick();
 
-        handleKeyPresses();
-
         if(!moving){
             speed = 0;
             this.getVelocity().setX(0);
             this.getVelocity().setY(0);
-        }
-    }
-
-    public void handleKeyPresses(){
-        this.setDirection(new Vector(0, 0));
-        boolean isMoving = currentlyActiveKeys.contains("A") || currentlyActiveKeys.contains("D") || currentlyActiveKeys.contains("W") || currentlyActiveKeys.contains("S");
-
-        if (isMoving) {
-            moving = true;
-            speed = maxSpeed;
-
-            setDirection();
-        }
-
-
-        if (!currentlyActiveKeys.contains("A")) {
-            this.walkLeft.resetCount();
-        }
-
-        if (!currentlyActiveKeys.contains("D")) {
-            this.walkRight.resetCount();
-        }
-
-        if (!currentlyActiveKeys.contains("W")) {
-            this.walkUp.resetCount();
-        }
-
-        if (!currentlyActiveKeys.contains("S")) {
-            this.walkDown.resetCount();
-        }
-
-        setCurrentAnimation();
-
-        // Binding for going in and out of fullscreen
-        if(currentlyActiveKeys.contains("F11")) {
-            if (!hasChangedFullscreen) {
-                Main.switchFullscreen();
-            }
-            hasChangedFullscreen = true;
-        }
-
-        if(currentlyActiveKeys.contains("I")) {
-            Main.slowVal ++;
-        }
-
-        if(currentlyActiveKeys.contains("K")) {
-            if (Main.slowVal > 1) {
-                Main.slowVal --;
-            }
-        }
-
-
-        if(!moving){
-            this.setCurrentAnimation(this.idleAnimation);
-        }
-
-        if (currentlyActiveKeys.contains("Z")) {
-            getDirection().setX(getDirection().getX() + 1);
-        }
-
-        if (currentlyActiveKeys.contains("X")) {
-            getDirection().setY(getDirection().getY() + 1);
         }
     }
 
@@ -131,14 +58,6 @@ public class Player extends Entity {
         Chunk[] surroundingChunks = new Chunk[9];
 
         return surroundingChunks;
-    }
-
-    public static HashSet<String> getCurrentlyActiveKeys() {
-        return currentlyActiveKeys;
-    }
-
-    public void getNumOfChars(HashSet<String> currentlyActiveKeys){
-
     }
 
     public void setTexture(){
@@ -183,40 +102,7 @@ public class Player extends Entity {
         return currentAnimation.getImage();
     }
 
-    public void setCurrentAnimation(){
-        if(moving){
-
-            if(this.getDirection().getX() < 0){
-                this.setCurrentAnimation(this.walkLeft);
-            }
-            if(this.getDirection().getY() < 0){
-                this.setCurrentAnimation(this.walkUp);
-            }
-            if(this.getDirection().getY() > 0){
-                this.setCurrentAnimation(this.walkDown);
-            }
-            if(this.getDirection().getX() > 0){
-                this.setCurrentAnimation(this.walkRight);
-            }
-        }
-    }
-
-    public void setDirection(){
-
-        if (currentlyActiveKeys.contains("A")) {
-            this.getDirection().setToVec(this.getDirection().add(Entity.getLEFT()));
-        } else if (currentlyActiveKeys.contains("D")) {
-            this.getDirection().setToVec(this.getDirection().add(Entity.getRIGHT()));
-        }
-
-        if (currentlyActiveKeys.contains("W")) {
-            this.getDirection().setToVec(this.getDirection().add(Entity.getUP()));
-        } else if (currentlyActiveKeys.contains("S")) {
-            this.getDirection().setToVec(this.getDirection().add(Entity.getDOWN()));
-        }
-    }
-
-    public static void setMoving(boolean moving) {
+    public void setMoving(boolean moving) {
         Player.moving = moving;
     }
 }
