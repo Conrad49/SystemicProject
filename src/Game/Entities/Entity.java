@@ -4,6 +4,7 @@ import Game.*;
 import Game.Tiles.Tile;
 import Game.testing.Vector;
 import handlers.AnimationHandler;
+import handlers.CollisionHandler;
 import handlers.MovementHandler;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -49,6 +50,7 @@ public abstract class Entity {
 
     MovementHandler movementHandler = new MovementHandler(this);
     AnimationHandler animationHandler = new AnimationHandler(this);
+    CollisionHandler collisionHandler = new CollisionHandler(this);
 
     public static Group group = new Group();
 
@@ -87,6 +89,7 @@ public abstract class Entity {
     public void tick(){
         this.movementHandler.move();
         this.animationHandler.animate();
+        this.collisionHandler.collide();
         //this.collisionHandler.check();
         //this.animationHandler.handle();
     }

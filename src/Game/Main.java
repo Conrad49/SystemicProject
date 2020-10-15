@@ -161,7 +161,8 @@ public class Main extends Application {
         last_time = time;
 
         player.tick();
-        checkPlayerCollision();
+
+        //checkPlayerCollision();
         //for(Game.Chunk chunk : chunks){
         //    chunk.tick();
         //}
@@ -222,6 +223,7 @@ public class Main extends Application {
 
                     double ctime = (double) stuffs[3];
 
+                    //Tile collision resolution
                     player.setVelocity(player.getVelocity().add(((normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime)))));
                     colliding = true;
                 }
