@@ -316,8 +316,8 @@ public abstract class Entity {
      */
     public int[] getChunkCoords(){
         int[] chunkCoords = new int[2];
-        chunkCoords[0] = this.tileX / Chunk.sideLength;
-        chunkCoords[1] = this.tileY / Chunk.sideLength;
+        chunkCoords[0] = this.tileX / Chunk.getSize();
+        chunkCoords[1] = this.tileY / Chunk.getSize();
         return chunkCoords;
     }
 

@@ -6,18 +6,17 @@ import Game.plants.Plant;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Chunk implements Serializable{
-    private static final int size = 100;
+    private static final int size = 100;// size of chunk in tiles
     ArrayList<Entity> entities;
     Tile[][] tiles;
     ArrayList<Plant> plants;
-    public static int sideLength;
-    private int x;
+    private int x;// coordinates on the chunk level of the world
     private int y;
 
-    private static Chunk[][] allChunks = new Chunk[Tile.getMapWidth() / size]
-                                          [Tile.getMapHeight() / size];
+
 
     /**
      * Loads the specified chunk from memory.
@@ -28,14 +27,9 @@ public class Chunk implements Serializable{
             FileInputStream fis = new FileInputStream(chunk);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
-            allChunks[x][y] = (Chunk)ois.readObject();
+            World.setChunk(x, y, (Chunk)ois.readObject());
         }catch(Exception e){
             e.printStackTrace();
-        }
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                Tile.getAllTiles()[x * size + j][y * size + i] = allChunks[x][y].tiles[j][i];
-            }
         }
     }
 
@@ -49,7 +43,7 @@ public class Chunk implements Serializable{
         this.x = x;
         this.y = y;
 
-        allChunks[x][y] = this;
+        World.setChunk(x, y, this);
         save();
     }
 
@@ -60,6 +54,13 @@ public class Chunk implements Serializable{
 
         for(Entity entity : entities){
             entity.tick();
+        }
+
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
+        for(Plant plant : plants){
+            if(rand.nextInt(100) == 0) {
+                plant.tick();
+            }
         }
     }
 
@@ -81,15 +82,23 @@ public class Chunk implements Serializable{
         return size;
     }
 
-    public static Chunk[][] getAllChunks() {
-        return allChunks;
-    }
-
     public int getX() {
         return x;
     }
 
     public int getY() {
         return y;
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+    public ArrayList<Plant> getPlants() {
+        return plants;
     }
 }

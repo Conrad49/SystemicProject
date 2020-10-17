@@ -32,9 +32,9 @@ public class Main extends Application {
 
     public static void main(String[] args)
     {
-        Tile.setMapDimensions(100, 100);
         launch(args);
     }
+
     private static Stage stage;
     private static Scene mainScene;
     private static Camera root;
@@ -86,15 +86,11 @@ public class Main extends Application {
             if(exists){
                 System.out.println("Running with existing map files");
 
-                int size = Chunk.getSize();
-
-                for (int chunkY = 0; chunkY < Tile.getMapHeight() / size; chunkY++) {
-                    for (int chunkX = 0; chunkX < Tile.getMapWidth() / size; chunkX++) {
+                for (int chunkY = 0; chunkY < World.getWorldHeight(); chunkY++) {
+                    for (int chunkX = 0; chunkX < World.getWorldWidth(); chunkX++) {
                         Chunk.loadChunk(chunkX, chunkY);
                     }
-                    System.out.println(chunkY);
                 }
-                //makeWorldFromFile();
             } else {
                 System.out.println("No existing map file");
                 System.out.println("Stopping...");
@@ -146,15 +142,6 @@ public class Main extends Application {
         });
     }
 
-    public void renderTiles(){
-        for(int i = 0; i < Tile.getAllTiles().length; i ++){
-            for(int j = 0; j < Tile.getAllTiles().length; j ++){
-                Tile[][] tiles = Tile.getAllTiles();
-                Tile tileToBeRendered = tiles[j][i];
-            }
-        }
-    }
-
     /**
      * A tick is what needs to be done in a frame like plant growth or creature ai choices and movement.
      * This method does all of that and everything related to displaying that frame.
@@ -184,31 +171,13 @@ public class Main extends Application {
 
     private static void checkPlayerCollision(){
         Tile[] surroundingTiles = new Tile[9];
-        Tile[][] allTiles = Tile.getAllTiles();
 
-        // above
-        surroundingTiles[0] = allTiles[player.getTileX()][player.getTileY() - 1];
-        //surroundingTiles[0].backColor = Color.RED;
-
-        // below
-        surroundingTiles[1] = allTiles[player.getTileX()][player.getTileY() + 1];
-        //surroundingTiles[1].backColor = Color.BLUE;
-
-        // left
-        surroundingTiles[2] = allTiles[player.getTileX() - 1][player.getTileY()];
-        //surroundingTiles[2].backColor = Color.PALEGOLDENROD;
-
-        // right
-        surroundingTiles[3] = allTiles[player.getTileX() + 1][player.getTileY()];
-        //surroundingTiles[3].backColor = Color.GRAY;
-
-        surroundingTiles[4] = allTiles[player.getTileX()][player.getTileY()];
-
-        //diagonals
-        surroundingTiles[5] = allTiles[player.getTileX() - 1][player.getTileY() - 1];
-        surroundingTiles[6] = allTiles[player.getTileX() + 1][player.getTileY() - 1];
-        surroundingTiles[7] = allTiles[player.getTileX() + 1][player.getTileY() + 1];
-        surroundingTiles[8] = allTiles[player.getTileX() - 1][player.getTileY() + 1];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                surroundingTiles[3 * i + j] = World.getTile(player.getTileX() - 1 + j, player.getTileY() - 1 + i);
+            //allTiles[j][i];
+            }
+        }
 
         colliding = false;
         group = new Group();
@@ -239,6 +208,7 @@ public class Main extends Application {
         Camera.setGUIGroup(Entity.group);
     }
 
+    // outdated, chunk ticking needs to be implemented
     private static void tileTick(){
         //growth rate
         if(numOfFrames % 600 == 0) {
@@ -250,7 +220,7 @@ public class Main extends Application {
                     int tx = ((int) player.getPosX() / Tile.getTileWidth()) - loadWidth / 2 + j;
                     int ty = ((int) player.getPosY() / Tile.getTileWidth()) - loadWidth / 2 + i;
 
-                    Tile t = Tile.getAllTiles()[ty][tx];
+                    Tile t = World.getTile(ty, tx);
                     if (t.getPlants().size() > 0) {
                         if (rand.nextInt(10) == 0) {
                             t.tick();
@@ -268,6 +238,7 @@ public class Main extends Application {
     /**
      * very basic world generation method.
      */
+    /*
     private static void makeWorld(){
         //GrassTile.setTexture(new Image("/res/GrassTile.png"));
         //StoneTile.setTexture(new Image("/res/StoneTile.png"));
@@ -276,9 +247,8 @@ public class Main extends Application {
         Image stoneImage = new Image("/res/StoneTile.png");
 
         Rectangle[][] noiseRectangles = ImprovedNoise.getNoiseArray();
-        Tile[][] allTiles = Tile.getAllTiles();
-        for (int i = 0; i < Tile.getMapHeight(); i++) {
-            for (int j = 0; j < Tile.getMapWidth(); j++) {
+        for (int i = 0; i < World.getWorldHeight(); i++) {
+            for (int j = 0; j < World.getWorldWidth(); j++) {
                 Color color = (Color)noiseRectangles[i][j].getFill();
                 if (color.getBlue() < 0.5){
                     GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
@@ -287,17 +257,19 @@ public class Main extends Application {
                     StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
                     stoneTile.setTexture("/res/StoneTile.png");
                 }
-
+                */
                 /*if(i == 30 || j == 30){
                     new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
                 }else {
                     GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
                     //grassTile.setTexture(new Image("/res/Game.Tiles.GrassTile.png"));
-                }*/
+                }*//*
             }
         }
     }
+    */
 
+    /*
     private static void makeWorldFromFile(){
         Image grassImage = new Image("/res/GrassTile.png");
         Image sandImage = new Image("/res/SandTile.png");
@@ -357,6 +329,7 @@ public class Main extends Application {
             System.out.println("File not found!!!");
         }
     }
+     */
 
     /**
      * returns the time between frames in milliseconds?

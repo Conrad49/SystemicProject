@@ -266,9 +266,10 @@ public class Camera extends Pane {
         }
         entities.clear();
 
+        System.out.println(topLeftX + " " + topLeftY);
         for (int i = topLeftY; i < topLeftY + screenTilesTall; i++) {
             for (int j = topLeftX; j < topLeftX + screenTilesWide; j++) {
-                display(Tile.getAllTiles()[j][i]);
+                display(World.getTile(j, i));
             }
         }
     }
@@ -358,7 +359,7 @@ public class Camera extends Pane {
                 y = (screenTilesTall - 1) - y + 2 * topLeftY;
 
 
-                display(Tile.getAllTiles()[x][y]);
+                display(World.getTile(x, y));
             }
         }
 
@@ -522,10 +523,10 @@ public class Camera extends Pane {
             screenCenterX = halfWidth;
 
             topLeftX = 0;
-        }else if(px + halfWidth > Tile.getMapWidth() * Tile.getTileWidth()){
-            screenCenterX = Tile.getMapWidth() * Tile.getTileWidth() - halfWidth;
+        }else if(px + halfWidth > World.getWorldWidth() * Chunk.getSize() * Tile.getTileWidth()){
+            screenCenterX = World.getWorldWidth() * Chunk.getSize() * Tile.getTileWidth() - halfWidth;
 
-            topLeftX = Tile.getMapWidth() - screenTilesWide;
+            topLeftX = World.getWorldWidth() * Chunk.getSize()  - screenTilesWide;
         }else{
             screenCenterX = px;
 
@@ -541,10 +542,10 @@ public class Camera extends Pane {
             screenCenterY = halfHeight;
 
             topLeftY = 0;
-        }else if(py + halfHeight > Tile.getMapHeight() * Tile.getTileWidth()){
-            screenCenterY = Tile.getMapHeight() * Tile.getTileWidth() - halfHeight;
+        }else if(py + halfHeight > World.getWorldHeight() * Chunk.getSize() * Tile.getTileWidth()){
+            screenCenterY = World.getWorldHeight() * Chunk.getSize() * Tile.getTileWidth() - halfHeight;
 
-            topLeftY = Tile.getMapHeight() - screenTilesTall;
+            topLeftY = World.getWorldHeight() * Chunk.getSize() - screenTilesTall;
         }else{
             screenCenterY = py;
 

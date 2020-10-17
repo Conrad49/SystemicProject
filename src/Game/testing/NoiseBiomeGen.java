@@ -2,6 +2,7 @@ package Game.testing;
 
 import Game.Chunk;
 import Game.Tiles.*;
+import Game.World;
 import Game.biomes.Biome;
 import Game.plants.Plant;
 import Game.plants.SingleTallGrass;
@@ -273,8 +274,8 @@ public class NoiseBiomeGen extends Application {
 
         int size = Chunk.getSize();
 
-        for (int chunkY = 0; chunkY < Tile.getMapHeight() / size; chunkY++) {
-            for (int chunkX = 0; chunkX < Tile.getMapWidth() / size; chunkX++) {
+        for (int chunkY = 0; chunkY < World.getWorldHeight(); chunkY++) {
+            for (int chunkX = 0; chunkX < World.getWorldWidth(); chunkX++) {
                 // new chunk
 
                 xCount = chunkX * inc * size;

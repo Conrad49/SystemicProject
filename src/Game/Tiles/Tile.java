@@ -19,7 +19,7 @@ public abstract class Tile extends Displayable implements Serializable {
     boolean isInteractiveTile;
     private static int mapWidth;
     private static int mapHeight;
-    private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
+    //private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
     private static int xCount = 0;
     private static int yCount = 0;
     String url;
@@ -32,9 +32,6 @@ public abstract class Tile extends Displayable implements Serializable {
         //this.backColor = backColor;
 
         this.isTextured = false;
-
-
-        allTiles[posX / width][posY / width] = this;
     }
 
     public Tile(int posX, int posY){
@@ -43,13 +40,6 @@ public abstract class Tile extends Displayable implements Serializable {
         this.isTextured = true;
 
         //this.boundsBox.setFill(backColor);
-
-        allTiles[xCount][yCount] = this;
-        xCount ++;
-        if(xCount >= allTiles.length){
-            yCount++;
-            xCount = 0;
-        }
     }
 
     public Rectangle getBoundsBox() {
@@ -59,10 +49,6 @@ public abstract class Tile extends Displayable implements Serializable {
     public void boundingLines(){         /* TODO: either use rectangle object for ray intersection or four lines
                                             TODO: that represent the rectangle */
 
-    }
-
-    public static Tile[][] getAllTiles() {
-        return allTiles;
     }
 
     public Image getTexture() {
@@ -88,20 +74,6 @@ public abstract class Tile extends Displayable implements Serializable {
 
     public boolean isSolid() {
         return isSolid;
-    }
-
-    public static void setMapDimensions(int width, int height){
-        mapWidth = width;
-        mapHeight = height;
-        allTiles = new Tile[mapWidth][mapHeight];
-    }
-
-    public static int getMapWidth() {
-        return mapWidth;
-    }
-
-    public static int getMapHeight() {
-        return mapHeight;
     }
 
     public void setTexture(String url) {
