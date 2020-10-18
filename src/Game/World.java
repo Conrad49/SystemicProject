@@ -14,8 +14,8 @@ public class World {
                 getTiles()[(int)x % Chunk.getSize()][(int)y % Chunk.getSize()];
     }
 
-    public static Chunk setChunk(int x, int y, Chunk c){
-        return loadedChunks[x][y] = c;
+    public static void setChunk(int x, int y, Chunk c){
+        loadedChunks[x][y] = c;
     }
 
     public static int getWorldWidth() {
