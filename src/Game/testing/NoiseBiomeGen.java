@@ -1,6 +1,7 @@
 package Game.testing;
 
 import Game.Chunk;
+import Game.Entities.Entity;
 import Game.Tiles.*;
 import Game.World;
 import Game.biomes.Biome;
@@ -274,8 +275,8 @@ public class NoiseBiomeGen extends Application {
 
         int size = Chunk.getSize();
 
-        for (int chunkY = 0; chunkY < World.getWorldHeight(); chunkY++) {
-            for (int chunkX = 0; chunkX < World.getWorldWidth(); chunkX++) {
+        for (int chunkY = 0; chunkY < World.getWorldChunkHeight(); chunkY++) {
+            for (int chunkX = 0; chunkX < World.getWorldChunkWidth(); chunkX++) {
                 // new chunk
 
                 xCount = chunkX * inc * size;
@@ -366,7 +367,7 @@ public class NoiseBiomeGen extends Application {
                     yCount += inc;
                 }
                 //chunk complete
-                Chunk c = new Chunk(null, tiles, plants, chunkX, chunkY);
+                Chunk c = new Chunk(new ArrayList<Entity>(), tiles, plants, chunkX, chunkY);
             }
             System.out.println(chunkY);
         }

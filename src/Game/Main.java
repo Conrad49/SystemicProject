@@ -3,24 +3,19 @@ package Game;
 import Game.Entities.Entity;
 import Game.Entities.Player;
 import Game.Tiles.*;
-import Game.plants.SingleTallGrass;
 import Game.testing.NoiseBiomeGen;
 import Game.testing.Vector;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This is where the setup and running happens. Everything from drawing a frame to
@@ -86,8 +81,8 @@ public class Main extends Application {
             if(exists){
                 System.out.println("Running with existing map files");
 
-                for (int chunkY = 0; chunkY < World.getWorldHeight(); chunkY++) {
-                    for (int chunkX = 0; chunkX < World.getWorldWidth(); chunkX++) {
+                for (int chunkY = 0; chunkY < World.getWorldChunkHeight(); chunkY++) {
+                    for (int chunkX = 0; chunkX < World.getWorldChunkWidth(); chunkX++) {
                         Chunk.loadChunk(chunkX, chunkY);
                     }
                 }
@@ -156,15 +151,10 @@ public class Main extends Application {
 
         player.tick();
         checkPlayerCollision();
-        //for(Game.Chunk chunk : chunks){
-        //    chunk.tick();
-        //}
-
-        // ?????????
         player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
                 player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
 
-        //tileTick();
+        World.tick();
 
         root.update();
     }
@@ -175,7 +165,6 @@ public class Main extends Application {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 surroundingTiles[3 * i + j] = World.getTile(player.getTileX() - 1 + j, player.getTileY() - 1 + i);
-            //allTiles[j][i];
             }
         }
 
@@ -208,128 +197,9 @@ public class Main extends Application {
         Camera.setGUIGroup(Entity.group);
     }
 
-    // outdated, chunk ticking needs to be implemented
-    private static void tileTick(){
-        //growth rate
-        if(numOfFrames % 600 == 0) {
-            root.doUpdateAll();
-            ThreadLocalRandom rand = ThreadLocalRandom.current();
-            int loadWidth = 50;
-            for (int i = 0; i < loadWidth; i++) {
-                for (int j = 0; j < loadWidth; j++) {
-                    int tx = ((int) player.getPosX() / Tile.getTileWidth()) - loadWidth / 2 + j;
-                    int ty = ((int) player.getPosY() / Tile.getTileWidth()) - loadWidth / 2 + i;
-
-                    Tile t = World.getTile(ty, tx);
-                    if (t.getPlants().size() > 0) {
-                        if (rand.nextInt(10) == 0) {
-                            t.tick();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public static Player getPlayer(){
         return player;
     }
-
-    /**
-     * very basic world generation method.
-     */
-    /*
-    private static void makeWorld(){
-        //GrassTile.setTexture(new Image("/res/GrassTile.png"));
-        //StoneTile.setTexture(new Image("/res/StoneTile.png"));
-
-        Image grassImage = new Image("/res/GrassTile.png");
-        Image stoneImage = new Image("/res/StoneTile.png");
-
-        Rectangle[][] noiseRectangles = ImprovedNoise.getNoiseArray();
-        for (int i = 0; i < World.getWorldHeight(); i++) {
-            for (int j = 0; j < World.getWorldWidth(); j++) {
-                Color color = (Color)noiseRectangles[i][j].getFill();
-                if (color.getBlue() < 0.5){
-                    GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                    grassTile.setTexture("/res/GrassTile.png");
-                } else {
-                    StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                    stoneTile.setTexture("/res/StoneTile.png");
-                }
-                */
-                /*if(i == 30 || j == 30){
-                    new StoneTile(i * Tile.getWidth(), j * Tile.getWidth());
-                }else {
-                    GrassTile grassTile = new GrassTile(i * Tile.getWidth(), j * Tile.getWidth());
-                    //grassTile.setTexture(new Image("/res/Game.Tiles.GrassTile.png"));
-                }*//*
-            }
-        }
-    }
-    */
-
-    /*
-    private static void makeWorldFromFile(){
-        Image grassImage = new Image("/res/GrassTile.png");
-        Image sandImage = new Image("/res/SandTile.png");
-        Image iceImage = new Image("/res/IceTile.png");
-        Image lavaImage = new Image("/res/LavaTile.png");
-        Image dirtImage = new Image("/res/DirtTile.png");
-        Image stoneImage = new Image("/res/StoneTile.png");
-        Image snowImage = new Image("/res/SnowTile.png");
-        Image waterImage = new Image("/res/WaterTile.png");
-
-        File file = new File("map.txt");
-        Scanner reader = null;
-        try {
-            reader = new Scanner(file);
-
-            ThreadLocalRandom rand = ThreadLocalRandom.current();
-
-            for (int i = 0; i < Tile.getMapHeight(); i++) {
-                String[] line = reader.nextLine().split(",");
-                for (int j = 0; j < Tile.getMapWidth(); j++) {
-                    if(line[j].equals("g")){
-                        GrassTile grassTile = new GrassTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        grassTile.setTexture("/res/GrassTile.png");
-
-                        // For testing purposes this should add tall grass to every 4th grass tile
-                        int count = rand.nextInt(4, 6);
-                        for (int k = 0; k < count; k++) {
-                            grassTile.addPlant(new SingleTallGrass(
-                                    rand.nextInt(0, SingleTallGrass.getMaxHealth()),
-                                    rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
-                                    i * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
-                                    j * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth())
-                            ));
-                        }
-                    }else if(line[j].equals("s")){
-                        StoneTile stoneTile = new StoneTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        stoneTile.setTexture("/res/StoneTile.png");
-                    }else if(line[j].equals("a")){
-                        SandTile sandTile = new SandTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        sandTile.setTexture("/res/SandTile.png");
-                    }else if(line[j].equals("i")){
-                        IceTile iceTile = new IceTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        iceTile.setTexture("/res/IceTile.png");
-                    }else if(line[j].equals("l")){
-                        LavaTile lavaTile = new LavaTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        lavaTile.setTexture("/res/LavaTile.png");
-                    }else if(line[j].equals("o")){
-                        SnowTile snowTile = new SnowTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        snowTile.setTexture("/res/SnowTile.png");
-                    }else if(line[j].equals("w")){
-                        WaterTile waterTile = new WaterTile(i * Tile.getTileWidth(), j * Tile.getTileWidth());
-                        waterTile.setTexture("/res/WaterTile.png");
-                    }
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found!!!");
-        }
-    }
-     */
 
     /**
      * returns the time between frames in milliseconds?
@@ -350,4 +220,7 @@ public class Main extends Application {
         return new double[] {x, y};
     }
 
+    public static Camera getRoot() {
+        return root;
+    }
 }

@@ -56,10 +56,13 @@ public class Chunk implements Serializable{
             entity.tick();
         }
 
-        ThreadLocalRandom rand = ThreadLocalRandom.current();
-        for(Plant plant : plants){
-            if(rand.nextInt(100) == 0) {
-                plant.tick();
+        if(Main.numOfFrames % 60 == 0) {
+            ThreadLocalRandom rand = ThreadLocalRandom.current();
+            for (Plant plant : plants) {
+                if (rand.nextInt(6000) == 0) {
+                    Main.getRoot().doUpdateAll();
+                    plant.tick();
+                }
             }
         }
     }

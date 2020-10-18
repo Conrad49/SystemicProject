@@ -1,12 +1,10 @@
 package Game.plants;
 
-import Game.Tiles.DirtTile;
+import Game.Chunk;
 import Game.Tiles.GrassTile;
 import Game.Tiles.Tile;
 import Game.World;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
@@ -157,11 +155,14 @@ public class SingleTallGrass extends Plant{
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 // loop through their plants
-                for (Plant p : World.getTile(y + i, x + j).getPlants()) {
-                    //check if they are grass
-                    if (p instanceof SingleTallGrass) {
-                        SingleTallGrass g = (SingleTallGrass) p;
-                        grass.add(g);
+
+                if(x + j < World.getWorldChunkWidth() * Chunk.getSize() && y + i < World.getWorldChunkHeight() * Chunk.getSize()) {
+                    for (Plant p : World.getTile(x + j, y + i).getPlants()) {
+                        //check if they are grass
+                        if (p instanceof SingleTallGrass) {
+                            SingleTallGrass g = (SingleTallGrass) p;
+                            grass.add(g);
+                        }
                     }
                 }
             }
