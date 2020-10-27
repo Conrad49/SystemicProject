@@ -9,5 +9,11 @@ To make a systemic world which is a world full of creatures that interact with n
 An example of a map generated. Different colors represent different biomes. Each pixel represents one tile so this would be a very big world.
 ![map](/src/res/Map.png)
 
-- Current goal
-  - Infinite world generation through chunks.
+### Collision
+  - Axis Aligned Rectangle Collision
+    - Closely follows this video: https://www.youtube.com/watch?v=8JJ-4JgR7Dg&t=1704s
+      There are still bugs and there are parts of the video that have yet to be implemented but it functions predictably
+
+
+### Current goal
+  - Infinite world generation through a chunk system.
