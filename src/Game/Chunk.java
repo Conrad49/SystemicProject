@@ -10,6 +10,7 @@ public class Chunk {
     public static int sideLength;
     int tileX;
     int tileY;
+    boolean firstEntering;
 
     public Chunk() {
 

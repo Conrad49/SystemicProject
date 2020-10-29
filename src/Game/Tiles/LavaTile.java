@@ -4,21 +4,20 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
- * Stone is a solid tile that you cannot move past.
+ * A lava tile has no interesting things about it.
  */
-public class StoneTile extends Tile {
-    public static final String tileCode = "s";
+public class LavaTile extends Tile {
+    public static final String tileCode = "l";
 
     double movementSpeed;
     //static Image texture;
+    static boolean isTextured = true;
 
-    public StoneTile(int posX, int posY) {
-        super(posX, posY, Color.GRAY);
+    public LavaTile(int posX, int posY) {
+        super(posX, posY, Color.ORANGE);
         this.movementSpeed = 5;
         this.isInteractiveTile = true;
-        super.isSolid = true;
     }
-
 
     public Image getImage() {
         return texture;

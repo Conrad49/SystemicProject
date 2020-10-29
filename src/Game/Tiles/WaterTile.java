@@ -4,21 +4,20 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
- * Stone is a solid tile that you cannot move past.
+ * A water tile has no interesting things about it.
  */
-public class StoneTile extends Tile {
-    public static final String tileCode = "s";
+public class WaterTile extends Tile {
+    public static final String tileCode = "w";
 
     double movementSpeed;
     //static Image texture;
+    static boolean isTextured = true;
 
-    public StoneTile(int posX, int posY) {
-        super(posX, posY, Color.GRAY);
+    public WaterTile(int posX, int posY) {
+        super(posX, posY, Color.BLUE);
         this.movementSpeed = 5;
         this.isInteractiveTile = true;
-        super.isSolid = true;
     }
-
 
     public Image getImage() {
         return texture;

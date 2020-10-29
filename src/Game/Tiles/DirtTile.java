@@ -4,21 +4,20 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
- * Stone is a solid tile that you cannot move past.
+ * A dirt tile has no interesting things about it.
  */
-public class StoneTile extends Tile {
-    public static final String tileCode = "s";
+public class DirtTile extends Tile {
+    public static final String tileCode = "d";
 
     double movementSpeed;
     //static Image texture;
+    static boolean isTextured = true;
 
-    public StoneTile(int posX, int posY) {
-        super(posX, posY, Color.GRAY);
+    public DirtTile(int posX, int posY) {
+        super(posX, posY, Color.BROWN);
         this.movementSpeed = 5;
         this.isInteractiveTile = true;
-        super.isSolid = true;
     }
-
 
     public Image getImage() {
         return texture;
