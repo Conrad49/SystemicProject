@@ -10,8 +10,7 @@ public class GrassTile extends Tile {
     public static final String tileCode = "g";
 
     double movementSpeed;
-    //static Image texture;
-    static boolean isTextured = true;
+    //static boolean isTextured = true;
 
     public GrassTile(int posX, int posY) {
         super(posX, posY, Color.GREEN);

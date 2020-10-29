@@ -278,99 +278,7 @@ public class NoiseBiomeGen extends Application {
 
         for (int chunkY = 0; chunkY < World.getWorldChunkHeight(); chunkY++) {
             for (int chunkX = 0; chunkX < World.getWorldChunkWidth(); chunkX++) {
-                // new chunk
                 generateChunk(chunkX, chunkY);
-                /*xCount = chunkX * inc * size;
-                yCount = chunkY * inc * size;
-
-                Tile[][] tiles = new Tile[size][size];
-                ArrayList<Plant> plants = new ArrayList<>();
-
-                for (int j = 0; j < size; j++) {
-                    for (int i = 0; i < size; i++) {
-                        double tempVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + zOffset) + 1) / 2.0;
-                        double moistureVal = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + 2 * zOffset) + 1) / 2.0;
-                        double elevation = (SimplexNoise.octavedNoise(octaves, roughness, 1f, xCount, yCount, zCount + 3 * zOffset) + 1) / 2.0;
-
-                        String biome = biome(elevation, tempVal, moistureVal);
-
-                        Tile tile;
-
-                        double test = (chunkX * size + i) * Tile.getTileWidth();
-                        double test2 = (chunkY * size + j) * Tile.getTileWidth();
-
-                        switch (biome) {
-                            case "fields":
-
-                            case "forest":
-
-                            case "valley":
-
-                            case "hills":
-
-                            case "plateau":
-                                tile = new GrassTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture("/res/GrassTile.png");
-
-                                // For testing purposes this should add tall grass to every 4th grass tile
-                                int count = rand.nextInt(4, 6);
-                                for (int k = 0; k < count; k++) {
-                                    Plant p = new SingleTallGrass(
-                                            rand.nextInt(0, SingleTallGrass.getMaxHealth()),
-                                            rand.nextInt(0, SingleTallGrass.getMaxEnergy()),
-                                            (chunkX * size + i) * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()),
-                                            (chunkY * size + j) * Tile.getTileWidth() + rand.nextInt(Tile.getTileWidth()));
-
-                                    tile.addPlant(p);
-                                    plants.add(p);
-                                }
-                                break;
-                            case "snow":
-
-                            case "snow peaks":
-                                tile = new SnowTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture("/res/SnowTile.png");
-                                break;
-                            case "desert":
-                                tile = new SandTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture("/res/SandTile.png");
-                                break;
-                            case "volcano":
-                                tile = new LavaTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture("/res/LavaTile.png");
-                                break;
-                            case "peaks":
-                                tile = new StoneTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture("/res/StoneTile.png");
-                                break;
-                            case "frozen lake":
-                                tile = new IceTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture("/res/IceTile.png");
-                                break;
-                            case "swamp":
-
-                            case "lake":
-
-                            case "ocean":
-                                tile = new WaterTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());
-                                tile.setTexture("/res/WaterTile.png");
-                                break;
-                            default:
-                                System.out.println("No biome case found");
-                                tile = new GrassTile((chunkX * size + i) * Tile.getTileWidth(), (chunkY * size + j) * Tile.getTileWidth());;
-                                break;
-                        }
-
-                        tiles[i][j] = tile;
-                        xCount += inc;
-                    }
-                    xCount = chunkX * inc * size;
-                    yCount += inc;
-                }
-                //chunk complete
-                Chunk c = new Chunk(new ArrayList<Entity>(), tiles, plants, chunkX, chunkY);
-                chunkCount++;
-                //System.out.println(chunkCount);*/
             }
             //System.out.println(chunkY);
         }
@@ -438,8 +346,8 @@ public class NoiseBiomeGen extends Application {
 
                         Tile tile;
 
-                        double test = (x * tileSize + i) * Tile.getTileWidth();
-                        double test2 = (y * tileSize + j) * Tile.getTileWidth();
+                        //double test = (x * tileSize + i) * Tile.getTileWidth();
+                        //double test2 = (y * tileSize + j) * Tile.getTileWidth();
 
                         switch (biome) {
                             case "fields":
@@ -511,7 +419,6 @@ public class NoiseBiomeGen extends Application {
                 }
                 //chunk complete
                 Chunk c = new Chunk(new ArrayList<Entity>(), tiles, plants, x, y);
-                // makes chunk in game memory and in a file but cannot just make a file ^
 
             System.out.println(x + ", " + y);
 

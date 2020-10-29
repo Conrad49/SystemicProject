@@ -2,14 +2,13 @@ package Game;
 
 // JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN.
 
-//import java.awt.*;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
+// NOT BEING USED
 public final class ImprovedNoise {
     static boolean grayScale = false;
     //static double zCount = 1;

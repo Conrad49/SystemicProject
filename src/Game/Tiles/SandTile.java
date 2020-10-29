@@ -10,8 +10,7 @@ public class SandTile extends Tile {
     public static final String tileCode = "a";
 
     double movementSpeed;
-    //static Image texture;
-    static boolean isTextured = true;
+    //static boolean isTextured = true;
 
     public SandTile(int posX, int posY) {
         super(posX, posY, Color.YELLOW);

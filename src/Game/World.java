@@ -5,8 +5,6 @@ import Game.testing.NoiseBiomeGen;
 
 import java.awt.*;
 import java.io.File;
-import java.util.Arrays;
-import java.util.function.Predicate;
 
 /**
  * @author Benjamin Vick

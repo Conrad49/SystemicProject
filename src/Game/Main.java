@@ -1,17 +1,13 @@
 package Game;
 
-import Game.Entities.Entity;
 import Game.Entities.Player;
-import Game.Tiles.*;
 import Game.testing.NoiseBiomeGen;
-import Game.testing.Vector;
 import handlers.MovementHandler;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -36,16 +32,11 @@ public class Main extends Application {
     private static Camera root;
     public static int slowVal = 1;
 
-    private static int WIDTH = 512;
-    private static int HEIGHT = 256;
     private static long last_time = System.nanoTime();
     private static int delta_time = 0;
     public static boolean colliding;
 
     private static HashSet<String> currentlyActiveKeys;
-
-    static final double speed = 5;
-
 
     private static Player player = new Player(Color.AQUA, new Rectangle(6500, 6500, 64, 32));
     public static Group group = new Group();
@@ -62,7 +53,6 @@ public class Main extends Application {
         mainScene = new Scene(root);
         stage.setScene(mainScene);
 
-        //stage.setFullScreen(true);
 
         prepareActionHandlers();
 
@@ -151,53 +141,15 @@ public class Main extends Application {
         last_time = time;
 
         player.tick();
-        //checkPlayerCollision();
         player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
                 player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
 
+        // Plant lag happens here
         //World.tick();
 
         root.update();
     }
 
-    private static void checkPlayerCollision(){
-        Tile[] surroundingTiles = new Tile[9];
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                surroundingTiles[3 * i + j] = World.getTile(player.getTileX() - 1 + j, player.getTileY() - 1 + i);
-            }
-        }
-
-        colliding = false;
-        group = new Group();
-        for(Tile tile : surroundingTiles){
-            Entity.drawContactPoint();
-            Rectangle box = tile.getBoundsBox();
-            double[] coords = shift(box.getX(), box.getY());
-            box.setX(coords[0]);
-            box.setY(coords[1]);
-            box.setOpacity(0.5);
-            group.getChildren().add(box);
-            if (tile.isSolid()) {
-                Object[] stuffs = player.movingRectVcRect(player, tile.getBoundsBox());
-                if ((boolean)stuffs[0]) {
-                    Vector normal = (Vector) stuffs[1];
-                    Vector point = (Vector) stuffs[2];
-
-                    double[] pointShift = shift(point.getX(), point.getY());
-                    Entity.group.getChildren().add(new Circle(pointShift[0], pointShift[1], 5));
-
-                    double ctime = (double) stuffs[3];
-
-                    //Tile collision resolution
-                    player.setVelocity(player.getVelocity().add(((normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime)))));
-                    colliding = true;
-                }
-            }
-        }
-        Camera.setGUIGroup(Entity.group);
-    }
 
     public static Player getPlayer(){
         return player;

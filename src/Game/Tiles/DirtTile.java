@@ -10,8 +10,7 @@ public class DirtTile extends Tile {
     public static final String tileCode = "d";
 
     double movementSpeed;
-    //static Image texture;
-    static boolean isTextured = true;
+    //static boolean isTextured = true;
 
     public DirtTile(int posX, int posY) {
         super(posX, posY, Color.BROWN);

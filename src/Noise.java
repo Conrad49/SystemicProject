@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import org.w3c.dom.css.Rect;
 
 import java.util.concurrent.ThreadLocalRandom;
-
+// NOT BEING USED
 public class Noise extends Application {
 
     public static void main(String[] args) {

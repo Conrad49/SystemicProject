@@ -17,9 +17,8 @@ public abstract class Tile extends Displayable implements Serializable {
     //Color backColor;
     static boolean isTextured = false;
     boolean isInteractiveTile;
-    private static int mapWidth;
-    private static int mapHeight;
-    //private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
+    //private static int mapWidth;
+    //private static int mapHeight;
     private static int xCount = 0;
     private static int yCount = 0;
     String url;
@@ -46,10 +45,6 @@ public abstract class Tile extends Displayable implements Serializable {
         return new Rectangle(this.x, this.y, width, width);
     }
 
-    public void boundingLines(){         /* TODO: either use rectangle object for ray intersection or four lines
-                                            TODO: that represent the rectangle */
-
-    }
 
     public Image getTexture() {
         return new Image(this.url);
@@ -59,10 +54,6 @@ public abstract class Tile extends Displayable implements Serializable {
     public static int getTileWidth() {
         return width;
     }
-
-    //public Color getBackColor() {
-    //    return backColor;
-    //}
 
     public boolean isTextured() {
         return isTextured;

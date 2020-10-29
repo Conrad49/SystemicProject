@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 import java.awt.*;
 
@@ -29,7 +28,7 @@ public abstract class Entity {
     double posX;
     double posY;
     double speed = 5;
-    boolean isVisible = false;
+    //boolean isVisible = false;
     // this is a stupid sloppy fix for the special case that is our only entitiy the player
     // when more are added this will be moved to displayable and the fixed values will be removed
     protected int width = 64;
@@ -93,8 +92,6 @@ public abstract class Entity {
         this.movementHandler.move();
         this.animationHandler.animate();
         this.collisionHandler.collide();
-        //this.collisionHandler.check();
-        //this.animationHandler.handle();
     }
 
 

@@ -10,8 +10,7 @@ public class IceTile extends Tile {
     public static final String tileCode = "i";
 
     double movementSpeed;
-    //static Image texture;
-    static boolean isTextured = true;
+    //static boolean isTextured = true;
 
     public IceTile(int posX, int posY) {
         super(posX, posY, Color.LIGHTBLUE);

@@ -11,7 +11,7 @@ public class WaterTile extends Tile {
 
     double movementSpeed;
     //static Image texture;
-    static boolean isTextured = true;
+    //static boolean isTextured = true;
 
     public WaterTile(int posX, int posY) {
         super(posX, posY, Color.BLUE);

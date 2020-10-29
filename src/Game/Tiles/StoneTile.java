@@ -10,7 +10,6 @@ public class StoneTile extends Tile {
     public static final String tileCode = "s";
 
     double movementSpeed;
-    //static Image texture;
 
     public StoneTile(int posX, int posY) {
         super(posX, posY, Color.GRAY);

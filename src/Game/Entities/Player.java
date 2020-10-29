@@ -53,12 +53,6 @@ public class Player extends Entity {
         this.hasChangedFullscreen = hasChangedFullscreen;
     }
 
-    public Chunk[] getSurroundingChunks(){
-
-        Chunk[] surroundingChunks = new Chunk[9];
-
-        return surroundingChunks;
-    }
 
     public void setTexture(){
         Image[] walkDown = new Image[6];

@@ -10,8 +10,7 @@ public class LavaTile extends Tile {
     public static final String tileCode = "l";
 
     double movementSpeed;
-    //static Image texture;
-    static boolean isTextured = true;
+    //static boolean isTextured = true;
 
     public LavaTile(int posX, int posY) {
         super(posX, posY, Color.ORANGE);

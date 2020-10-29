@@ -3,7 +3,6 @@ package Game.testing;
  * A generator based on placing seeds then spreading or growing till they meet lad claimed by another biome
  */
 
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
