@@ -20,7 +20,7 @@ public class GrassTile extends Tile {
     }
 
     public Image getImage() {
-        return texture;
+        return new Image(this.url);
     }
 
     @Override

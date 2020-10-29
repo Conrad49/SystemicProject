@@ -1,11 +1,10 @@
 package Game.plants;
 
-import Game.Tiles.DirtTile;
+import Game.Chunk;
 import Game.Tiles.GrassTile;
 import Game.Tiles.Tile;
+import Game.World;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  */
 public class SingleTallGrass extends Plant{
     private static ArrayList<String> growsOn = new ArrayList<>();
-    private static ArrayList<Image> images = new ArrayList<>();
+    private static ArrayList<String> images = new ArrayList<>();
     private static boolean firstPlant = true;
     private static final double joinWidth = 32;//8 in game pixels
     public static final int maxHealth = 20, maxEnergy = 10;
@@ -33,7 +32,7 @@ public class SingleTallGrass extends Plant{
         if(firstPlant){
             growsOn.add(GrassTile.tileCode);
             for (int i = 1; i <= 5; i++) {
-                images.add(new Image("/res/plants/TallGrass/SingleTallGrass" + i + ".png"));
+                images.add("/res/plants/TallGrass/SingleTallGrass" + i + ".png");
             }
 
             firstPlant = false;
@@ -77,12 +76,22 @@ public class SingleTallGrass extends Plant{
 
     @Override
     public Image getImage() {
+
+        if(firstPlant){
+            growsOn.add(GrassTile.tileCode);
+            for (int i = 1; i <= 5; i++) {
+                images.add("/res/plants/TallGrass/SingleTallGrass" + i + ".png");
+            }
+
+            firstPlant = false;
+        }
+
         // health / maxHealth returns 0.05-1 and the desired range is 0-4
         // * 5  changes the range to 0.25-5 and after the int it's 0 1 2 3 4 or 5
         // the -1 on health takes away the one special case of 1 * 5 and replaces it with
         // a simple 0 * 5 so we are now going 0 1 2 3 4
         int i = (int)(((double)(health - 1) / maxHealth) * 5);
-        return images.get(i);
+        return new Image(images.get(i));
     }
 
     @Override
@@ -97,9 +106,8 @@ public class SingleTallGrass extends Plant{
     private void combineGrass(){
         ArrayList<SingleTallGrass> nearby = new ArrayList<>();
         nearby.add(this);
-        Tile[][] tiles = Tile.getAllTiles();
         // check all grasses withing a 3 by 3 area surrounding the tile this grass occupies
-        ArrayList<SingleTallGrass> grasses = getGrass(tiles [(int)y / Tile.getTileWidth()]  [(int)x / Tile.getTileWidth()]);
+        ArrayList<SingleTallGrass> grasses = getGrass(World.getTile( (int)y / Tile.getTileWidth(), (int)x / Tile.getTileWidth()));
         grasses.remove(this);
 
         for (int i = 0; i < grasses.size(); i++) {
@@ -117,7 +125,7 @@ public class SingleTallGrass extends Plant{
                         SingleTallGrass toRemove = nearby.get(j);
                         int x = ((int)toRemove.getX()) / Tile.getTileWidth();
                         int y = ((int)toRemove.getY()) / Tile.getTileWidth();
-                        tiles[y][x].removePlant(toRemove);
+                        World.getTile(y, x).removePlant(toRemove);
                     }
                     // there is no point looking for more grasses since this grass does not exist anymore
                     return;
@@ -135,18 +143,26 @@ public class SingleTallGrass extends Plant{
         // -1 makes it the top left corner of the 3 by 3 square
         int x = (int)t.getX() / Tile.getTileWidth() - 1;
         int y = (int)t.getY() / Tile.getTileWidth() - 1;
-        Tile[][] tiles = Tile.getAllTiles();
+        if(x < 0){
+            x = 0;
+        }
+        if(y < 0){
+            y = 0;
+        }
 
 
         // loop through all the tiles
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 // loop through their plants
-                for (Plant p : tiles[y + i][x + j].getPlants()) {
-                    //check if they are grass
-                    if (p instanceof SingleTallGrass) {
-                        SingleTallGrass g = (SingleTallGrass) p;
-                        grass.add(g);
+
+                if(x + j < World.getWorldChunkWidth() * Chunk.getTileSize() && y + i < World.getWorldChunkHeight() * Chunk.getTileSize()) {
+                    for (Plant p : World.getTile(x + j, y + i).getPlants()) {
+                        //check if they are grass
+                        if (p instanceof SingleTallGrass) {
+                            SingleTallGrass g = (SingleTallGrass) p;
+                            grass.add(g);
+                        }
                     }
                 }
             }
@@ -174,7 +190,7 @@ public class SingleTallGrass extends Plant{
         }
 
         int xx = (int)Math.round(x), yy = (int)Math.round(y);
-        Tile.getAllTiles()[yy / Tile.getTileWidth()][xx / Tile.getTileWidth()].addPlant(new TallGrass(health, energy, xx, yy));
+        World.getTile(yy / Tile.getTileWidth(), xx / Tile.getTileWidth()).addPlant(new TallGrass(health, energy, xx, yy));
     }
 
     public static int getMaxHealth() {
