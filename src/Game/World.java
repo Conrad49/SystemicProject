@@ -27,15 +27,15 @@ public class World {
 
         // Test for how fast it would be to load only one row of chunks
 
-        if((Main.getPlayer().getTileX() % Chunk.getTileSize() == 0 || Main.getPlayer().getTileY() % Chunk.getTileSize() == 0) && test){
+        if((Main.getPlayer().getTileX() % Chunk.getTileSize() == 0 || Main.getPlayer().getTileY() % Chunk.getTileSize() == 0)){
             System.out.println("Chunk change");
-            for (int i = 0; i < 1; i++) {
+            /*for (int i = 0; i < 1; i++) {
                 for (int j = 0; j < World.getWorldChunkWidth(); j++) {
                     loadedChunks[j][i] = Chunk.getChunk((Main.getPlayer().getChunkCoords().x - 1) + j, (Main.getPlayer().getChunkCoords().y - 1) + i);
                 }
 
             }
-            test = false;
+            test = false;*/
         }
 
         //System.out.println(Main.getPlayer().getChunkCoords().x + ", " + Main.getPlayer().getChunkCoords().y);
