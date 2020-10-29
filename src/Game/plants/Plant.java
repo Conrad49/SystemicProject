@@ -3,6 +3,7 @@ package Game.plants;
 import Game.displayablesHidingPlace.Displayable;
 import javafx.scene.image.Image;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * This allows for easy access of plants in an area and it's easy to find out what a
  * plant is growing on.
  */
-public abstract class Plant extends Displayable {
+public abstract class Plant extends Displayable implements Serializable {
     protected int health; // health is essentially how much plant there is, if health goes down some of the plant has been cut off.
     protected double energy;
     protected final int maxHealth, maxEnergy;

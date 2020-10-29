@@ -2,12 +2,15 @@ package Game.displayablesHidingPlace;
 
 import javafx.scene.image.Image;
 
+import java.io.Serializable;
+
 /**
  * Everything that needs to be displayed shares a few things in common and
  * it's also nice to be able to use the same logic to display everything.
  */
-public abstract class Displayable {
-    protected double x, y;
+public abstract class Displayable implements Serializable {
+    protected double x,
+            y;
     protected int width, height;
     protected boolean coordsAtCorner;
 

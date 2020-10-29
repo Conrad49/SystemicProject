@@ -2,9 +2,11 @@ package handlers;
 
 import Game.Camera;
 import Game.Entities.Entity;
+import Game.Entities.Player;
 import Game.Main;
 import Game.Tiles.LavaTile;
 import Game.Tiles.Tile;
+import Game.World;
 import Game.testing.Vector;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
@@ -41,50 +43,38 @@ public class CollisionHandler {
     }
 
     private void checkEntityTileCollision(){
+        Player player = (Player) this.entity;
         Tile[] surroundingTiles = new Tile[9];
-        Tile[][] allTiles = Tile.getAllTiles();
 
-        // above
-        surroundingTiles[0] = allTiles[entity.getTileY() - 1][entity.getTileX()];
-        //surroundingTiles[0].backColor = Color.RED;
-
-        // below
-        surroundingTiles[1] = allTiles[entity.getTileY() + 1][entity.getTileX()];
-        //surroundingTiles[1].backColor = Color.BLUE;
-
-        // left
-        surroundingTiles[2] = allTiles[entity.getTileY()][entity.getTileX() - 1];
-        //surroundingTiles[2].backColor = Color.PALEGOLDENROD;
-
-        // right
-        surroundingTiles[3] = allTiles[entity.getTileY()][entity.getTileX() + 1];
-        //surroundingTiles[3].backColor = Color.GRAY;
-
-        surroundingTiles[4] = allTiles[entity.getTileY()][entity.getTileX()];
-
-        //diagonals
-        surroundingTiles[5] = allTiles[entity.getTileY() - 1][entity.getTileX() - 1];
-        surroundingTiles[6] = allTiles[entity.getTileY() - 1][entity.getTileX() + 1];
-        surroundingTiles[7] = allTiles[entity.getTileY() + 1][entity.getTileX() + 1];
-        surroundingTiles[8] = allTiles[entity.getTileY() + 1][entity.getTileX() - 1];
-
-        //colliding = false;
-        if(allTiles[entity.getTileY()][entity.getTileX()] instanceof LavaTile){
-            System.out.println("You Died!");
-            System.exit(0);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                surroundingTiles[3 * i + j] = World.getTile(player.getTileX() - 1 + j, player.getTileY() - 1 + i);
+            }
         }
 
+        //colliding = false;
+        //group = new Group();
         for(Tile tile : surroundingTiles){
+            Entity.drawContactPoint();
+            Rectangle box = tile.getBoundsBox();
+            double[] coords = Main.shift(box.getX(), box.getY());
+            box.setX(coords[0]);
+            box.setY(coords[1]);
+            box.setOpacity(0.5);
+            //group.getChildren().add(box);
             if (tile.isSolid()) {
-                Object[] stuffs = movingRectVcRect(entity, tile.getBoundsBox());
+                Object[] stuffs = player.movingRectVcRect(player, tile.getBoundsBox());
                 if ((boolean)stuffs[0]) {
                     Vector normal = (Vector) stuffs[1];
                     Vector point = (Vector) stuffs[2];
 
+                    double[] pointShift = Main.shift(point.getX(), point.getY());
+                    Entity.group.getChildren().add(new Circle(pointShift[0], pointShift[1], 5));
+
                     double ctime = (double) stuffs[3];
 
                     //Tile collision resolution
-                    resolveTileCollision(normal, ctime);
+                    player.setVelocity(player.getVelocity().add(((normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime)))));
                     //colliding = true;
                 }
             }

@@ -20,7 +20,7 @@ public class SandTile extends Tile {
     }
 
     public Image getImage() {
-        return texture;
+        return new Image(this.url);
     }
 
     @Override

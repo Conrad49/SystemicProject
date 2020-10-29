@@ -4,7 +4,6 @@ package Game;
 
 //import java.awt.*;
 
-import Game.Tiles.Tile;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -63,7 +62,7 @@ public final class ImprovedNoise {
 
 
     public static Rectangle[][] getNoiseArray(){
-        Rectangle[][] noise = new Rectangle[Tile.getMapHeight()][Tile.getMapWidth()];
+        Rectangle[][] noise = new Rectangle[World.getWorldChunkHeight()][World.getWorldChunkWidth()];
 
         double count = 3.14;
         double yCount = 1.25;
@@ -72,8 +71,8 @@ public final class ImprovedNoise {
         double step = 0.01;
         //zCount += step;
 
-        for(int i = 0; i < Tile.getMapHeight(); i ++){
-            for(int j = 0; j < Tile.getMapWidth(); j++){
+        for(int i = 0; i < World.getWorldChunkHeight(); i ++){
+            for(int j = 0; j < World.getWorldChunkWidth(); j++){
                 double noiseVal = (noise(count, yCount, 1) + 1)/2.0;
                        Rectangle rectangle = new Rectangle(j, i, 1, 1);
                 if (!grayScale) {
@@ -104,8 +103,8 @@ public final class ImprovedNoise {
         try {
             FileWriter fileWriter = new FileWriter("map.txt");
 
-            for(int i = 0; i < Tile.getMapHeight(); i ++){
-                for(int j = 0; j < Tile.getMapWidth(); j++){
+            for(int i = 0; i < World.getWorldChunkHeight(); i ++){
+                for(int j = 0; j < World.getWorldChunkWidth(); j++){
                     double noiseVal = (noise(xCount, yCount, z) + 1)/2.0;
 
                     if(noiseVal > 0 && noiseVal < 0.5) {
