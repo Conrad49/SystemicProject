@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Chunk implements Serializable{
-    private static final int size = 100;// size of chunk in tiles
+    private static final int tileSize = 100;// size of chunk in tiles
     ArrayList<Entity> entities;
     Tile[][] tiles;
     ArrayList<Plant> plants;
     private int x;// coordinates on the chunk level of the world
     private int y;
+    private static int numOfChunks;
 
 
 
@@ -37,14 +38,18 @@ public class Chunk implements Serializable{
      * Makes a new chunk
      */
     public Chunk(ArrayList<Entity> entities, Tile[][] tiles, ArrayList<Plant> plants, int x, int y) {
+        numOfChunks ++;
+
         this.entities = entities;
         this.tiles = tiles;
         this.plants = plants;
         this.x = x;
         this.y = y;
 
-        World.setChunk(x, y, this);
-        save();
+        if (numOfChunks <= World.worldChunkWidth * World.worldChunkWidth) {
+            World.setChunk(x, y, this);
+        }
+        this.save();
     }
 
     public void tick (){
@@ -81,8 +86,27 @@ public class Chunk implements Serializable{
         }
     }
 
-    public static int getSize() {
-        return size;
+    public static Chunk getChunk(int x, int y){
+
+        if(World.chunkFileExists(x, y)){
+            File chunk = new File("chunk " + x + ", " + y);
+            try {
+                FileInputStream fis = new FileInputStream(chunk);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                return (Chunk)ois.readObject();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        } else {
+            return null;
+        }
+
+        return new Chunk(null, null, null, 0, 0);
+    }
+
+    public static int getTileSize() {
+        return tileSize;
     }
 
     public int getX() {

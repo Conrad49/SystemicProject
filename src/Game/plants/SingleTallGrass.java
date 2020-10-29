@@ -156,7 +156,7 @@ public class SingleTallGrass extends Plant{
             for (int j = 0; j < 3; j++) {
                 // loop through their plants
 
-                if(x + j < World.getWorldChunkWidth() * Chunk.getSize() && y + i < World.getWorldChunkHeight() * Chunk.getSize()) {
+                if(x + j < World.getWorldChunkWidth() * Chunk.getTileSize() && y + i < World.getWorldChunkHeight() * Chunk.getTileSize()) {
                     for (Plant p : World.getTile(x + j, y + i).getPlants()) {
                         //check if they are grass
                         if (p instanceof SingleTallGrass) {

@@ -1,7 +1,6 @@
 package Game.Entities;
 
 import Game.Animation;
-import Game.Camera;
 import Game.Chunk;
 import Game.Main;
 import Game.Tiles.Tile;
@@ -13,7 +12,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 
@@ -314,11 +312,10 @@ public abstract class Entity {
      * Gets an entity's coordinates in relation to all of the chunks (first chunk over and two chunks down)
      * @return An int array with index 0 being the x-coordinate and index 1 being the y-coordinate
      */
-    public int[] getChunkCoords(){
-        int[] chunkCoords = new int[2];
-        chunkCoords[0] = this.tileX / Chunk.getSize();
-        chunkCoords[1] = this.tileY / Chunk.getSize();
-        return chunkCoords;
+    public Point getChunkCoords(){
+        //int[] chunkCoords = new int[2];
+        Point point = new Point(this.tileX / Chunk.getTileSize() ,this.tileY / Chunk.getTileSize());
+        return point;
     }
 
     public Rectangle getBoundsBox() {

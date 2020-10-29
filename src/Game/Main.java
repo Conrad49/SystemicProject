@@ -46,7 +46,7 @@ public class Main extends Application {
     static final double speed = 5;
 
 
-    private static Player player = new Player(Color.AQUA, new Rectangle(3000, 3000, 64, 32));
+    private static Player player = new Player(Color.AQUA, new Rectangle(6500, 6500, 64, 32));
     public static Group group = new Group();
 
 
