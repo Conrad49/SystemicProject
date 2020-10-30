@@ -2,12 +2,11 @@ package handlers;
 
 import Game.Entities.Entity;
 import Game.Tiles.Tile;
-import Game.testing.Vector;
 
 import java.util.HashSet;
 
-public class MovementHandler {
-    Entity entity;
+public abstract class MovementHandler {
+    protected Entity entity;
     double speed = 5;
     private static HashSet<String> currentlyActiveKeys = new HashSet<String>(4);
 
@@ -38,9 +37,7 @@ public class MovementHandler {
         entity.getVelocity().setToVec(entity.getDirection().multiply(speed));
     }
 
-    public void findDirection(){
-
-    }
+    protected abstract void findDirection();
 
     public static HashSet<String> getCurrentlyActiveKeys() {
         return currentlyActiveKeys;

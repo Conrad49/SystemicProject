@@ -14,7 +14,6 @@ public class PlayerAnimationHandler extends AnimationHandler {
         this.player = (Player) this.entity;
     }
 
-    @Override
     public void setCurrentAnimation(){
 
         if (!MovementHandler.getCurrentlyActiveKeys().contains("A")) {

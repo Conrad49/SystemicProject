@@ -2,7 +2,7 @@ package Game.Entities;
 
 import Game.Animation;
 import Game.Chunk;
-import handlers.PlayerMovementHandler;
+import handlers.player.PlayerMovementHandler;
 import Game.testing.Vector;
 import handlers.player.PlayerAnimationHandler;
 import javafx.scene.image.Image;

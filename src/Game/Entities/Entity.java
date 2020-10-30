@@ -1,6 +1,8 @@
 package Game.Entities;
 
-import Game.*;
+import Game.Animation;
+import Game.Chunk;
+import Game.Main;
 import Game.Tiles.Tile;
 import Game.testing.Vector;
 import handlers.AnimationHandler;
@@ -12,7 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 import java.awt.*;
 
@@ -48,8 +49,8 @@ public abstract class Entity {
     private static final Vector LEFT = new Vector(-1, 0);
     private static final Vector RIGHT = new Vector(1, 0);
 
-    MovementHandler movementHandler = new MovementHandler(this);
-    AnimationHandler animationHandler = new AnimationHandler(this);
+    MovementHandler movementHandler;
+    AnimationHandler animationHandler;
     CollisionHandler collisionHandler = new CollisionHandler(this);
 
     public static Group group = new Group();

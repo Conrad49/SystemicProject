@@ -1,4 +1,4 @@
-package handlers;
+package handlers.player;
 
 import Game.Entities.Entity;
 import Game.Entities.Player;
@@ -80,7 +80,6 @@ public class PlayerMovementHandler extends MovementHandler {
 
     }
 
-    @Override
     public void findDirection(){
 
         if (MovementHandler.getCurrentlyActiveKeys().contains("A")) {

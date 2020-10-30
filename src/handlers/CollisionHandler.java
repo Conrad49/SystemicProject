@@ -6,8 +6,6 @@ import Game.Main;
 import Game.Tiles.LavaTile;
 import Game.Tiles.Tile;
 import Game.testing.Vector;
-import javafx.scene.Group;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
@@ -28,13 +26,9 @@ public class CollisionHandler {
 
     }
 
-    public void doPostCollisionAction(){
-        //unique to the entity that is colliding and changes depending on what it collided with
-    }
+    void doPostCollisionAction() {}
 
-    public void detectTileCollision() {
-
-    }
+    void detectTileCollision() {}
 
     public void resolveTileCollision(Vector normal, double ctime){
         entity.setVelocity(entity.getVelocity().add(((normal.multiply(new Vector(Math.abs(entity.getVelocity().getX()), Math.abs(entity.getVelocity().getY()))).multiply(1-ctime)))));
