@@ -1,6 +1,5 @@
 package handlers.player;
 
-import Game.Entities.Entity;
 import Game.Entities.Player;
 import handlers.AnimationHandler;
 import handlers.MovementHandler;
@@ -9,12 +8,11 @@ public class PlayerAnimationHandler extends AnimationHandler {
 
     Player player;
 
-    public PlayerAnimationHandler(Entity entity) {
-        super(entity);
-        this.player = (Player) this.entity;
+    public PlayerAnimationHandler(Player player) {
+        super(player);
+        this.player = player;
     }
 
-    @Override
     public void setCurrentAnimation(){
 
         if (!MovementHandler.getCurrentlyActiveKeys().contains("A")) {

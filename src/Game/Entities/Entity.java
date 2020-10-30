@@ -50,9 +50,9 @@ public abstract class Entity {
     private static final Vector LEFT = new Vector(-1, 0);
     private static final Vector RIGHT = new Vector(1, 0);
 
-    MovementHandler movementHandler = new MovementHandler(this);
-    AnimationHandler animationHandler = new AnimationHandler(this);
-    CollisionHandler collisionHandler = new CollisionHandler(this);
+    MovementHandler movementHandler;
+    AnimationHandler animationHandler;
+    CollisionHandler collisionHandler;
 
     public static Group group = new Group();
 
@@ -337,5 +337,9 @@ public abstract class Entity {
 
     public void setAnimationHandler(AnimationHandler animationHandler) {
         this.animationHandler = animationHandler;
+    }
+
+    public void setCollisionHandler(CollisionHandler collisionHandler) {
+        this.collisionHandler = collisionHandler;
     }
 }

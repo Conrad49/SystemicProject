@@ -2,7 +2,8 @@ package Game.Entities;
 
 import Game.Animation;
 import Game.Chunk;
-import handlers.PlayerMovementHandler;
+import handlers.player.PlayerCollisionHandler;
+import handlers.player.PlayerMovementHandler;
 import Game.testing.Vector;
 import handlers.player.PlayerAnimationHandler;
 import javafx.scene.image.Image;
@@ -24,6 +25,7 @@ public class Player extends Entity {
         setTexture();
         this.setMovementHandler(new PlayerMovementHandler(this));
         this.setAnimationHandler(new PlayerAnimationHandler(this));
+        this.setCollisionHandler(new PlayerCollisionHandler(this));
     }
 
     public Player(Image texture, javafx.scene.shape.Rectangle boundsBox) {
