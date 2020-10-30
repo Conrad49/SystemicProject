@@ -1,5 +1,6 @@
 package Game.Entities;
 
+
 import Game.Animation;
 import Game.Chunk;
 import Game.Main;
@@ -241,11 +242,10 @@ public abstract class Entity {
      * Gets an entity's coordinates in relation to all of the chunks (first chunk over and two chunks down)
      * @return An int array with index 0 being the x-coordinate and index 1 being the y-coordinate
      */
-    public int[] getChunkCoords(){
-        int[] chunkCoords = new int[2];
-        chunkCoords[0] = this.tileX / Chunk.sideLength;
-        chunkCoords[1] = this.tileY / Chunk.sideLength;
-        return chunkCoords;
+    public Point getChunkCoords(){
+        //int[] chunkCoords = new int[2];
+        Point point = new Point(this.tileX / Chunk.getTileSize() ,this.tileY / Chunk.getTileSize());
+        return point;
     }
 
     public Rectangle getBoundsBox() {

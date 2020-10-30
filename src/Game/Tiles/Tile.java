@@ -6,42 +6,32 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public abstract class Tile extends Displayable {
+public abstract class Tile extends Displayable implements Serializable {
 
     static int width = 16 * 4;
 
-    Color backColor;
+    //Color backColor;
     static boolean isTextured = false;
     boolean isInteractiveTile;
     private static int mapWidth;
     private static int mapHeight;
-    private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
+    //private static Tile[][] allTiles;    // TODO: fill array with Tiles and calculate size of array
     private static int xCount = 0;
     private static int yCount = 0;
-    Rectangle boundsBox;
-    Image texture;
+    String url;
     boolean isSolid;
 
     protected ArrayList<Plant> plants = new ArrayList<>(); // Plants growing on this tile.
 
     public Tile(int posX, int posY, Color backColor){
         super(posX, posY, width, width, true);
-        this.backColor = backColor;
+        //this.backColor = backColor;
 
         this.isTextured = false;
-
-        this.boundsBox = new Rectangle(posX, posY, width, width);
-        //this.boundsBox.setFill(backColor);
-
-        allTiles[xCount][yCount] = this;
-        xCount ++;
-        if(xCount >= allTiles.length){
-            yCount++;
-            xCount = 0;
-        }
     }
 
     public Tile(int posX, int posY){
@@ -49,19 +39,11 @@ public abstract class Tile extends Displayable {
 
         this.isTextured = true;
 
-        this.boundsBox = new Rectangle(posX, posY, width, width);
         //this.boundsBox.setFill(backColor);
-
-        allTiles[xCount][yCount] = this;
-        xCount ++;
-        if(xCount >= allTiles.length){
-            yCount++;
-            xCount = 0;
-        }
     }
 
     public Rectangle getBoundsBox() {
-        return boundsBox;
+        return new Rectangle(this.x, this.y, width, width);
     }
 
     public void boundingLines(){         /* TODO: either use rectangle object for ray intersection or four lines
@@ -69,12 +51,8 @@ public abstract class Tile extends Displayable {
 
     }
 
-    public static Tile[][] getAllTiles() {
-        return allTiles;
-    }
-
     public Image getTexture() {
-        return this.texture;
+        return new Image(this.url);
     }
 
 
@@ -82,9 +60,9 @@ public abstract class Tile extends Displayable {
         return width;
     }
 
-    public Color getBackColor() {
-        return backColor;
-    }
+    //public Color getBackColor() {
+    //    return backColor;
+    //}
 
     public boolean isTextured() {
         return isTextured;
@@ -98,22 +76,8 @@ public abstract class Tile extends Displayable {
         return isSolid;
     }
 
-    public static void setMapDimensions(int width, int height){
-        mapWidth = width;
-        mapHeight = height;
-        allTiles = new Tile[mapWidth][mapHeight];
-    }
-
-    public static int getMapWidth() {
-        return mapWidth;
-    }
-
-    public static int getMapHeight() {
-        return mapHeight;
-    }
-
-    public void setTexture(Image texture) {
-        this.texture = texture;
+    public void setTexture(String url) {
+        this.url = url;
         isTextured = true;
     }
 
