@@ -2,17 +2,18 @@ package handlers;
 
 import Game.Camera;
 import Game.Entities.Entity;
-import Game.Entities.Player;
 import Game.Main;
-import Game.Tiles.LavaTile;
 import Game.Tiles.Tile;
 import Game.World;
 import Game.testing.Vector;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
-public class CollisionHandler {
-    Entity entity;
+import java.util.Arrays;
+
+public abstract class CollisionHandler {
+    protected Entity entity;
     static Vector contactPoint = new Vector(0, 0);
     private Vector contactNormal = new Vector(0, 0);
     double time = 0;
@@ -22,58 +23,32 @@ public class CollisionHandler {
     }
 
     public void collide(){
-        //detect for collision and find what type of collision resolution has to occur
-        //resolve collision
-        checkEntityTileCollision();
-
+        checkSurroundingTiles();
     }
 
-    void doPostCollisionAction() {}
-
-    void detectTileCollision() {}
+    protected abstract void doPostCollisionAction(Tile tile);
 
     public void resolveTileCollision(Vector normal, double ctime){
         entity.setVelocity(entity.getVelocity().add(((normal.multiply(new Vector(Math.abs(entity.getVelocity().getX()), Math.abs(entity.getVelocity().getY()))).multiply(1-ctime)))));
     }
 
-    private void checkEntityTileCollision(){
-        Player player = (Player) this.entity;
+    private void checkSurroundingTiles(){
         Tile[] surroundingTiles = new Tile[9];
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                surroundingTiles[3 * i + j] = World.getTile(player.getTileX() - 1 + j, player.getTileY() - 1 + i);
+                surroundingTiles[3 * i + j] = World.getTile(entity.getTileX() - 1 + j, entity.getTileY() - 1 + i);
             }
         }
 
-        //colliding = false;
-        //group = new Group();
-        for(Tile tile : surroundingTiles){
-            Entity.drawContactPoint();
-            Rectangle box = tile.getBoundsBox();
-            double[] coords = Main.shift(box.getX(), box.getY());
-            box.setX(coords[0]);
-            box.setY(coords[1]);
-            box.setOpacity(0.5);
-            //group.getChildren().add(box);
-            if (tile.isSolid()) {
-                Object[] stuffs = player.movingRectVcRect(player, tile.getBoundsBox());
-                if ((boolean)stuffs[0]) {
-                    Vector normal = (Vector) stuffs[1];
-                    Vector point = (Vector) stuffs[2];
-
-                    double[] pointShift = Main.shift(point.getX(), point.getY());
-                    Entity.group.getChildren().add(new Circle(pointShift[0], pointShift[1], 5));
-
-                    double ctime = (double) stuffs[3];
-
-                    //Tile collision resolution
-                    player.setVelocity(player.getVelocity().add(((normal.multiply(new Vector(Math.abs(player.getVelocity().getX()), Math.abs(player.getVelocity().getY()))).multiply(1-ctime)))));
-                    //colliding = true;
-                }
-            }
-        }
+        Arrays.stream(surroundingTiles)
+                .forEach(this::doPostCollisionAction);
         Camera.setGUIGroup(Entity.group);
+    }
+
+    protected void createCollisionDrawing(Vector vector) {
+        double[] pointShift = Main.shift(vector.getX(), vector.getY());
+        Entity.group.getChildren().add(new Circle(pointShift[0], pointShift[1], 5));
     }
 
 
@@ -126,11 +101,10 @@ public class CollisionHandler {
         if(near.getX() > near.getY()){
             if(ray.getX() < 0){
                 contactNormal.setX(1);
-                contactNormal.setY(0);
             } else {
                 contactNormal.setX(-1);
-                contactNormal.setY(0);
             }
+            contactNormal.setY(0);
         } else if (near.getX() < near.getY()){
             if(ray.getY() < 0){
                 contactNormal.setX(0);

@@ -52,7 +52,7 @@ public abstract class Entity {
 
     MovementHandler movementHandler;
     AnimationHandler animationHandler;
-    CollisionHandler collisionHandler = new CollisionHandler(this);
+    CollisionHandler collisionHandler;
 
     public static Group group = new Group();
 
@@ -339,5 +339,9 @@ public abstract class Entity {
 
     public void setAnimationHandler(AnimationHandler animationHandler) {
         this.animationHandler = animationHandler;
+    }
+
+    public void setCollisionHandler(CollisionHandler collisionHandler) {
+        this.collisionHandler = collisionHandler;
     }
 }

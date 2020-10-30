@@ -12,9 +12,9 @@ public class PlayerMovementHandler extends MovementHandler {
 
     Player player;
 
-    public PlayerMovementHandler(Entity entity) {
-        super(entity);
-        player = (Player)entity;
+    public PlayerMovementHandler(Player player) {
+        super(player);
+        this.player = player;
     }
 
     @Override
@@ -35,23 +35,6 @@ public class PlayerMovementHandler extends MovementHandler {
             //speed = maxSpeed;
             findDirection();
         }
-
-
-        /*if (!currentlyActiveKeys.contains("A")) {
-            player.walkLeft.resetCount();
-        }
-
-        if (!currentlyActiveKeys.contains("D")) {
-            player.walkRight.resetCount();
-        }
-
-        if (!currentlyActiveKeys.contains("W")) {
-            player.walkUp.resetCount();
-        }
-
-        if (!currentlyActiveKeys.contains("S")) {
-            player.walkDown.resetCount();
-        }*/
 
         //player.setCurrentAnimation();
 
