@@ -20,12 +20,8 @@ public class World {
 
     public static Tile getTile(int x, int y){
 
-        if((y % Chunk.getTileSize()) < 0 || (x % Chunk.getTileSize()) < 0){
-            System.out.println("bad");
-        }
-
         return loadedChunks[x / Chunk.getTileSize()][y / Chunk.getTileSize()].
-                getTiles()[x % Chunk.getTileSize()][y % Chunk.getTileSize()];
+                getTiles()[Math.abs(x % Chunk.getTileSize())][Math.abs(y % Chunk.getTileSize())];
     }
 
     public static Point getIndexOfCoordInLoadedChunks(Point point){
@@ -72,7 +68,7 @@ public class World {
 
             Point newPlayerChunkCoord = Main.getPlayer().newChunkCoordinate;
 
-            Chunk[][] newLoadedChunks = new Chunk[Chunk.getTileSize()][Chunk.getTileSize()];
+            Chunk[][] newLoadedChunks = new Chunk[World.worldChunkWidth][World.worldChunkHeight];
 
             Point[][] oldChunkCoords = loadedChunkCoords;
 
@@ -100,12 +96,12 @@ public class World {
                         int x = index.x;
                         int y = index.y;
 
-                        newChunkCoords[j][i] = loadedChunkCoords[x][y];
+                        newLoadedChunks[j][i] = loadedChunks[x][y];
                     }
                 }
             }
 
-
+            loadedChunks = newLoadedChunks;
 
             System.out.println("Chunk change");
             /*for (int i = 0; i < 1; i++) {

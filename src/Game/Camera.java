@@ -520,14 +520,15 @@ public class Camera extends Pane {
                 halfHeight = screenTilesTall * Tile.getTileWidth() / 2.0;
 
         if(px - halfWidth < 0){
-            screenCenterX = halfWidth;
+            //screenCenterX = halfWidth;
 
-            topLeftX = 0;
-        }else if(px + halfWidth > World.getWorldChunkWidth() * Chunk.getTileSize() * Tile.getTileWidth()){
+            //topLeftX = 0;
+        }/*else if(px + halfWidth > World.getWorldChunkWidth() * Chunk.getTileSize() * Tile.getTileWidth()){
             screenCenterX = World.getWorldChunkWidth() * Chunk.getTileSize() * Tile.getTileWidth() - halfWidth;
 
-            topLeftX = World.getWorldChunkWidth() * Chunk.getTileSize()  - screenTilesWide;
-        }else{
+            topLeftX = World.getWorldChunkWidth() * Chunk.getTileSize()  - screenTilesWide;*/
+        //}
+        else{
             screenCenterX = px;
 
             // needs to be done earlier
@@ -539,14 +540,14 @@ public class Camera extends Pane {
         }
 
         if(py - halfHeight < 0){
-            screenCenterY = halfHeight;
+            //screenCenterY = halfHeight;
 
-            topLeftY = 0;
-        }else if(py + halfHeight > World.getWorldChunkHeight() * Chunk.getTileSize() * Tile.getTileWidth()){
+            //topLeftY = 0;
+        }/*else if(py + halfHeight > World.getWorldChunkHeight() * Chunk.getTileSize() * Tile.getTileWidth()){
             screenCenterY = World.getWorldChunkHeight() * Chunk.getTileSize() * Tile.getTileWidth() - halfHeight;
 
             topLeftY = World.getWorldChunkHeight() * Chunk.getTileSize() - screenTilesTall;
-        }else{
+        }*/else{
             screenCenterY = py;
 
             // needs to be done earlier
