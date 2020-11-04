@@ -9,6 +9,8 @@ import handlers.player.PlayerAnimationHandler;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+import java.awt.*;
+
 public class Player extends Entity {
 
     public static int speed = 0;
@@ -17,6 +19,9 @@ public class Player extends Entity {
     public static boolean moving;
 
     private Vector acceleration;
+
+    public Point oldChunkCoordinate;
+    public Point newChunkCoordinate;
 
     public boolean hasChangedFullscreen;
 

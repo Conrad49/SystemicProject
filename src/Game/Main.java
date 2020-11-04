@@ -155,7 +155,7 @@ public class Main extends Application {
         player.setBoundsBox(new Rectangle(player.getPosX(), player.getPosY(),
                 player.getBoundsBox().getWidth(), player.getBoundsBox().getHeight()));
 
-        //World.tick();
+        World.tick();
 
         root.update();
     }

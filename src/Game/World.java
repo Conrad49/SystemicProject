@@ -19,46 +19,104 @@ public class World {
     static boolean test = true;
 
     public static Tile getTile(int x, int y){
+
+        if((y % Chunk.getTileSize()) < 0 || (x % Chunk.getTileSize()) < 0){
+            System.out.println("bad");
+        }
+
         return loadedChunks[x / Chunk.getTileSize()][y / Chunk.getTileSize()].
                 getTiles()[x % Chunk.getTileSize()][y % Chunk.getTileSize()];
+    }
+
+    public static Point getIndexOfCoordInLoadedChunks(Point point){
+        Point index = new Point();
+
+        for (int i = 0; i < World.getWorldChunkWidth(); i++) {
+            for (int j = 0; j < World.getWorldChunkWidth(); j++) {
+                if(point.x == loadedChunkCoords[j][i].x && point.y == loadedChunkCoords[j][i].y){
+                    index.x = j;
+                    index.y = i;
+
+                    return index;
+                }
+            }
+        }
+
+        return index;
+    }
+
+    public static Point[] getDiff(Point[][] oldArray, Point[][] newArray){
+        Point[] diff = new Point[3];
+        int count = 0;
+
+        for (int i = 0; i < World.getWorldChunkWidth(); i++) {
+            for (int j = 0; j < World.getWorldChunkWidth(); j++) {
+
+                if(!arrayContainsPoint(newArray[j][i], oldArray)){
+
+                    diff[count] = newArray[j][i];
+                    count++;
+                }
+            }
+        }
+
+
+        return diff;
     }
 
     public static void tick(){
 
         // Test for how fast it would be to load only one row of chunks
 
-        if((Main.getPlayer().getTileX() % Chunk.getTileSize() == 0 || Main.getPlayer().getTileY() % Chunk.getTileSize() == 0)){
+        if(!Main.getPlayer().oldChunkCoordinate.equals(Main.getPlayer().newChunkCoordinate)){
+
+            Point newPlayerChunkCoord = Main.getPlayer().newChunkCoordinate;
+
+            Chunk[][] newLoadedChunks = new Chunk[Chunk.getTileSize()][Chunk.getTileSize()];
+
+            Point[][] oldChunkCoords = loadedChunkCoords;
+
+            for (int i = 0; i < World.getWorldChunkWidth(); i++) {
+                for (int j = 0; j < World.getWorldChunkWidth(); j++) {
+
+                    currentChunkCoords[j][i] = new Point((newPlayerChunkCoord.x - 1) + j, (newPlayerChunkCoord.y - 1) + i);
+                    loadedChunkCoords[j][i] = new Point(loadedChunks[j][i].getX(), loadedChunks[j][i].getY());
+
+                    //System.out.println("X: " + ((Main.getPlayer().getChunkCoords().x - 1) + j) + ", Y: " + ((Main.getPlayer().getChunkCoords().y - 1) + i));
+                }
+            }
+
+            Point[][] newChunkCoords = currentChunkCoords;
+            Point[] diff = getDiff(oldChunkCoords, newChunkCoords);
+
+            for (int i = 0; i < World.getWorldChunkWidth(); i++) {
+                for (int j = 0; j < World.getWorldChunkWidth(); j++) {
+                    if(arrayContainsPoint(newChunkCoords[j][i], diff)){
+                        Point coordinate = newChunkCoords[j][i];
+                        newLoadedChunks[j][i] = Chunk.getChunk(coordinate.x, coordinate.y);
+                    } else {
+                        // find the index of the coord in the old chunk coordinate array and copy the chunk at that index of the actual chunk array over to the new chunk array
+                        Point index = getIndexOfCoordInLoadedChunks(newChunkCoords[j][i]);
+                        int x = index.x;
+                        int y = index.y;
+
+                        newChunkCoords[j][i] = loadedChunkCoords[x][y];
+                    }
+                }
+            }
+
+
+
             System.out.println("Chunk change");
             /*for (int i = 0; i < 1; i++) {
                 for (int j = 0; j < World.getWorldChunkWidth(); j++) {
                     loadedChunks[j][i] = Chunk.getChunk((Main.getPlayer().getChunkCoords().x - 1) + j, (Main.getPlayer().getChunkCoords().y - 1) + i);
                 }
 
-            }
-            test = false;*/
+            }*/
+            test = false;
         }
 
-        //System.out.println(Main.getPlayer().getChunkCoords().x + ", " + Main.getPlayer().getChunkCoords().y);
-        for (int i = 0; i < World.getWorldChunkWidth(); i++) {
-            for (int j = 0; j < World.getWorldChunkWidth(); j++) {
-
-                loadedChunkCoords[j][i] = new Point((Main.getPlayer().getChunkCoords().x - 1) + j, (Main.getPlayer().getChunkCoords().y - 1) + i);
-                currentChunkCoords[j][i] = new Point(loadedChunks[j][i].getX(), loadedChunks[j][i].getY());
-
-                //System.out.println("X: " + ((Main.getPlayer().getChunkCoords().x - 1) + j) + ", Y: " + ((Main.getPlayer().getChunkCoords().y - 1) + i));
-            }
-        }
-
-        for (int i = 0; i < World.getWorldChunkWidth(); i++) {
-            for (int j = 0; j < World.getWorldChunkWidth(); j++) {
-                if(arrayContainsPoint(loadedChunkCoords[j][i]) != null){
-                    int[] index = arrayContainsPoint(loadedChunkCoords[j][i]);
-                    loadedChunks[j][i] = loadedChunks[index[0]][index[1]];
-                }
-            }
-        }
-
-        //System.out.println(Main.getPlayer().getChunkCoords().x + ", " + Main.getPlayer().getChunkCoords().y);
 
         for (int j = 0; j < loadedChunks[0].length; j++) {
             for (Chunk[] loadedChunk : loadedChunks) {
@@ -138,17 +196,25 @@ public class World {
 
     }
 
-    public static int[] arrayContainsPoint(Point point){
+    public static boolean arrayContainsPoint(Point point, Point[] array){
+        for (int i = 0; i < World.getWorldChunkWidth(); i++) {
+            if(array[i].x == point.x && array[i].y == point.y){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean arrayContainsPoint(Point point, Point[][] array){
         for (int i = 0; i < World.getWorldChunkWidth(); i++) {
             for (int j = 0; j < World.getWorldChunkWidth(); j++) {
-                if(currentChunkCoords[j][i].x == point.x && currentChunkCoords[j][i].y == point.y){
-                    int[] coords = new int[2];
-                    coords[0] = j;
-                    coords[1] = i;
-                    return coords;
+
+                if(point.x == array[j][i].x && point.y == array[j][i].y){
+
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 }

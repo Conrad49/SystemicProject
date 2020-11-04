@@ -1,11 +1,14 @@
 package handlers.player;
 
+import Game.Chunk;
 import Game.Entities.Entity;
 import Game.Entities.Player;
 import Game.Main;
+import Game.World;
 import Game.testing.Vector;
 import handlers.MovementHandler;
 
+import java.awt.*;
 import java.util.HashSet;
 
 public class PlayerMovementHandler extends MovementHandler {
@@ -19,8 +22,10 @@ public class PlayerMovementHandler extends MovementHandler {
 
     @Override
     public void move(){
+        player.oldChunkCoordinate = new Point(player.getTileX() / Chunk.getTileSize(), player.getTileY() / Chunk.getTileSize());
         super.move();
         handleKeyPresses();
+        player.newChunkCoordinate = new Point(player.getTileX() / Chunk.getTileSize(), player.getTileY() / Chunk.getTileSize());
     }
 
     public void handleKeyPresses(){
