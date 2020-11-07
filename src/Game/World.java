@@ -89,14 +89,14 @@ public class World {
                 for (int j = 0; j < World.getWorldChunkWidth(); j++) {
                     if(arrayContainsPoint(newChunkCoords[j][i], diff)){
                         Point coordinate = newChunkCoords[j][i];
-                        newLoadedChunks[j][i] = Chunk.getChunk(coordinate.x, coordinate.y);
+                        newLoadedChunks[i][j] = Chunk.getChunk(coordinate.x, coordinate.y);
                     } else {
                         // find the index of the coord in the old chunk coordinate array and copy the chunk at that index of the actual chunk array over to the new chunk array
                         Point index = getIndexOfCoordInLoadedChunks(newChunkCoords[j][i]);
                         int x = index.x;
                         int y = index.y;
 
-                        newLoadedChunks[j][i] = loadedChunks[x][y];
+                        newLoadedChunks[i][j] = loadedChunks[x][y];
                     }
                 }
             }
