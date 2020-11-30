@@ -1,6 +1,7 @@
 package Game.Tiles;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
 /**
@@ -22,6 +23,11 @@ public class StoneTile extends Tile {
 
     public Image getImage() {
         return new Image(this.url);
+    }
+
+    @Override
+    public PixelReader getPixelReader() {
+        return res.Resources.getStoneTileReader();
     }
 
     @Override

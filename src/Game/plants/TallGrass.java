@@ -3,6 +3,8 @@ package Game.plants;
 import Game.Tiles.GrassTile;
 import Game.Tiles.Tile;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import res.Resources;
 
 import java.util.ArrayList;
 
@@ -76,6 +78,16 @@ public class TallGrass extends Plant{
         // a simple 0 * 5 so we are now going 0 1 2 3 4
         int i = (int)(((double)(health - 1) / maxHealth) * 5);
         return new Image(images.get(i));
+    }
+
+    @Override
+    public PixelReader getPixelReader() {
+        // health / maxHealth returns 0.05-1 and the desired range is 0-4
+        // * 5  changes the range to 0.25-5 and after the int it's 0 1 2 3 4 or 5
+        // the -1 on health takes away the one special case of 1 * 5 and replaces it with
+        // a simple 0 * 5 so we are now going 0 1 2 3 4
+        int i = (int)(((double)(health - 1) / maxHealth) * 5);
+        return Resources.getTallGrass(i);
     }
 
     @Override

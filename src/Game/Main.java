@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import res.Resources;
 
 import java.util.HashSet;
 import java.util.Scanner;
@@ -58,7 +59,7 @@ public class Main extends Application {
 
         root = new Camera();
 
-        mainScene = new Scene(root);
+        mainScene = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(mainScene);
 
         //stage.setFullScreen(true);
@@ -93,21 +94,23 @@ public class Main extends Application {
             }
         }
 
+        Resources.initialize();
+
         //Game.Main "game" loop
-        new AnimationTimer()
-        {
-            public void handle(long currentNanoTime)
-            {
+        new AnimationTimer() {
+            public void handle(long currentNanoTime) {
                 numOfFrames ++;
 
                 if (numOfFrames % slowVal == 0) {
                     tickAndRender();
                 }
             }
-
         }.start();
 
         stage.show();
+
+
+        root.updatePixels();
 
     }
     
@@ -156,7 +159,7 @@ public class Main extends Application {
 
         World.tick();
 
-        root.update();
+        root.updatePixels();
     }
 
     private static void checkPlayerCollision(){

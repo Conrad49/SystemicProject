@@ -6,9 +6,13 @@ import Game.displayablesHidingPlace.Displayable;
 import Game.plants.Plant;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -50,6 +54,32 @@ public class Camera extends Pane {
 
     private boolean updateAll = false;
 
+    //private Canvas canvas = new Canvas(getWidth(), getHeight());
+    //private PixelWriter pw;
+
+    public void updatePixels(){
+        updateVariables();
+
+        getChildren().clear();
+        Canvas canvas = new Canvas(getWidth(), getHeight());
+        PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
+        getChildren().add(canvas);
+
+        int shiftx = (int)(screenCenterX - getWidth() / 2),
+            shifty = (int)(screenCenterY - getHeight() / 2);
+
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                int wx = x + shiftx;// world positions
+                int wy = y + shifty;
+
+                Tile t = World.getTile(wx / Tile.getTileWidth(), wy / Tile.getTileWidth());
+                Color c = t.getPixelReader().getColor(wx - (int)t.getX(), wy - (int)t.getY());
+                pw.setColor(x, y, c);
+            }
+        }
+    }
+
     public Camera() {
         for (int i = 0; i < numGroups; i++) {
             Group g = new Group();
@@ -57,6 +87,10 @@ public class Camera extends Pane {
         }
         mainGroup.getChildren().addAll(visibleTiles, standingGroup, GUIGroup);
         getChildren().add(mainGroup);
+
+
+
+        getChildren().clear();
     }
 
     /**
@@ -266,7 +300,6 @@ public class Camera extends Pane {
         }
         entities.clear();
 
-        System.out.println(topLeftX + " " + topLeftY);
         for (int i = topLeftY; i < topLeftY + screenTilesTall; i++) {
             for (int j = topLeftX; j < topLeftX + screenTilesWide; j++) {
                 display(World.getTile(j, i));

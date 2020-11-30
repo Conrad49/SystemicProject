@@ -264,15 +264,6 @@ public class NoiseBiomeGen extends Application {
 
         ThreadLocalRandom rand = ThreadLocalRandom.current();
 
-        Image grassImage = new Image("/res/GrassTile.png");
-        Image sandImage = new Image("/res/SandTile.png");
-        Image iceImage = new Image("/res/IceTile.png");
-        Image lavaImage = new Image("/res/LavaTile.png");
-        Image dirtImage = new Image("/res/DirtTile.png");
-        Image stoneImage = new Image("/res/StoneTile.png");
-        Image snowImage = new Image("/res/SnowTile.png");
-        Image waterImage = new Image("/res/WaterTile.png");
-
         int size = Chunk.getSize();
 
         for (int chunkY = 0; chunkY < World.getWorldChunkHeight(); chunkY++) {

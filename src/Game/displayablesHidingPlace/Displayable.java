@@ -1,6 +1,7 @@
 package Game.displayablesHidingPlace;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 
 import java.io.Serializable;
 
@@ -9,8 +10,7 @@ import java.io.Serializable;
  * it's also nice to be able to use the same logic to display everything.
  */
 public abstract class Displayable implements Serializable {
-    protected double x,
-            y;
+    protected double x, y;
     protected int width, height;
     protected boolean coordsAtCorner;
 
@@ -23,6 +23,8 @@ public abstract class Displayable implements Serializable {
     }
 
     public abstract Image getImage();
+
+    public abstract PixelReader getPixelReader();
 
     public double getX() {
         return x;

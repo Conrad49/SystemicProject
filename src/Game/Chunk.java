@@ -16,6 +16,10 @@ public class Chunk implements Serializable{
     private int x;// coordinates on the chunk level of the world
     private int y;
 
+    // This variable is used to store a decimal amount of plants to be ticked left over
+    // from previous ticks.
+    private double plantsToTick = 0;
+
 
 
     /**
@@ -47,6 +51,9 @@ public class Chunk implements Serializable{
         save();
     }
 
+    /**
+     * Makes everything do stuff
+     */
     public void tick (){
         // tick all things that need to be ticked
         // include ticking tiles eventually
@@ -58,11 +65,10 @@ public class Chunk implements Serializable{
 
         if(Main.numOfFrames % 60 == 0) {
             ThreadLocalRandom rand = ThreadLocalRandom.current();
-            for (Plant plant : plants) {
-                if (rand.nextInt(6000) == 0) {
-                    Main.getRoot().doUpdateAll();
-                    plant.tick();
-                }
+            for (plantsToTick += plants.size() / 6000.0 + 1; plantsToTick > 1; plantsToTick--) {
+                int plantNum = rand.nextInt(plants.size());
+                Main.getRoot().doUpdateAll();
+                plants.get(plantNum).tick();
             }
         }
     }
