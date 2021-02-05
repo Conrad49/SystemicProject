@@ -8,7 +8,7 @@ import java.util.HashSet;
 public abstract class MovementHandler {
     protected Entity entity;
     double speed = 5;
-    private static HashSet<String> currentlyActiveKeys = new HashSet<String>(4);
+    //private static HashSet<String> currentlyActiveKeys = new HashSet<String>(4);
 
     public MovementHandler(Entity entity) {
         this.entity = entity;
@@ -39,7 +39,5 @@ public abstract class MovementHandler {
 
     protected abstract void findDirection();
 
-    public static HashSet<String> getCurrentlyActiveKeys() {
-        return currentlyActiveKeys;
-    }
+
 }

@@ -2,6 +2,7 @@ package handlers.player;
 
 import Game.Entities.Player;
 import handlers.AnimationHandler;
+import handlers.KeyHandler;
 import handlers.MovementHandler;
 
 public class PlayerAnimationHandler extends AnimationHandler {
@@ -15,19 +16,19 @@ public class PlayerAnimationHandler extends AnimationHandler {
 
     public void setCurrentAnimation(){
 
-        if (!MovementHandler.getCurrentlyActiveKeys().contains("A")) {
+        if (!KeyHandler.getCurrentlyActiveKeys().contains("A")) {
             player.walkLeft.resetCount();
         }
 
-        if (!MovementHandler.getCurrentlyActiveKeys().contains("D")) {
+        if (!KeyHandler.getCurrentlyActiveKeys().contains("D")) {
             player.walkRight.resetCount();
         }
 
-        if (!MovementHandler.getCurrentlyActiveKeys().contains("W")) {
+        if (!KeyHandler.getCurrentlyActiveKeys().contains("W")) {
             player.walkUp.resetCount();
         }
 
-        if (!MovementHandler.getCurrentlyActiveKeys().contains("S")) {
+        if (!KeyHandler.getCurrentlyActiveKeys().contains("S")) {
             player.walkDown.resetCount();
         }
 

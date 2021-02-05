@@ -5,6 +5,7 @@ import Game.Entities.Player;
 import Game.Tiles.*;
 import Game.testing.NoiseBiomeGen;
 import Game.testing.Vector;
+import handlers.KeyHandler;
 import handlers.MovementHandler;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -128,7 +129,7 @@ public class Main extends Application {
     private static void prepareActionHandlers() {
         // HashSets don't allow duplicate values
         //currentlyActiveKeys = new HashSet<String>();
-        currentlyActiveKeys = MovementHandler.getCurrentlyActiveKeys();
+        currentlyActiveKeys = KeyHandler.getCurrentlyActiveKeys();
         mainScene.setOnKeyPressed(e -> {
             currentlyActiveKeys.add(e.getCode().toString());
         });

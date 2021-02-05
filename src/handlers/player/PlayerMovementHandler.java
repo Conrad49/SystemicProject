@@ -4,6 +4,7 @@ import Game.Entities.Entity;
 import Game.Entities.Player;
 import Game.Main;
 import Game.testing.Vector;
+import handlers.KeyHandler;
 import handlers.MovementHandler;
 
 import java.util.HashSet;
@@ -25,7 +26,7 @@ public class PlayerMovementHandler extends MovementHandler {
 
     public void handleKeyPresses(){
 
-        HashSet<String> currentlyActiveKeys = MovementHandler.getCurrentlyActiveKeys();
+        HashSet<String> currentlyActiveKeys = KeyHandler.getCurrentlyActiveKeys();
 
         entity.setDirection(new Vector(0, 0));
         boolean isMoving = currentlyActiveKeys.contains("A") || currentlyActiveKeys.contains("D") || currentlyActiveKeys.contains("W") || currentlyActiveKeys.contains("S");
@@ -65,16 +66,18 @@ public class PlayerMovementHandler extends MovementHandler {
 
     public void findDirection(){
 
-        if (MovementHandler.getCurrentlyActiveKeys().contains("A")) {
+        if (KeyHandler.getCurrentlyActiveKeys().contains("A")) {
             entity.getDirection().setToVec(entity.getDirection().add(Entity.getLEFT()));
-        } else if (MovementHandler.getCurrentlyActiveKeys().contains("D")) {
+        } else if (KeyHandler.getCurrentlyActiveKeys().contains("D")) {
             entity.getDirection().setToVec(entity.getDirection().add(Entity.getRIGHT()));
         }
 
-        if (MovementHandler.getCurrentlyActiveKeys().contains("W")) {
+        if (KeyHandler.getCurrentlyActiveKeys().contains("W")) {
             entity.getDirection().setToVec(entity.getDirection().add(Entity.getUP()));
-        } else if (MovementHandler.getCurrentlyActiveKeys().contains("S")) {
+        } else if (KeyHandler.getCurrentlyActiveKeys().contains("S")) {
             entity.getDirection().setToVec(entity.getDirection().add(Entity.getDOWN()));
         }
     }
+
+
 }
